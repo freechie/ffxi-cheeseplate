@@ -1,0 +1,57 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <KeyItemDisplay>true</KeyItemDisplay>
+        <Track><![CDATA[Inv: ${inventory:$usedspace}/${inventory:$maxspace}
+1: ${satchel:$usedspace}/${satchel:$maxspace}
+2: ${sack:$usedspace}/${sack:$maxspace}
+3: ${case:$usedspace}/${case:$maxspace}]]></Track>
+        <Tracker>
+            <bg>
+                <alpha>0</alpha>
+                <blue>0</blue>
+                <green>0</green>
+                <red>0</red>
+                <visible>false</visible>
+            </bg>
+            <flags>
+                <bold>false</bold>
+                <bottom>true</bottom>
+                <draggable>true</draggable>
+                <italic>false</italic>
+                <right>true</right>
+            </flags>
+            <padding>0</padding> <!-- Negative = left/up from bottom-right corner (left of life bars) -->
+            <pos>
+                <x>-280</x>
+                <y>-55</y>
+            </pos>
+            <text>
+                <alpha>255</alpha>
+                <blue>255</blue>
+                <font>Consolas</font>
+                <fonts>
+
+                </fonts>
+                <green>255</green>
+                <red>255</red>
+                <size>10</size>
+                <stroke>
+                    <alpha>200</alpha>
+                    <blue>0</blue>
+                    <green>0</green>
+                    <red>0</red>
+                    <width>1</width>
+                </stroke>
+            </text>
+        </Tracker>
+    </global>
+    <cheeseplate>
+        <Tracker>
+            <pos>
+                <x>-322.84375</x>
+                <y>838.78887939453</y>
+            </pos>
+        </Tracker>
+    </cheeseplate>
+</settings>

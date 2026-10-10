@@ -1,0 +1,24 @@
+<settings>
+    <global>
+        <X>-9</X>
+        <Y>61</Y>
+        <Zoom>10</Zoom>
+        <Opacity>60</Opacity>
+        <ShowPC>true</ShowPC>
+        <ShowNPC>true</ShowNPC>
+        <ShowMob>true</ShowMob>
+        <ShowMarker>true</ShowMarker>
+        <ShowTargetLine>true</ShowTargetLine>
+        <Ranges />
+        <Scale>0.85</Scale>
+        <ColorPC>#FF006FB8</ColorPC>
+        <ColorNPC>#FF269D49</ColorNPC>
+        <ColorMob>#FFED1A20</ColorMob>
+        <ColorMarker>#FFB646AD</ColorMarker>
+        <ZoomDefault>-7</ZoomDefault>
+    </global>
+    <Cheeseplate>
+        <X>2131</X>
+        <Y>768</Y>
+    </Cheeseplate>
+</settings>

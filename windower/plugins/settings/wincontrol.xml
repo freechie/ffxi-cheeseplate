@@ -1,0 +1,6 @@
+<settings>
+    <global>
+        <!--Disables console output when moving or resizing the window.-->
+        <Silent>false</Silent>
+    </global>
+</settings>

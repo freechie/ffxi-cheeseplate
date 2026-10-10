@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<settings>
+  <launcher>
+    <branch>stable</branch>
+  </launcher>
+  <autoload>
+    <addon>XIPivot</addon>
+    <addon>autoenterkey</addon>
+    <addon>Debuffed</addon>
+    <addon>DistancePlus</addon>
+    <addon>DressUp</addon>
+    <addon>findAll</addon>
+    <addon>InfoBar</addon>
+    <addon>Lookup</addon>
+    <addon>macrochanger</addon>
+    <addon>MountMuzzle</addon>
+    <addon>MountRoulette</addon>
+    <addon>roe</addon>
+    <addon>scoreboard</addon>
+    <addon>TParty</addon>
+    <addon>Trusts</addon>
+    <addon>update</addon>
+    <addon>ConsoleBG</addon>
+    <addon>InfoReplacer</addon>
+    <addon>SpeedChecker</addon>
+    <addon>timestamp</addon>
+    <addon>targetinfo</addon>
+    <addon>GearSwap</addon>
+    <addon>SATACast</addon>
+    <addon>SetTarget</addon>
+    <addon>shortcuts</addon>
+    <addon>instaLS</addon>
+    <addon>itemizer</addon>
+    <addon>equipviewer</addon>
+    <addon>BattleStations</addon>
+    <addon>battlemod</addon>
+    <addon>enternity</addon>
+    <addon>invtracker</addon>
+    <plugin>DelayMeNot</plugin>
+    <plugin>Config</plugin>
+    <plugin>Tickle</plugin>
+    <plugin>Timers</plugin>
+    <plugin>WinControl</plugin>
+    <plugin>FFXIDB</plugin>
+    <plugin>MipmapFix</plugin>
+  </autoload>
+  <profile name="">
+    <consolekey>Insert</consolekey>
+    <uiscale>1.4</uiscale>
+    <supersampling>2</supersampling>
+    <allowwinkey>true</allowwinkey>
+    <enablefastlogin>true</enablefastlogin>
+    <preventbackgroundthrottling>true</preventbackgroundthrottling>
+  </profile>
+</settings>

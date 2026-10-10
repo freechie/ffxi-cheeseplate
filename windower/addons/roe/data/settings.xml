@@ -1,0 +1,23 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <blacklist />
+        <clear>true</clear>
+        <clearall>false</clearall>
+        <clearprogress>false</clearprogress>
+        <profiles>
+            <!--
+              Profiles are filled in-game:
+                1. Set your RoE objectives in the menu
+                2. //roe save daily
+                3. Later: //roe set daily
+
+              Optional second profile for sparks/exp nights:
+                //roe save sparks
+            -->
+            <default />
+            <daily />
+            <sparks />
+        </profiles>
+    </global>
+</settings>

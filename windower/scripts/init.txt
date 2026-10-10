@@ -1,0 +1,26 @@
+keyboard_allowmmf 1
+
+console_position 15 50
+console_color 255 255 0 0
+console_displayactivity 1
+console_fadedelay 3500
+console_screendir screenshots
+
+bind f12 showfps
+bind sysrq screenshot jpg hide
+bind ^v paste
+
+// GearSwap THF set cycle helpers
+bind !f9 gs c toggle TP set
+bind !f10 gs c toggle Idle set
+bind !f11 gs c th
+bind !f8 gs c sata
+
+lua load XIPivot
+lua load enemybar2
+
+lua load SATACast
+
+// RoE tip (run once after you set daily objectives in-game):
+//   //roe save daily
+//   //roe set daily

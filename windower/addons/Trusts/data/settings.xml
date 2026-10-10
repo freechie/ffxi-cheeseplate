@@ -1,0 +1,35 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <auto>true</auto>
+        <language>English</language>
+        <sets>
+            <default>
+                <1>August</1>
+                <2>King of Hearts</2>
+                <3>Koru-Moru</3>
+                <4>Qultada</4>
+                <5>Shantotto II</5>
+            </default>
+            <no-apururu>
+                <1>August</1>
+                <2>King of Hearts</2>
+                <3>Koru-Moru</3>
+                <4>Qultada</4>
+                <5>Shantotto II</5>
+            </no-apururu>
+            <no-apururu-boss>
+                <1>King of Hearts</1>
+                <2>Koru-Moru</2>
+                <3>Shantotto II</3>
+                <4>Amchuchu</4>
+                <5>Fablinix</5>
+            </no-apururu-boss>
+        </sets>
+        <wait>
+            <aftercast>3</aftercast>
+            <retr>1.25</retr>
+            <retrall>3</retrall>
+        </wait>
+    </global>
+</settings>
