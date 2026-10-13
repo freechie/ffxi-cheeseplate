@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>cheeseplate / asura</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --panel: #12161c;
+      --panel-2: #1a2029;
+      --border: #2a3340;
+      --text: #d6dde6;
+      --muted: #8b95a5;
+      --accent: #5ec8ff;
+      --accent-dim: rgba(94, 200, 255, 0.14);
+      --ok: #3dd68c;
+      --ok-dim: rgba(61, 214, 140, 0.14);
+      --warn: #ffc14d;
+      --warn-dim: rgba(255, 193, 77, 0.14);
+      --bad: #ff6b6b;
+      --bad-dim: rgba(255, 107, 107, 0.14);
+      --max: 960px;
+      --glow: 0 0 0 1px rgba(94, 200, 255, 0.25), 0 0 24px rgba(94, 200, 255, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text);
+      background:
+        radial-gradient(900px 400px at 100% 0%, rgba(94, 200, 255, 0.07), transparent 55%),
+        var(--bg);
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .hero {
+      position: relative;
+      min-height: 48vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px 24px 32px;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(11,13,16,0.2) 0%, rgba(11,13,16,0.55) 55%, rgba(11,13,16,0.92) 100%),
+        url("hero.jpg") center 28% / cover no-repeat;
+      z-index: 0;
+      transform: scale(1.02);
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .hero-kicker .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 0 rgba(61, 214, 140, 0.7);
+      animation: pulse 2s ease-out infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(61, 214, 140, 0.55); }
+      70% { box-shadow: 0 0 0 10px rgba(61, 214, 140, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(61, 214, 140, 0); }
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      text-shadow: 0 8px 30px rgba(0,0,0,0.65);
+    }
+    .hero p {
+      margin: 8px 0 0;
+      color: #b7c0cc;
+      max-width: 42rem;
+    }
+    .stat-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .stat {
+      background: rgba(18, 22, 28, 0.78);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      padding: 8px 12px;
+      min-width: 110px;
+    }
+    .stat .label {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .stat .value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .stat.hot {
+      border-color: rgba(94, 200, 255, 0.45);
+      box-shadow: var(--glow);
+    }
+    .stat.hot .value { color: var(--accent); }
+
+    .wrap {
+      width: min(100% - 32px, var(--max));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    nav.top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: -8px 0 28px;
+      padding: 10px 0;
+      background: linear-gradient(180deg, rgba(11,13,16,0.96), rgba(11,13,16,0.88));
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid transparent;
+    }
+    nav.top a {
+      color: var(--muted);
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 6px 10px;
+      transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+    nav.top a:hover {
+      color: var(--text);
+      border-color: rgba(94, 200, 255, 0.45);
+      text-decoration: none;
+      background: var(--accent-dim);
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    section { margin-bottom: 36px; }
+
+    .box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+    }
+
+    ol.todo {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: n;
+    }
+    ol.todo li {
+      counter-increment: n;
+      display: grid;
+      grid-template-columns: 2.4rem 1fr;
+      gap: 12px;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      border-left: 3px solid transparent;
+      transition: background 140ms ease, border-left-color 140ms ease;
+    }
+    ol.todo li:first-child { border-top: 0; }
+    ol.todo li:hover {
+      background: var(--panel-2);
+      border-left-color: var(--accent);
+    }
+    ol.todo li::before {
+      content: counter(n, decimal-leading-zero);
+      color: var(--accent);
+      font-weight: 600;
+      padding-top: 1px;
+    }
+    ol.todo strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    ol.todo span { color: var(--muted); }
+
+    .jobs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 740px) {
+      .jobs { grid-template-columns: 1fr; }
+    }
+    .job {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+    }
+    .job:hover {
+      border-color: rgba(94, 200, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+    .job .badge {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      margin-bottom: 8px;
+      border: 1px solid currentColor;
+    }
+    .job .badge.p1 { color: var(--ok); background: var(--ok-dim); }
+    .job .badge.p2 { color: var(--warn); background: var(--warn-dim); }
+    .job .badge.p3 { color: var(--accent); background: var(--accent-dim); }
+    .job .name { font-weight: 600; font-size: 14px; }
+    .job .lvl {
+      font-size: 28px;
+      font-weight: 600;
+      margin: 8px 0 4px;
+      letter-spacing: -0.03em;
+    }
+    .job .meta { color: var(--muted); min-height: 2.8em; }
+    .job .bar {
+      height: 6px;
+      background: #0e131a;
+      margin-top: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .job .bar > i {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #2a8fd4, var(--accent));
+      box-shadow: 0 0 12px rgba(94, 200, 255, 0.45);
+      transform-origin: left center;
+      animation: grow 900ms ease-out both;
+    }
+    @keyframes grow {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 11px 12px;
+      border-top: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: rgba(94, 200, 255, 0.04); }
+    th {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-top: 0;
+      background: var(--panel-2);
+    }
+    td.done-list {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 2px 8px;
+      border: 1px solid currentColor;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .pill.active { color: var(--warn); background: var(--warn-dim); }
+    .pill.blocked { color: var(--bad); background: var(--bad-dim); }
+    .pill.empty { color: var(--muted); background: rgba(139,149,165,0.1); }
+    .pill.ok { color: var(--ok); background: var(--ok-dim); }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 740px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+    .panel h3 {
+      margin: 0 0 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 0;
+      border-bottom: 1px solid #1e2630;
+    }
+    .row:last-child { border-bottom: 0; }
+    .row b {
+      font-weight: 600;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .row.hi b { color: var(--accent); }
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 2px 0 8px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 740px) {
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 14px;
+      transition: border-color 140ms ease, box-shadow 140ms ease;
+    }
+    .metric:hover {
+      border-color: rgba(94, 200, 255, 0.4);
+      box-shadow: var(--glow);
+    }
+    .metric .k {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .metric .v {
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: 8px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    code {
+      font-family: inherit;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-kicker"><span class="dot" aria-hidden="true"></span> Asura · live board</div>
+    <h1>cheeseplate</h1>
+    <p>DNC 91 / NIN 45. THF 99. Mission log from 2026-10-12 screenshots. Priority list for SAM / BRD / DNC.</p>
+    <div class="stat-strip">
+      <div class="stat hot"><span class="label">Main</span><span class="value">DNC 91</span></div>
+      <div class="stat"><span class="label">Sparks</span><span class="value">76.7k</span></div>
+      <div class="stat"><span class="label">Unity</span><span class="value">86.5k</span></div>
+      <div class="stat"><span class="label">Gil</span><span class="value">1.74M</span></div>
+      <div class="stat"><span class="label">Active lines</span><span class="value">10</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <nav class="top">
+      <a href="#todo">todo</a>
+      <a href="#jobs">jobs</a>
+      <a href="#missions">missions</a>
+      <a href="#currency">currency</a>
+      <a href="#trusts">trusts</a>
+    </nav>
+
+    <section id="todo">
+      <h2>Todo</h2>
+      <ol class="todo box">
+        <li>
+          <div>
+            <strong>DNC 91 → 99</strong>
+            <span>Closest finish. Trust camp Rala / Ceizak / Yahse. Capacity, Trizek, Echad on.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Redeem kupons</strong>
+            <span>Orvail Robe +1 for BRD. Four Karieyh +1 pieces for SAM. W-EMI eminent weapon for the next job you level.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Alter ego points</strong>
+            <span>Mog House → Stats → Alter Ego Points. Spend HP, then VIT, INT, MND, Magic Skill. Cipher bracelet already owned.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Unlock SAM and BRD, then level SAM before BRD</strong>
+            <span>Neither job is on the job list yet. Karieyh covers SAM. Orvail robe covers early BRD.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Mission log when not grinding EXP</strong>
+            <span>San d'Oria Lightbringer. Zilart Temple of Uggalepih. CoP The Road Forks. WotG In the Name of the Father. SoA Life on the Frontier. RoV Keep On Giving. Add-ons ACP / MKD / ASA all in progress.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Spend bag currency after 99</strong>
+            <span>Sell dagger enchiridions for gil. Dial keys and mog pells when you can use the loot. Copper/silver vouchers and Mars/Venus orbs for A.M.A.N. Trove. Abdhaljs seals for Ambuscade.</span>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="jobs">
+      <h2>Jobs</h2>
+      <div class="jobs">
+        <div class="job">
+          <span class="badge p1">priority 1</span>
+          <div class="name">Dancer</div>
+          <div class="lvl">91 / 99</div>
+          <div class="meta">Mummu / Espial / daggers already in wardrobes.</div>
+          <div class="bar"><i style="width:92%"></i></div>
+        </div>
+        <div class="job">
+          <span class="badge p2">priority 2</span>
+          <div class="name">Samurai</div>
+          <div class="lvl">0 / 99</div>
+          <div class="meta">Not unlocked. GKT skill 0. Use Karieyh +1.</div>
+          <div class="bar"><i style="width:0%"></i></div>
+        </div>
+        <div class="job">
+          <span class="badge p3">priority 3</span>
+          <div class="name">Bard</div>
+          <div class="lvl">0 / 99</div>
+          <div class="meta">Not unlocked. Orvail Robe +1 first.</div>
+          <div class="bar"><i style="width:0%"></i></div>
+        </div>
+      </div>
+      <p class="hint" style="margin-top:12px;">Also on character: THF 99, NIN 70, WAR 48, PUP 28, RDM 5, WHM/MNK/BLM 1.</p>
+    </section>
+
+    <section id="missions">
+      <h2>Missions</h2>
+      <p class="hint">In-game Mission menu screenshots, 2026-10-12 23:31. Completed lists show what the UI displayed.</p>
+      <div class="box" style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Status</th>
+              <th>Current</th>
+              <th>Completed (shown)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>San d'Oria</td>
+              <td><span class="pill active">active</span></td>
+              <td>Lightbringer</td>
+              <td class="done-list">Smash the Orcish Scouts · Bat Hunt · Save the Children · The Rescue Drill · The Davoi Report</td>
+            </tr>
+            <tr>
+              <td>Bastok</td>
+              <td><span class="pill blocked">blocked</span></td>
+              <td>Not allowed under current allegiance</td>
+              <td class="done-list">none</td>
+            </tr>
+            <tr>
+              <td>Windurst</td>
+              <td><span class="pill blocked">blocked</span></td>
+              <td>Not allowed under current allegiance</td>
+              <td class="done-list">none</td>
+            </tr>
+            <tr>
+              <td>Rise of the Zilart</td>
+              <td><span class="pill active">active</span></td>
+              <td>The Temple of Uggalepih</td>
+              <td class="done-list">The New Frontier · Welcome t'Norg · Kazham's Chieftainess</td>
+            </tr>
+            <tr>
+              <td>Chains of Promathia</td>
+              <td><span class="pill active">active</span></td>
+              <td>The Road Forks</td>
+              <td class="done-list">Ancient Flames Beckon · The Rites of Life · Below the Arks · The Mothercrystals · The Isle of Forgotten Saints</td>
+            </tr>
+            <tr>
+              <td>Treasures of Aht Urhgan</td>
+              <td><span class="pill active">active</span></td>
+              <td>Guests of the Empire <span class="hint">(Chrome guide tab)</span></td>
+              <td class="done-list">boarding permit owned · Imperial Standing 1,147</td>
+            </tr>
+            <tr>
+              <td>Assault</td>
+              <td><span class="pill empty">empty</span></td>
+              <td>none</td>
+              <td class="done-list">none</td>
+            </tr>
+            <tr>
+              <td>Campaign</td>
+              <td><span class="pill empty">empty</span></td>
+              <td>none</td>
+              <td class="done-list">none</td>
+            </tr>
+            <tr>
+              <td>Wings of the Goddess</td>
+              <td><span class="pill active">active</span></td>
+              <td>In the Name of the Father</td>
+              <td class="done-list">Cavernous Maws · Back to the Beginning · Cait Sith · The Queen of the Dance · While the Cat Is Away</td>
+            </tr>
+            <tr>
+              <td>Seekers of Adoulin</td>
+              <td><span class="pill active">active</span></td>
+              <td>Life on the Frontier</td>
+              <td class="done-list">The Sacred City of Adoulin · Rumors from the West · The Geomagnetron · Onward to Adoulin · Heartwings and the Kindhearted</td>
+            </tr>
+            <tr>
+              <td>Rhapsodies of Vana'diel</td>
+              <td><span class="pill active">active</span></td>
+              <td>Keep On Giving</td>
+              <td class="done-list">Rhapsodies of Vana'diel · Chapter One: Creation and Rebirth · Resonance · Emissary from the Seas · Set Free</td>
+            </tr>
+            <tr>
+              <td>A Crystalline Prophecy</td>
+              <td><span class="pill active">active</span></td>
+              <td>The Echo Awakens</td>
+              <td class="done-list">A Crystalline Prophecy</td>
+            </tr>
+            <tr>
+              <td>A Moogle Kupo d'Etat</td>
+              <td><span class="pill active">active</span></td>
+              <td>Drenched! It Began with a Raindrop</td>
+              <td class="done-list">A Moogle Kupo d'Etat</td>
+            </tr>
+            <tr>
+              <td>A Shantotto Ascension</td>
+              <td><span class="pill active">active</span></td>
+              <td>That Which Curdles Blood</td>
+              <td class="done-list">A Shantotto Ascension · Burgeoning Dread</td>
+            </tr>
+            <tr>
+              <td>Abyssea</td>
+              <td><span class="pill ok">engaged</span></td>
+              <td>—</td>
+              <td class="done-list">Cruor 100,047 · Traverser stones 2,876 · multiple Atma</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="currency">
+      <h2>Currency</h2>
+      <div class="metric-grid">
+        <div class="metric"><div class="k">Sparks</div><div class="v">76,771</div></div>
+        <div class="metric"><div class="k">Unity</div><div class="v">86,555</div></div>
+        <div class="metric"><div class="k">Bayld</div><div class="v">6,852</div></div>
+        <div class="metric"><div class="k">San d'Oria CP</div><div class="v">255.7k</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Spend soon</h3>
+          <div class="row hi"><span>Sparks</span><b>76,771</b></div>
+          <p class="hint">Weapons and armor while leveling SAM / BRD.</p>
+          <div class="row hi"><span>Unity Accolades</span><b>86,555</b></div>
+          <p class="hint">Hold for Wanted / Unity gear after 99.</p>
+          <div class="row"><span>Bayld</span><b>6,852</b></div>
+          <p class="hint">SoA NPC buys if kupons are not enough.</p>
+          <div class="row"><span>Login Points</span><b>1,000</b></div>
+          <div class="row"><span>Deeds</span><b>20</b></div>
+          <div class="row"><span>Hallmarks / total / gallantry</span><b>4,100 / 6,500 / 250</b></div>
+        </div>
+        <div class="panel">
+          <h3>Other pools</h3>
+          <div class="row"><span>Beastmen / Kindred seals</span><b>84 / 24</b></div>
+          <div class="row"><span>Crests K / H / S</span><b>54 / 20 / 8</b></div>
+          <div class="row"><span>Copper / Silver A.M.A.N. vouchers</span><b>50 / 40</b></div>
+          <div class="row"><span>Valor Points</span><b>3,157</b></div>
+          <div class="row"><span>Daily Tally</span><b>22,325</b></div>
+          <div class="row"><span>Cruor / Traverser</span><b>100,047 / 2,876</b></div>
+          <div class="row"><span>Mweya / Escha Silt / Beads</span><b>9,160 / 3,194 / 2</b></div>
+          <div class="row"><span>Imperial Standing / ID tags</span><b>1,147 / 3</b></div>
+          <div class="row"><span>Imprimaturs / Kinetic Units</span><b>15 / 25</b></div>
+          <div class="row"><span>Op Credits / Dominion Notes</span><b>7 / 821</b></div>
+          <div class="row"><span>Gil (findall)</span><b>~1.74M</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="trusts">
+      <h2>Trusts / bag items</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Alter ego point spend order</h3>
+          <div class="row"><span>1</span><b>HP</b></div>
+          <div class="row"><span>2</span><b>VIT</b></div>
+          <div class="row"><span>3</span><b>INT</b></div>
+          <div class="row"><span>4</span><b>MND</b></div>
+          <div class="row"><span>5</span><b>Magic Skill</b></div>
+          <p class="hint">Unspent balance was not in the screenshots.</p>
+        </div>
+        <div class="panel">
+          <h3>Inventory redeemables</h3>
+          <div class="row hi"><span>Kupon A-PK109</span><b>×5</b></div>
+          <div class="row hi"><span>Kupon W-EMI</span><b>×1</b></div>
+          <div class="row"><span>Dial Key #Ab</span><b>×13</b></div>
+          <div class="row"><span>SP Gobbie Key</span><b>×2</b></div>
+          <div class="row"><span>Mars / Venus Orb</span><b>1 / 1</b></div>
+          <div class="row"><span>Mog Pell Red / Silver</span><b>9 / 4</b></div>
+          <div class="row"><span>Abdhaljs Seal / Nugget</span><b>3 / 1</b></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Source: Windower screenshots + findAll Cheeseplate dump + Chrome FFXI tabs.
+      Repo path: <code>docs/</code>
+    </footer>
+  </div>
+</body>
+</html>
