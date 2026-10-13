@@ -42,7 +42,7 @@
             </mogWardrobe>
             <pos>
             <!-- Bottom-right anchor. Left edge lines up with the equipment viewer; bottom sits just above it. -->
-                <x>-225</x>
+                <x>-245</x>
                 <y>-140</y>
             </pos>
             <sort>true</sort>

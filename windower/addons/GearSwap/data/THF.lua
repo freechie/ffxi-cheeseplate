@@ -64,8 +64,20 @@ function get_sets()
     sets.SneakAttack = {}
     sets.TrickAttack = {}
 
+    send_command('bind !f8 gs c sata')
+    send_command('bind !f9 gs c toggle TP set')
+    send_command('bind !f10 gs c toggle Idle set')
+    send_command('bind !f11 gs c th')
+
     send_command('input /macro book 1; wait 0.1; input /macro set 1')
-    send_command('@input /echo [GearSwap] THF loaded — fill sets in addons/GearSwap/data/THF.lua or //gs export')
+    send_command('@input /echo [GearSwap] THF loaded — Alt+F8 SATA | F9 TP | F10 idle | F11 TH')
+end
+
+function file_unload()
+    send_command('unbind !f8')
+    send_command('unbind !f9')
+    send_command('unbind !f10')
+    send_command('unbind !f11')
 end
 
 local function equip_tp()

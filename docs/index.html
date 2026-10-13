@@ -9,22 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0b0d10;
-      --panel: #12161c;
-      --panel-2: #1a2029;
-      --border: #2a3340;
-      --text: #d6dde6;
-      --muted: #8b95a5;
-      --accent: #5ec8ff;
-      --accent-dim: rgba(94, 200, 255, 0.14);
-      --ok: #3dd68c;
-      --ok-dim: rgba(61, 214, 140, 0.14);
-      --warn: #ffc14d;
-      --warn-dim: rgba(255, 193, 77, 0.14);
-      --bad: #ff6b6b;
-      --bad-dim: rgba(255, 107, 107, 0.14);
-      --max: 960px;
-      --glow: 0 0 0 1px rgba(94, 200, 255, 0.25), 0 0 24px rgba(94, 200, 255, 0.12);
+      --bg: #0b0d16;
+      --win: rgba(42, 46, 102, 0.84);
+      --title: linear-gradient(180deg, #6a6cbc 0%, #4a4e98 45%, #363a7a 100%);
+      --border: #9ad0e8;
+      --border-inner: rgba(18, 22, 52, 0.9);
+      --text: #ffffff;
+      --muted: #c8d0e8;
+      --link: #a8d0ff;
+      --gold: #f0d060;
+      --select: #e08838;
+      --current: #ff9ad8;
+      --max: 920px;
+      --stripe: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.18) 0px,
+        rgba(0, 0, 0, 0.18) 1px,
+        transparent 1px,
+        transparent 3px
+      );
     }
 
     * { box-sizing: border-box; }
@@ -32,247 +35,207 @@
     body {
       margin: 0;
       font-family: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.55;
       color: var(--text);
-      background:
-        radial-gradient(900px 400px at 100% 0%, rgba(94, 200, 255, 0.07), transparent 55%),
-        var(--bg);
+      background: var(--bg);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
     }
 
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { color: #fff; text-decoration: underline; }
 
     .hero {
       position: relative;
-      min-height: 48vh;
+      min-height: min(46vh, 380px);
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 28px 24px 32px;
-      border-bottom: 1px solid var(--border);
+      align-items: flex-end;
+      padding: 28px 20px 36px;
       overflow: hidden;
+      isolation: isolate;
     }
     .hero::before {
       content: "";
       position: absolute;
       inset: 0;
+      z-index: -1;
       background:
-        linear-gradient(180deg, rgba(11,13,16,0.2) 0%, rgba(11,13,16,0.55) 55%, rgba(11,13,16,0.92) 100%),
-        url("hero.jpg") center 28% / cover no-repeat;
-      z-index: 0;
-      transform: scale(1.02);
+        linear-gradient(180deg, rgba(11, 13, 22, 0.2) 0%, rgba(11, 13, 22, 0.5) 50%, rgba(11, 13, 22, 0.94) 100%),
+        url("hero.jpg") center 30% / cover no-repeat;
     }
-    .hero > * { position: relative; z-index: 1; }
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-      color: var(--accent);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    .hero-kicker .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--ok);
-      box-shadow: 0 0 0 0 rgba(61, 214, 140, 0.7);
-      animation: pulse 2s ease-out infinite;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(61, 214, 140, 0.55); }
-      70% { box-shadow: 0 0 0 10px rgba(61, 214, 140, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(61, 214, 140, 0); }
+    .hero-inner {
+      width: min(100%, var(--max));
+      margin: 0 auto;
     }
     .hero h1 {
-      margin: 0;
-      font-size: clamp(28px, 5vw, 40px);
+      margin: 0 0 6px;
+      font-size: clamp(34px, 7vw, 52px);
       font-weight: 600;
       letter-spacing: -0.02em;
-      text-shadow: 0 8px 30px rgba(0,0,0,0.65);
     }
     .hero p {
-      margin: 8px 0 0;
-      color: #b7c0cc;
+      margin: 0;
+      color: var(--muted);
       max-width: 42rem;
     }
-    .stat-strip {
+    /* Window Type 3 chrome */
+    .win {
+      background-color: var(--win);
+      background-image: var(--stripe);
+      border: 1px solid var(--border);
+      box-shadow:
+        inset 0 0 0 1px var(--border-inner),
+        0 10px 28px rgba(0, 0, 0, 0.45);
+      border-radius: 0;
+      overflow: hidden;
+      backdrop-filter: blur(3px);
+    }
+    .win-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 12px;
+      background: var(--title);
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .win-bar span:last-child {
+      color: #ff7070;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      font-weight: 500;
+    }
+    .win-bar a { color: inherit; }
+    .win-bar a:hover { color: var(--gold); text-decoration: none; }
+    .win-body, .panel-pad { padding: 14px 16px 16px; }
+
+    nav {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 16px;
+      margin-top: 14px;
     }
-    .stat {
-      background: rgba(18, 22, 28, 0.78);
-      border: 1px solid var(--border);
-      backdrop-filter: blur(8px);
-      padding: 8px 12px;
-      min-width: 110px;
-    }
-    .stat .label {
-      display: block;
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-    .stat .value {
-      font-size: 16px;
-      font-weight: 600;
+    nav a {
       color: var(--text);
+      border: 1px solid rgba(180, 200, 230, 0.45);
+      background: linear-gradient(180deg, #2c3270, #1c2258);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
-    .stat.hot {
-      border-color: rgba(94, 200, 255, 0.45);
-      box-shadow: var(--glow);
+    nav a:hover {
+      border-color: var(--select);
+      color: var(--gold);
+      text-decoration: none;
+      background: linear-gradient(180deg, #4a3a28, #2e2418);
     }
-    .stat.hot .value { color: var(--accent); }
 
     .wrap {
       width: min(100% - 32px, var(--max));
       margin: 0 auto;
-      padding: 28px 0 56px;
+      padding: 24px 0 56px;
     }
 
-    nav.top {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: -8px 0 28px;
-      padding: 10px 0;
-      background: linear-gradient(180deg, rgba(11,13,16,0.96), rgba(11,13,16,0.88));
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid transparent;
-    }
-    nav.top a {
-      color: var(--muted);
-      border: 1px solid var(--border);
-      background: var(--panel);
-      padding: 6px 10px;
-      transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
-    }
-    nav.top a:hover {
-      color: var(--text);
-      border-color: rgba(94, 200, 255, 0.45);
-      text-decoration: none;
-      background: var(--accent-dim);
-    }
+    section { margin-bottom: 34px; }
 
     h2 {
-      margin: 0 0 12px;
-      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
+      font-size: 26px;
       font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
+      letter-spacing: -0.02em;
+      color: var(--text);
     }
-
-    section { margin-bottom: 36px; }
-
-    .box {
-      background: var(--panel);
-      border: 1px solid var(--border);
+    h2::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffe9a0, var(--gold) 55%, #a88420);
+      box-shadow: 0 0 8px rgba(240, 208, 96, 0.55);
+      flex: 0 0 auto;
+    }
+    h2::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(158, 180, 216, 0.55), transparent);
+      margin-left: 4px;
     }
 
     ol.todo {
       margin: 0;
       padding: 0;
       list-style: none;
-      counter-reset: n;
     }
     ol.todo li {
-      counter-increment: n;
       display: grid;
-      grid-template-columns: 2.4rem 1fr;
-      gap: 12px;
-      padding: 14px 16px;
-      border-top: 1px solid var(--border);
-      border-left: 3px solid transparent;
-      transition: background 140ms ease, border-left-color 140ms ease;
+      grid-template-columns: 1rem 1fr;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid rgba(158, 180, 216, 0.16);
     }
-    ol.todo li:first-child { border-top: 0; }
-    ol.todo li:hover {
-      background: var(--panel-2);
-      border-left-color: var(--accent);
-    }
+    ol.todo li:first-child { border-top: 0; padding-top: 0; }
+    ol.todo li:last-child { padding-bottom: 0; }
     ol.todo li::before {
-      content: counter(n, decimal-leading-zero);
-      color: var(--accent);
-      font-weight: 600;
-      padding-top: 1px;
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffe9a0, var(--gold) 55%, #a88420);
+      box-shadow: 0 0 6px rgba(240, 208, 96, 0.45);
     }
     ol.todo strong {
       display: block;
-      font-weight: 600;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
-    ol.todo span { color: var(--muted); }
+    ol.todo span, .muted { color: var(--muted); }
+    .todo a, .muted a, .panel-pad a { color: var(--link); }
 
     .jobs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
-    @media (max-width: 740px) {
+    @media (max-width: 720px) {
       .jobs { grid-template-columns: 1fr; }
     }
-    .job {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 16px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
-    }
-    .job:hover {
-      border-color: rgba(94, 200, 255, 0.4);
-      transform: translateY(-2px);
-      box-shadow: var(--glow);
-    }
-    .job .badge {
-      display: inline-block;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 2px 7px;
-      margin-bottom: 8px;
-      border: 1px solid currentColor;
-    }
-    .job .badge.p1 { color: var(--ok); background: var(--ok-dim); }
-    .job .badge.p2 { color: var(--warn); background: var(--warn-dim); }
-    .job .badge.p3 { color: var(--accent); background: var(--accent-dim); }
-    .job .name { font-weight: 600; font-size: 14px; }
+    .job .name { font-weight: 600; color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
     .job .lvl {
-      font-size: 28px;
-      font-weight: 600;
+      position: relative;
       margin: 8px 0 4px;
-      letter-spacing: -0.03em;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--current);
+      padding-left: 14px;
     }
-    .job .meta { color: var(--muted); min-height: 2.8em; }
-    .job .bar {
-      height: 6px;
-      background: #0e131a;
-      margin-top: 14px;
-      border: 1px solid var(--border);
+    .job .lvl::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--select);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+    .bar {
+      height: 12px;
+      margin-top: 12px;
+      border: 1px solid rgba(158, 180, 216, 0.45);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.4);
       overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45);
     }
-    .job .bar > i {
+    .bar > i {
       display: block;
       height: 100%;
-      background: linear-gradient(90deg, #2a8fd4, var(--accent));
-      box-shadow: 0 0 12px rgba(94, 200, 255, 0.45);
-      transform-origin: left center;
-      animation: grow 900ms ease-out both;
-    }
-    @keyframes grow {
-      from { transform: scaleX(0); }
-      to { transform: scaleX(1); }
+      background: linear-gradient(180deg, #7eb8ff, #3a6fd4 55%, #244a9a);
     }
 
     table {
@@ -281,404 +244,506 @@
     }
     th, td {
       text-align: left;
-      padding: 11px 12px;
-      border-top: 1px solid var(--border);
+      padding: 10px 8px;
+      border-top: 1px solid rgba(158, 180, 216, 0.16);
       vertical-align: top;
     }
-    tr:hover td { background: rgba(94, 200, 255, 0.04); }
     th {
       color: var(--muted);
+      font-size: 12px;
       font-weight: 500;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
       border-top: 0;
-      background: var(--panel-2);
     }
-    td.done-list {
+    .current { color: var(--current); }
+    .current a { color: var(--current); }
+    .current a:hover { color: #ffc2e8; }
+    .next { color: var(--gold); font-size: 13px; margin: 0 0 6px; }
+    .next a { color: var(--gold); }
+    .onward { color: var(--muted); font-size: 13px; }
+    .onward details { margin: 0; }
+    .onward summary {
+      cursor: pointer;
+      color: var(--link);
+      font-size: 12px;
+      margin-bottom: 6px;
+      list-style: none;
+    }
+    .onward summary::-webkit-details-marker { display: none; }
+    .onward summary::before {
+      content: "▸ ";
+      color: var(--select);
+    }
+    details[open] > summary::before { content: "▾ "; }
+    .onward summary:hover { color: var(--gold); }
+    .onward .full { margin: 0; line-height: 1.65; }
+    .blocked { color: #ffb080; font-size: 13px; }
+    .blocked a { color: #ffb080; }
+    .note {
+      margin: 10px 0 0;
       color: var(--muted);
       font-size: 12px;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      padding: 2px 8px;
-      border: 1px solid currentColor;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .pill::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-    .pill.active { color: var(--warn); background: var(--warn-dim); }
-    .pill.blocked { color: var(--bad); background: var(--bad-dim); }
-    .pill.empty { color: var(--muted); background: rgba(139,149,165,0.1); }
-    .pill.ok { color: var(--ok); background: var(--ok-dim); }
-
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 12px;
     }
-    @media (max-width: 740px) {
+    @media (max-width: 720px) {
       .grid-2 { grid-template-columns: 1fr; }
-    }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 16px;
-    }
-    .panel h3 {
-      margin: 0 0 12px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
     }
     .row {
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      padding: 7px 0;
-      border-bottom: 1px solid #1e2630;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(158, 180, 216, 0.14);
     }
     .row:last-child { border-bottom: 0; }
-    .row b {
-      font-weight: 600;
-      color: var(--text);
-      font-variant-numeric: tabular-nums;
-    }
-    .row.hi b { color: var(--accent); }
-    .hint {
-      color: var(--muted);
-      font-size: 12px;
-      margin: 2px 0 8px;
-    }
+    .row b { font-weight: 600; }
+    .row.hi b { color: var(--current); }
 
-    .metric-grid {
+    .act {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 10px;
+      grid-template-columns: 1.4rem 1fr;
+      gap: 2px 10px;
+      padding: 10px 0;
+      border-top: 1px solid rgba(158, 180, 216, 0.16);
     }
-    @media (max-width: 740px) {
-      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+    .act:first-child { border-top: 0; padding-top: 0; }
+    .act:last-child { padding-bottom: 0; }
+    .act .n {
+      color: var(--select);
+      font-weight: 600;
+      line-height: 1.45;
     }
-    .metric {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 14px;
-      transition: border-color 140ms ease, box-shadow 140ms ease;
-    }
-    .metric:hover {
-      border-color: rgba(94, 200, 255, 0.4);
-      box-shadow: var(--glow);
-    }
-    .metric .k {
-      color: var(--muted);
+    .act strong { display: block; }
+    .act span, .fine { color: var(--muted); font-size: 13px; }
+    .tag {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 0 7px;
+      border: 1px solid rgba(224, 136, 56, 0.7);
+      border-radius: 999px;
+      color: var(--select);
       font-size: 10px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      vertical-align: 2px;
     }
-    .metric .v {
-      margin-top: 6px;
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      color: var(--accent);
+    .tag.later {
+      border-color: rgba(200, 208, 232, 0.35);
+      color: var(--muted);
+    }
+    .spend-item {
+      padding: 12px 0;
+      border-top: 1px solid rgba(158, 180, 216, 0.16);
+    }
+    .spend-item:first-child { border-top: 0; padding-top: 0; }
+    .spend-item:last-child { padding-bottom: 0; }
+    .spend-item p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
     }
 
     footer {
-      margin-top: 8px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(158, 180, 216, 0.2);
       color: var(--muted);
       font-size: 12px;
-    }
-    code {
-      font-family: inherit;
-      color: var(--text);
     }
   </style>
 </head>
 <body>
   <header class="hero">
-    <div class="hero-kicker"><span class="dot" aria-hidden="true"></span> Asura · live board</div>
-    <h1>cheeseplate</h1>
-    <p>DNC 91 / NIN 45. THF 99. Mission log from 2026-10-12 screenshots. Priority list for SAM / BRD / DNC.</p>
-    <div class="stat-strip">
-      <div class="stat hot"><span class="label">Main</span><span class="value">DNC 91</span></div>
-      <div class="stat"><span class="label">Sparks</span><span class="value">76.7k</span></div>
-      <div class="stat"><span class="label">Unity</span><span class="value">86.5k</span></div>
-      <div class="stat"><span class="label">Gil</span><span class="value">1.74M</span></div>
-      <div class="stat"><span class="label">Active lines</span><span class="value">10</span></div>
+    <div class="hero-inner">
+      <div class="win">
+        <div class="win-bar">
+          <span>Status</span>
+          <span>◀ ▶</span>
+        </div>
+        <div class="win-body">
+          <h1>Cheeseplate</h1>
+          <p>Asura · <a href="https://www.bg-wiki.com/ffxi/Dancer" target="_blank" rel="noreferrer">DNC</a> 91 / <a href="https://www.bg-wiki.com/ffxi/Ninja" target="_blank" rel="noreferrer">NIN</a> 45 · <a href="https://www.bg-wiki.com/ffxi/Thief" target="_blank" rel="noreferrer">THF</a> 99</p>
+          <nav>
+            <a href="#work">Work</a>
+            <a href="#buy">Buy</a>
+            <a href="#use">Use</a>
+            <a href="#spend">Spend</a>
+            <a href="#missions">Missions</a>
+          </nav>
+        </div>
+      </div>
     </div>
   </header>
 
   <div class="wrap">
-    <nav class="top">
-      <a href="#todo">todo</a>
-      <a href="#jobs">jobs</a>
-      <a href="#missions">missions</a>
-      <a href="#currency">currency</a>
-      <a href="#trusts">trusts</a>
-    </nav>
-
-    <section id="todo">
-      <h2>Todo</h2>
-      <ol class="todo box">
-        <li>
-          <div>
-            <strong>DNC 91 → 99</strong>
-            <span>Closest finish. Trust camp Rala / Ceizak / Yahse. Capacity, Trizek, Echad on.</span>
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>Redeem kupons</strong>
-            <span>Orvail Robe +1 for BRD. Four Karieyh +1 pieces for SAM. W-EMI eminent weapon for the next job you level.</span>
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>Alter ego points</strong>
-            <span>Mog House → Stats → Alter Ego Points. Spend HP, then VIT, INT, MND, Magic Skill. Cipher bracelet already owned.</span>
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>Unlock SAM and BRD, then level SAM before BRD</strong>
-            <span>Neither job is on the job list yet. Karieyh covers SAM. Orvail robe covers early BRD.</span>
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>Mission log when not grinding EXP</strong>
-            <span>San d'Oria Lightbringer. Zilart Temple of Uggalepih. CoP The Road Forks. WotG In the Name of the Father. SoA Life on the Frontier. RoV Keep On Giving. Add-ons ACP / MKD / ASA all in progress.</span>
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>Spend bag currency after 99</strong>
-            <span>Sell dagger enchiridions for gil. Dial keys and mog pells when you can use the loot. Copper/silver vouchers and Mars/Venus orbs for A.M.A.N. Trove. Abdhaljs seals for Ambuscade.</span>
-          </div>
-        </li>
-      </ol>
-    </section>
-
-    <section id="jobs">
-      <h2>Jobs</h2>
+    <section id="work">
+      <h2>Work</h2>
       <div class="jobs">
-        <div class="job">
-          <span class="badge p1">priority 1</span>
-          <div class="name">Dancer</div>
-          <div class="lvl">91 / 99</div>
-          <div class="meta">Mummu / Espial / daggers already in wardrobes.</div>
-          <div class="bar"><i style="width:92%"></i></div>
+        <div class="panel win">
+          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Dancer" target="_blank" rel="noreferrer">Dancer</a></span><span>◀ ▶</span></div>
+          <div class="panel-pad job">
+            <div class="name">Now</div>
+            <div class="lvl">91 / 99</div>
+            <div class="muted"><a href="https://www.bg-wiki.com/ffxi/Rala_Waterways" target="_blank" rel="noreferrer">Rala</a> · <a href="https://www.bg-wiki.com/ffxi/Ceizak_Battlegrounds" target="_blank" rel="noreferrer">Ceizak</a> · <a href="https://www.bg-wiki.com/ffxi/Yahse_Hunting_Grounds" target="_blank" rel="noreferrer">Yahse</a></div>
+            <div class="bar"><i style="width:92%"></i></div>
+          </div>
         </div>
-        <div class="job">
-          <span class="badge p2">priority 2</span>
-          <div class="name">Samurai</div>
-          <div class="lvl">0 / 99</div>
-          <div class="meta">Not unlocked. GKT skill 0. Use Karieyh +1.</div>
-          <div class="bar"><i style="width:0%"></i></div>
+        <div class="panel win">
+          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Samurai" target="_blank" rel="noreferrer">Samurai</a></span><span>◀ ▶</span></div>
+          <div class="panel-pad job">
+            <div class="name">After 99</div>
+            <div class="lvl">0 / 99</div>
+            <div class="muted">Unlock, then level before BRD</div>
+            <div class="bar"><i style="width:0%"></i></div>
+          </div>
         </div>
-        <div class="job">
-          <span class="badge p3">priority 3</span>
-          <div class="name">Bard</div>
-          <div class="lvl">0 / 99</div>
-          <div class="meta">Not unlocked. Orvail Robe +1 first.</div>
-          <div class="bar"><i style="width:0%"></i></div>
+        <div class="panel win">
+          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Bard" target="_blank" rel="noreferrer">Bard</a></span><span>◀ ▶</span></div>
+          <div class="panel-pad job">
+            <div class="name">After SAM</div>
+            <div class="lvl">0 / 99</div>
+            <div class="muted">Unlock after Samurai</div>
+            <div class="bar"><i style="width:0%"></i></div>
+          </div>
         </div>
       </div>
-      <p class="hint" style="margin-top:12px;">Also on character: THF 99, NIN 70, WAR 48, PUP 28, RDM 5, WHM/MNK/BLM 1.</p>
+      <div class="panel win" style="margin-top:12px;">
+        <div class="win-bar"><span>Between camps</span><span>◀ ▶</span></div>
+        <div class="panel-pad">
+          <div class="act">
+            <div class="n">1</div>
+            <div>
+              <strong><a href="https://www.bg-wiki.com/ffxi/Zilart_Mission_4" target="_blank" rel="noreferrer">Zilart 4 · Temple of Uggalepih</a></strong>
+              <span>Next is Headstone. RoV stops at 2-23 until that flag.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="n">2</div>
+            <div>
+              <strong><a href="https://www.bg-wiki.com/ffxi/San_d%27Oria_Mission_8-2" target="_blank" rel="noreferrer">San d'Oria 8-2 · Lightbringer</a></strong>
+              <span>Then 9-1 Breaking Barriers → 9-2 The Heir to the Light.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="n">3</div>
+            <div>
+              <strong><a href="https://www.bg-wiki.com/ffxi/Promathia_Mission_3-3" target="_blank" rel="noreferrer">CoP 3-3 · The Road Forks</a></strong>
+              <span>Next is 3-4 Tending Aged Wounds. This gate is already clear for RoV.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="n">4</div>
+            <div>
+              <strong><a href="https://www.bg-wiki.com/ffxi/Keep_On_Giving" target="_blank" rel="noreferrer">RoV 2-22 · Keep On Giving</a></strong>
+              <span>Next is 2-23 Past Imperfect, then Zilart blocks 2-24.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="n">5</div>
+            <div>
+              <strong><a href="https://www.bg-wiki.com/ffxi/Life_on_the_Frontier" target="_blank" rel="noreferrer">Adoulin 1-6 · Life on the Frontier</a></strong>
+              <span>Next is 1-7 Meeting of the Minds, which RoV chapter 3 needs later.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="n">6</div>
+            <div>
+              <strong><a href="https://www.bg-wiki.com/ffxi/Aht_Urhgan_Mission_17" target="_blank" rel="noreferrer">ToAU 17</a> · <a href="https://www.bg-wiki.com/ffxi/In_the_Name_of_the_Father" target="_blank" rel="noreferrer">WotG 8</a> · add-ons</strong>
+              <span>ToAU next is Passing Glory (game-day wait). WotG needs nation quest 5 before mission 9. Add-ons: <a href="https://www.bg-wiki.com/ffxi/Crystalline_Mission_2" target="_blank" rel="noreferrer">Echo Awakens</a>, <a href="https://www.bg-wiki.com/ffxi/Kupo_Mission_2" target="_blank" rel="noreferrer">Drenched</a>, <a href="https://www.bg-wiki.com/ffxi/A_Shantotto_Ascension_Mission_3" target="_blank" rel="noreferrer">Curdles Blood</a>.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="fine" style="margin-top:10px;">Also on the character: THF 99 (27,373 cap / 0 JP), NIN 70, WAR 48, PUP 28, RDM 5, WHM/MNK/BLM 1. Master levels locked. Bastok and Windurst missions stay blocked by San d'Oria allegiance.</p>
+    </section>
+
+    <section id="buy">
+      <h2>Buy</h2>
+      <div class="panel win">
+        <div class="win-bar"><span>Redeem now</span><span>◀ ▶</span></div>
+        <div class="panel-pad">
+          <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Karieyh_Haubert_%2B1" target="_blank" rel="noreferrer">Karieyh +1</a> ×4 <span class="tag">SAM</span></span><b>4× <a href="https://www.bg-wiki.com/ffxi/Kupon_A-PK109" target="_blank" rel="noreferrer">A-PK109</a></b></div>
+          <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Orvail_Robe_%2B1" target="_blank" rel="noreferrer">Orvail Robe +1</a> <span class="tag">BRD</span></span><b>1× <a href="https://www.bg-wiki.com/ffxi/Kupon_A-PK109" target="_blank" rel="noreferrer">A-PK109</a></b></div>
+          <div class="row hi"><span>Eminent weapon</span><b>1× <a href="https://www.bg-wiki.com/ffxi/Kupon_W-EMI" target="_blank" rel="noreferrer">W-EMI</a></b></div>
+          <p class="fine" style="margin:10px 0 0;">Holding A-PK109 ×5 and W-EMI ×1. <a href="https://www.bg-wiki.com/ffxi/Mummu_Jacket" target="_blank" rel="noreferrer">Mummu</a> / Espial already covers DNC.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="use">
+      <h2>Use</h2>
+      <div class="grid-2">
+        <div class="panel win">
+          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Trust" target="_blank" rel="noreferrer">Alter ego</a> 340 / 1000</span><span>◀ ▶</span></div>
+          <div class="panel-pad">
+            <div class="row hi"><span>1 · Mog House</span><b>HP</b></div>
+            <div class="row"><span>2</span><b>VIT</b></div>
+            <div class="row"><span>3</span><b>INT</b></div>
+            <div class="row"><span>4</span><b>MND</b></div>
+            <div class="row"><span>5</span><b>Magic Skill</b></div>
+            <p class="fine" style="margin:10px 0 0;">Cipher bracelet already owned.</p>
+          </div>
+        </div>
+        <div class="panel win">
+          <div class="win-bar"><span>While leveling</span><span>◀ ▶</span></div>
+          <div class="panel-pad">
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Capacity_Ring" target="_blank" rel="noreferrer">Capacity</a></span><b>On</b></div>
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Trizek_Ring" target="_blank" rel="noreferrer">Trizek</a></span><b>On</b></div>
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Echad_Ring" target="_blank" rel="noreferrer">Echad</a></span><b>On</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="spend">
+      <h2>Spend</h2>
+      <div class="panel win">
+        <div class="win-bar"><span>Before it caps or expires</span><span>◀ ▶</span></div>
+        <div class="panel-pad">
+          <div class="spend-item">
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Sparks_of_Eminence" target="_blank" rel="noreferrer">Sparks</a></span><b>76,771</b></div>
+            <p>Cap is 99,999, and sparks past that disappear. At <a href="https://www.bg-wiki.com/ffxi/Rolandienne" target="_blank" rel="noreferrer">Rolandienne</a> in Southern San d'Oria (G-10), buy <a href="https://www.bg-wiki.com/ffxi/Acheron_Shield" target="_blank" rel="noreferrer">Acheron Shield</a> from the level 71–98 list (2,755 sparks) and sell the shield to a vendor. That is the gil dump, and the weekly exchange limit (100,000) covers this whole pile. Mummu, Espial, and the W-EMI kupon already cover gear. Buy a second <a href="https://www.bg-wiki.com/ffxi/Capacity_Ring" target="_blank" rel="noreferrer">Capacity Ring</a> (5,000) only if you are sharing the one you wear. Dagger enchiridions already in the bag can go to a vendor too; they are a worse sparks purchase than the shield.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Unity" target="_blank" rel="noreferrer">Unity Accolades</a> · Apururu</span><b>66,555</b></div>
+            <p>Same 99,999 cap. Apururu only boosts that unity's Wanted NMs. Spend the points at any Unity NPC, such as Urbiolaine in Southern San d'Oria. Keep a few thousand for Wanted warps while you run missions. Buy <a href="https://www.bg-wiki.com/ffxi/Prize_Powder" target="_blank" rel="noreferrer">Prize Powder</a> with the rest (10 accolades each) and vendor it. An SP Gobbie Key costs 15,000, and two are already unspun.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Repeat_Login_Campaign" target="_blank" rel="noreferrer">Login points</a></span><b>1,000</b></div>
+            <p>These expire. September's exchange closed October 12, and only 700 points carry. October's campaign opens October 14 and exchanges through November 9 at the Greeter Moogle. Trust ciphers are 5 points. <a href="https://www.bg-wiki.com/ffxi/Valaineral" target="_blank" rel="noreferrer">Valaineral</a> and <a href="https://www.bg-wiki.com/ffxi/Koru-Moru" target="_blank" rel="noreferrer">Koru-Moru</a> are the ones that change a DNC trust party, if either cipher is missing.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Bayld" target="_blank" rel="noreferrer">Bayld</a></span><b>6,852</b></div>
+            <p>Waypoint fees in Adoulin while you do Life on the Frontier. Coalition gear costs more than this stack, so the balance stays put aside from warps. Inventor lists can wait.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel win" style="margin-top:12px;">
+        <div class="win-bar"><span>After 99</span><span>◀ ▶</span></div>
+        <div class="panel-pad">
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Dial_Key_AB" target="_blank" rel="noreferrer">Dial Key #Ab</a></span><b>×13</b></div>
+            <p>Trade to the goblin beside the <a href="https://www.bg-wiki.com/ffxi/Gobbie_Mystery_Box" target="_blank" rel="noreferrer">Gobbie Mystery Box</a> (Mystrix in Lower Jeuno). Each key rolls a random abjuration, which upgrades Escha armor. That armor is item level 119.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span>SP Gobbie Key</span><b>×2</b></div>
+            <p>Same goblin. Rolls any normal 50-point box prize. Spin when a free inventory slot is open.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Mars_Orb" target="_blank" rel="noreferrer">Mars</a> / <a href="https://www.bg-wiki.com/ffxi/Venus_Orb" target="_blank" rel="noreferrer">Venus</a> orb</span><b>1 / 1</b></div>
+            <p>Trade an orb to the Burning Circle in Horlais Peak, Waughroon Shrine, or Balga's Dais for <a href="https://www.bg-wiki.com/ffxi/A.M.A.N._Trove" target="_blank" rel="noreferrer">A.M.A.N. Trove</a>. Open chests and leave before the mimic. Venus has the better chests. An orb you already hold can be used before 99. <a href="https://www.bg-wiki.com/ffxi/Greyson" target="_blank" rel="noreferrer">Greyson</a> in Lower Jeuno (G-11) sells more only to a level 99: 6 silver vouchers for Mars, 10 for Venus.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Mog_Pell_(Red)" target="_blank" rel="noreferrer">Mog Pell</a> red / silver</span><b>9 / 4</b></div>
+            <p>Bonanza tickets. The Mog Bonanza moogle is the exchange, and only while a bonanza is running. They have no use on the leveling path.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Abdhaljs_Seal" target="_blank" rel="noreferrer">Abdhaljs</a> seal / nugget · hallmarks · gallantry</span><b>3 / 1 · 4,100 · 250</b></div>
+            <p><a href="https://www.bg-wiki.com/ffxi/Ambuscade" target="_blank" rel="noreferrer">Ambuscade</a> is level 99. One seal enters one run. Hallmarks buy the NQ armor (4,100 of 6,500 earned are unspent). Gallantry buys the upgrades, and 250 is a small stack. Buy the piece the 99 job needs.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel win" style="margin-top:12px;">
+        <div class="win-bar"><span>Why the rest is sitting</span><span>◀ ▶</span></div>
+        <div class="panel-pad">
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Deeds_of_Heroism" target="_blank" rel="noreferrer">Deeds</a></span><b>20</b></div>
+            <p>A lifetime total, like total hallmarks. The A.M.A.N. Validator pays a prize at each step: copper vouchers at 10, a Moggiebag at 20. Claim either one if it is still unclaimed. The next prize is at 30. The number does not go down when you claim.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Conquest_Points/San_d%27Oria_Items" target="_blank" rel="noreferrer">San d'Oria CP</a></span><b>255,702</b></div>
+            <p>Aravoge in Southern San d'Oria (F-10). A missing <a href="https://www.bg-wiki.com/ffxi/Return_Ring" target="_blank" rel="noreferrer">Return Ring</a> (2,500), <a href="https://www.bg-wiki.com/ffxi/Homing_Ring" target="_blank" rel="noreferrer">Homing Ring</a> (9,000), or <a href="https://www.bg-wiki.com/ffxi/Warp_Ring" target="_blank" rel="noreferrer">Warp Ring</a> (5,000) is the buy. The rest covers San d'Oria Mastery Rank titles later (231,000 for all ten). Nation armor does not replace Mummu.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span>Beastmen / Kindred seals · crests K / H / S</span><b>84 / 24 · 54 / 20 / 8</b></div>
+            <p><a href="https://www.bg-wiki.com/ffxi/Curio_Vendor_Moogle" target="_blank" rel="noreferrer">Curio Vendor Moogle</a> in Port Jeuno. That menu is old armor below what you wear, plus a few gil items. Gil is already ~1.74M, so the crests stay until a specific curio item is the reason to trade them.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Copper_Voucher" target="_blank" rel="noreferrer">Copper</a> / <a href="https://www.bg-wiki.com/ffxi/Silver_Voucher" target="_blank" rel="noreferrer">Silver</a> vouchers</span><b>50 / 40</b></div>
+            <p>One copper voucher becomes 1,000 of a currency you are short on, at Rolandienne. Sparks, accolades, bayld, and cruor are all stocked. Silver vouchers become Mars and Venus orbs at Greyson, who only deals with level 99, and you already hold one of each orb.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Valor_Points" target="_blank" rel="noreferrer">Valor</a></span><b>3,157</b></div>
+            <p>Survival Guide teleports. The cap is 50,000. Instant Warp and Wanted warps already cover travel, so this is a spare fund.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Gobbie_Mystery_Box" target="_blank" rel="noreferrer">Daily Tally</a></span><b>22,325</b></div>
+            <p>The special dial at the Gobbie Mystery Box costs 50 and is once per Earth day. The bank is large because it only drips out one spin a day.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Cruor" target="_blank" rel="noreferrer">Cruor</a> / <a href="https://www.bg-wiki.com/ffxi/Traverser_Stone" target="_blank" rel="noreferrer">Traverser</a></span><b>100,047 / 2,876</b></div>
+            <p>Abyssea entry stones and atma. EXP is in Rala, Ceizak, and Yahse on trusts, so this stock waits.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Mweya_Plasm" target="_blank" rel="noreferrer">Mweya Plasm</a></span><b>9,160</b></div>
+            <p>Reive rewards after Wildskeeper Reives. It does not buy EXP.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Escha_Silt" target="_blank" rel="noreferrer">Escha silt</a> / <a href="https://www.bg-wiki.com/ffxi/Escha_Bead" target="_blank" rel="noreferrer">beads</a></span><b>3,194 / 2</b></div>
+            <p>Escha gear. Two beads cannot buy a piece, and that shop is behind more Rhapsodies plus level 99. Silt cap is 100,000, so this is a starter pile.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="missions">
       <h2>Missions</h2>
-      <p class="hint">In-game Mission menu screenshots, 2026-10-12 23:31. Completed lists show what the UI displayed.</p>
-      <div class="box" style="overflow-x:auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>Line</th>
-              <th>Status</th>
-              <th>Current</th>
-              <th>Completed (shown)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>San d'Oria</td>
-              <td><span class="pill active">active</span></td>
-              <td>Lightbringer</td>
-              <td class="done-list">Smash the Orcish Scouts · Bat Hunt · Save the Children · The Rescue Drill · The Davoi Report</td>
-            </tr>
-            <tr>
-              <td>Bastok</td>
-              <td><span class="pill blocked">blocked</span></td>
-              <td>Not allowed under current allegiance</td>
-              <td class="done-list">none</td>
-            </tr>
-            <tr>
-              <td>Windurst</td>
-              <td><span class="pill blocked">blocked</span></td>
-              <td>Not allowed under current allegiance</td>
-              <td class="done-list">none</td>
-            </tr>
-            <tr>
-              <td>Rise of the Zilart</td>
-              <td><span class="pill active">active</span></td>
-              <td>The Temple of Uggalepih</td>
-              <td class="done-list">The New Frontier · Welcome t'Norg · Kazham's Chieftainess</td>
-            </tr>
-            <tr>
-              <td>Chains of Promathia</td>
-              <td><span class="pill active">active</span></td>
-              <td>The Road Forks</td>
-              <td class="done-list">Ancient Flames Beckon · The Rites of Life · Below the Arks · The Mothercrystals · The Isle of Forgotten Saints</td>
-            </tr>
-            <tr>
-              <td>Treasures of Aht Urhgan</td>
-              <td><span class="pill active">active</span></td>
-              <td>Guests of the Empire <span class="hint">(Chrome guide tab)</span></td>
-              <td class="done-list">boarding permit owned · Imperial Standing 1,147</td>
-            </tr>
-            <tr>
-              <td>Assault</td>
-              <td><span class="pill empty">empty</span></td>
-              <td>none</td>
-              <td class="done-list">none</td>
-            </tr>
-            <tr>
-              <td>Campaign</td>
-              <td><span class="pill empty">empty</span></td>
-              <td>none</td>
-              <td class="done-list">none</td>
-            </tr>
-            <tr>
-              <td>Wings of the Goddess</td>
-              <td><span class="pill active">active</span></td>
-              <td>In the Name of the Father</td>
-              <td class="done-list">Cavernous Maws · Back to the Beginning · Cait Sith · The Queen of the Dance · While the Cat Is Away</td>
-            </tr>
-            <tr>
-              <td>Seekers of Adoulin</td>
-              <td><span class="pill active">active</span></td>
-              <td>Life on the Frontier</td>
-              <td class="done-list">The Sacred City of Adoulin · Rumors from the West · The Geomagnetron · Onward to Adoulin · Heartwings and the Kindhearted</td>
-            </tr>
-            <tr>
-              <td>Rhapsodies of Vana'diel</td>
-              <td><span class="pill active">active</span></td>
-              <td>Keep On Giving</td>
-              <td class="done-list">Rhapsodies of Vana'diel · Chapter One: Creation and Rebirth · Resonance · Emissary from the Seas · Set Free</td>
-            </tr>
-            <tr>
-              <td>A Crystalline Prophecy</td>
-              <td><span class="pill active">active</span></td>
-              <td>The Echo Awakens</td>
-              <td class="done-list">A Crystalline Prophecy</td>
-            </tr>
-            <tr>
-              <td>A Moogle Kupo d'Etat</td>
-              <td><span class="pill active">active</span></td>
-              <td>Drenched! It Began with a Raindrop</td>
-              <td class="done-list">A Moogle Kupo d'Etat</td>
-            </tr>
-            <tr>
-              <td>A Shantotto Ascension</td>
-              <td><span class="pill active">active</span></td>
-              <td>That Which Curdles Blood</td>
-              <td class="done-list">A Shantotto Ascension · Burgeoning Dread</td>
-            </tr>
-            <tr>
-              <td>Abyssea</td>
-              <td><span class="pill ok">engaged</span></td>
-              <td>—</td>
-              <td class="done-list">Cruor 100,047 · Traverser stones 2,876 · multiple Atma</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="currency">
-      <h2>Currency</h2>
-      <div class="metric-grid">
-        <div class="metric"><div class="k">Sparks</div><div class="v">76,771</div></div>
-        <div class="metric"><div class="k">Unity</div><div class="v">86,555</div></div>
-        <div class="metric"><div class="k">Bayld</div><div class="v">6,852</div></div>
-        <div class="metric"><div class="k">San d'Oria CP</div><div class="v">255.7k</div></div>
-      </div>
-      <div class="grid-2">
-        <div class="panel">
-          <h3>Spend soon</h3>
-          <div class="row hi"><span>Sparks</span><b>76,771</b></div>
-          <p class="hint">Weapons and armor while leveling SAM / BRD.</p>
-          <div class="row hi"><span>Unity Accolades</span><b>86,555</b></div>
-          <p class="hint">Hold for Wanted / Unity gear after 99.</p>
-          <div class="row"><span>Bayld</span><b>6,852</b></div>
-          <p class="hint">SoA NPC buys if kupons are not enough.</p>
-          <div class="row"><span>Login Points</span><b>1,000</b></div>
-          <div class="row"><span>Deeds</span><b>20</b></div>
-          <div class="row"><span>Hallmarks / total / gallantry</span><b>4,100 / 6,500 / 250</b></div>
+      <div class="panel win">
+        <div class="win-bar">
+          <span>Mission log</span>
+          <span>◀ ▶</span>
         </div>
-        <div class="panel">
-          <h3>Other pools</h3>
-          <div class="row"><span>Beastmen / Kindred seals</span><b>84 / 24</b></div>
-          <div class="row"><span>Crests K / H / S</span><b>54 / 20 / 8</b></div>
-          <div class="row"><span>Copper / Silver A.M.A.N. vouchers</span><b>50 / 40</b></div>
-          <div class="row"><span>Valor Points</span><b>3,157</b></div>
-          <div class="row"><span>Daily Tally</span><b>22,325</b></div>
-          <div class="row"><span>Cruor / Traverser</span><b>100,047 / 2,876</b></div>
-          <div class="row"><span>Mweya / Escha Silt / Beads</span><b>9,160 / 3,194 / 2</b></div>
-          <div class="row"><span>Imperial Standing / ID tags</span><b>1,147 / 3</b></div>
-          <div class="row"><span>Imprimaturs / Kinetic Units</span><b>15 / 25</b></div>
-          <div class="row"><span>Op Credits / Dominion Notes</span><b>7 / 821</b></div>
-          <div class="row"><span>Gil (findall)</span><b>~1.74M</b></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="trusts">
-      <h2>Trusts / bag items</h2>
-      <div class="grid-2">
-        <div class="panel">
-          <h3>Alter ego point spend order</h3>
-          <div class="row"><span>1</span><b>HP</b></div>
-          <div class="row"><span>2</span><b>VIT</b></div>
-          <div class="row"><span>3</span><b>INT</b></div>
-          <div class="row"><span>4</span><b>MND</b></div>
-          <div class="row"><span>5</span><b>Magic Skill</b></div>
-          <p class="hint">Unspent balance was not in the screenshots.</p>
-        </div>
-        <div class="panel">
-          <h3>Inventory redeemables</h3>
-          <div class="row hi"><span>Kupon A-PK109</span><b>×5</b></div>
-          <div class="row hi"><span>Kupon W-EMI</span><b>×1</b></div>
-          <div class="row"><span>Dial Key #Ab</span><b>×13</b></div>
-          <div class="row"><span>SP Gobbie Key</span><b>×2</b></div>
-          <div class="row"><span>Mars / Venus Orb</span><b>1 / 1</b></div>
-          <div class="row"><span>Mog Pell Red / Silver</span><b>9 / 4</b></div>
-          <div class="row"><span>Abdhaljs Seal / Nugget</span><b>3 / 1</b></div>
+        <div class="panel-pad" style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Line</th>
+                <th>Current</th>
+                <th>Next / onward</th>
+                <th>Blocked</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/San_d%27Orian_Missions" target="_blank" rel="noreferrer">San d'Oria</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/San_d%27Oria_Mission_8-2" target="_blank" rel="noreferrer">Lightbringer (8-2)</a></td>
+                <td class="onward">
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/San_d%27Oria_Mission_9-1" target="_blank" rel="noreferrer">9-1 Breaking Barriers</a></p>
+                  <details>
+                    <summary>8-2 → 9-2</summary>
+                    <p class="full">8-2 Lightbringer · 9-1 Breaking Barriers · 9-2 The Heir to the Light</p>
+                  </details>
+                </td>
+                <td class="blocked">—</td>
+              </tr>
+              <tr>
+                <td>Bastok / Windurst</td>
+                <td class="current">—</td>
+                <td class="onward">Nation missions unavailable while San d'Oria allegiance.</td>
+                <td class="blocked">Blocked by San d'Oria allegiance</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/Zilart_Mission" target="_blank" rel="noreferrer">Zilart</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/Zilart_Mission_4" target="_blank" rel="noreferrer">The Temple of Uggalepih (4)</a></td>
+                <td class="onward">
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Zilart_Mission_5" target="_blank" rel="noreferrer">5 Headstone Pilgrimage</a></p>
+                  <details>
+                    <summary>4 → 18 + epilogue</summary>
+                    <p class="full">4 The Temple of Uggalepih · 5 Headstone Pilgrimage · 6 Through the Quicksand Caves · 7 The Chamber of Oracles · 8 Return to Delkfutt's Tower · 9 Ro'Maeve · 10 The Temple of Desolation · 11 The Hall of the Gods · 12 The Mithra and the Crystal · 13 The Gate of the Gods · 14 Ark Angels · 15 The Sealed Shrine · 16 The Celestial Nexus · 17 Awakening · 18 The Last Verse · epilogue Storms of Fate / Shadows of the Departed / Apocalypse Nigh</p>
+                  </details>
+                </td>
+                <td class="blocked">RoV waits on <a href="https://www.bg-wiki.com/ffxi/Zilart_Mission_5" target="_blank" rel="noreferrer">Headstone Pilgrimage</a> before 2-24</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/Category:Promathia_Missions" target="_blank" rel="noreferrer">Promathia</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/Promathia_Mission_3-3" target="_blank" rel="noreferrer">The Road Forks (3-3)</a></td>
+                <td class="onward">
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Promathia_Mission_3-4" target="_blank" rel="noreferrer">3-4 Tending Aged Wounds</a></p>
+                  <details>
+                    <summary>3-3 → 8-5 + epilogue</summary>
+                    <p class="full">3-3 The Road Forks · 3-4 Tending Aged Wounds · 3-5 Darkness Named · 4-1 Sheltering Doubt · 4-2 The Savage · 4-3 The Secrets of Worship · 4-4 Slanderous Utterings · 5-1 The Enduring Tumult of War · 5-2 Desires of Emptiness · 5-3 Three Paths (Louverance / Tenzen / Ulmia) · 6-1 For Whom the Verse is Sung · 6-2 A Place to Return · 6-3 More Questions than Answers · 6-4 One to be Feared · 7-1 Chains and Bonds · 7-2 Flames in the Darkness · 7-3 Fire in the Eyes of Men · 7-4 Calm Before the Storm · 7-5 The Warrior's Path · 8-1 Garden of Antiquity · 8-2 A Fate Decided · 8-3 When Angels Fall · 8-4 Dawn · 8-5 The Last Verse · epilogue Storms of Fate / Shadows of the Departed / Apocalypse Nigh</p>
+                  </details>
+                </td>
+                <td class="blocked">—</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/Category:Aht_Urhgan_Missions" target="_blank" rel="noreferrer">Aht Urhgan</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/Aht_Urhgan_Mission_17" target="_blank" rel="noreferrer">Guests of the Empire (17)</a></td>
+                <td class="onward">
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Aht_Urhgan_Mission_18" target="_blank" rel="noreferrer">18 Passing Glory</a> <span class="muted">(zone + game-day wait)</span></p>
+                  <details>
+                    <summary>17 → 48 + epilogue</summary>
+                    <p class="full">17 Guests of the Empire · 18 Passing Glory · 19 Sweets for the Soul · 20 Teahouse Tumult · 21 Finders Keepers · 22 Shield of Diplomacy · 23 Social Graces · 24 Foiled Ambition · 25 Playing the Part · 26 Seal of the Serpent · 27 Misplaced Nobility · 28 Bastion of Knowledge · 29 Puppet in Peril · 30 Prevalence of Pirates · 31 Shades of Vengeance · 32 In the Blood · 33 Sentinels' Honor · 34 Testing the Waters · 35 Legacy of the Lost · 36 Gaze of the Saboteur · 37 Path of Blood · 38 Stirrings of War · 39 Allied Rumblings · 40 Unraveling Reason · 41 Light of Judgment · 42 Path of Darkness · 43 Fangs of the Lion · 44 Nashmeira's Plea · 45 Ragnarok · 46 Imperial Coronation · 47 The Empress Crowned · 48 Eternal Mercenary · epilogue Imperial Ward / The Rider Cometh / etc.</p>
+                  </details>
+                </td>
+                <td class="blocked">—</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/Category:Wings_of_the_Goddess_Missions" target="_blank" rel="noreferrer">Wings of the Goddess</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/In_the_Name_of_the_Father" target="_blank" rel="noreferrer">In the Name of the Father (8)</a></td>
+                <td class="onward">
+                  <p class="next">Next: Nation Quest 5, then <a href="https://www.bg-wiki.com/ffxi/Dancers_in_Distress" target="_blank" rel="noreferrer">9 Dancers in Distress</a></p>
+                  <details>
+                    <summary>8 → 54 + epilogue</summary>
+                    <p class="full">8 In the Name of the Father · NQ5 Storm on the Horizon / Perils of the Griffon / When One Man Is Not Enough · NQ6 Fire in the Hole / In a Haze of Glory / A Feast for Gnats · 9 Dancers in Distress · 10 Daughter of a Knight · 11 A Spoonful of Sugar · 12 Affairs of State · 13 Borne by the Wind · 14 A Nation on the Brink · 15 Crossroads of Time · NQ7–8 · 16 Sandswept Memories · 17 Northland Exposure · 18 Traitor in the Midst · 19 Betrayal at Beaucedine · 20 On Thin Ice · 21 Proof of Valor · 22 A Sanguinary Prelude · 23 Dungeons and Dancers · 24 Distorter of Time · 25 The Will of the World · 26 Fate in Haze · NQ9–10 · 27 The Scent of Battle · 28 Another World · 29 A Hawk in Repose · 30 The Battle of Xarcabard · 31 Prelude to a Storm · 32 Storm's Crescendo · 33 Into the Beast's Maw · 34 The Hunter Ensnared · 35 Flight of the Lion · 36 Fall of the Hawk · 37 Darkness Descends · 38 Adieu, Lilisette · NQ11–12 · 39 By the Fading Light · 40 Edge of Existence · 41 Her Memories (+ fragments) · 42 Forget Me Not · 43 Pillar of Hope · 44 Glimmer of Life · 45 Time Slips Away · 46 When Wills Collide · 47 Whispers of Dawn · 48 A Dreamy Interlude · 49 Cait in the Woods · 50 Fork in the Road · 51 Maiden of the Dusk · 52 Where It All Began · 53 A Token of Troth · 54 Lest We Forget · epilogue Champion of the Dawn / A Forbidden Reunion</p>
+                  </details>
+                </td>
+                <td class="blocked">Nation quests gate main-line steps after 8</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/Category:Seekers_of_Adoulin_Missions" target="_blank" rel="noreferrer">Adoulin</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/Life_on_the_Frontier" target="_blank" rel="noreferrer">Life on the Frontier (1-6)</a></td>
+                <td class="onward">
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Seekers_of_Adoulin_Mission_1-7" target="_blank" rel="noreferrer">1-7 Meeting of the Minds</a></p>
+                  <details>
+                    <summary>1-6 → 5-5-1 + epilogue</summary>
+                    <p class="full">1-6 Life on the Frontier · 1-7 Meeting of the Minds · 1-8 Arciela Appears Again · Ch.2 Budding Prospects → Yggdrasil (2-1…2-7-3, incl. Behind the Sluices) · Ch.3 Return of the Exorcist → Glimmer of Portent · Ch.4 …Into the Fire → Royal Blessings · Ch.5 Arboreal Rumors → The Light Within · epilogue The Silent Forest / Ygnas Directive / Arciela Directive</p>
+                  </details>
+                </td>
+                <td class="blocked">RoV 3-4 needs 1-7; later RoV needs Behind the Sluices + Waterway facility crank</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/Category:Rhapsodies_of_Vanadiel_Missions" target="_blank" rel="noreferrer">Rhapsodies</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/Keep_On_Giving" target="_blank" rel="noreferrer">Keep On Giving (2-22)</a></td>
+                <td class="onward">
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Past_Imperfect" target="_blank" rel="noreferrer">2-23 Past Imperfect</a></p>
+                  <details>
+                    <summary>2-22 → 3-35</summary>
+                    <p class="full">2-22 Keep On Giving · 2-23 Past Imperfect · <strong>gate:</strong> Zilart Headstone · 2-24 The Cursed Temple · 2-25 Wisdom of Our Forefathers · 2-26 Where Divinities Collide · 2-27 Visions of Dread · 2-28 To the Skies · 2-29 Escha - Ru'Aun · 2-30 The Decisive Heroine · 2-31 Fall from Grace · 2-32 Banishing the Darkness · 2-33 Over the Rainbow · 2-34 Cacophonous Discord · 2-35 Eddies of Despair · 2-36 Pretender to the Throne · 2-37 Banished · 2-38 Call of the Void · 2-39 Both Paths Taken · 2-40 The Man Behind the Mask · 2-41 Uncertain Futures · 3-1 Darkness Beckons · 3-2 The Brewing Storm · 3-3 The River Runs Red · <strong>gate:</strong> Adoulin 1-7 · 3-4 The Crucible · 3-5 Forward Thinking · <strong>gate:</strong> Adoulin Aimless Journey · 3-6 Tears of the Generals · 3-7 What He Left Behind · <strong>gate:</strong> Behind the Sluices + crank · 3-8 Gone but Not Forgotten · 3-9 August Artifacts · 3-10 Solemnity · 3-11 Eyes on You · 3-12 Exploring the Ruins · 3-13 Become Something More · 3-14 Unshakable Nightmares · 3-15 What Remains of Hope · 3-16 Death Cares Not · 3-17 No Time like the Future · 3-18 Sin · 3-19 Penance · 3-20 Vessel of Light · 3-21 The Lifestream of Reisenjima · 3-22 From West to East · 3-23 Good Things Come in Threes · 3-24 Tackling the Problem · 3-25 Way to Divinity · 3-26 The Winds of Time · 3-27 Calm After the Storm · 3-28 Nary a Cloud in Sight · 3-29 An Unending Song · 3-30 A Deep Sleep · 3-31 Guardians · 3-32 Iroha in Distress · 3-33 Absolute Trust · 3-34 The Orb's Radiance · 3-35 A Rhapsody for the Ages</p>
+                  </details>
+                </td>
+                <td class="blocked">2-24+ needs Zilart <a href="https://www.bg-wiki.com/ffxi/Zilart_Mission_5" target="_blank" rel="noreferrer">Headstone</a>; Ch.3 needs Adoulin 1-7 / Aimless Journey / Behind the Sluices</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/A_Crystalline_Prophecy_Missions" target="_blank" rel="noreferrer">Crystalline Prophecy</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/Crystalline_Mission_2" target="_blank" rel="noreferrer">The Echo Awakens (2)</a></td>
+                <td class="onward">
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Crystalline_Mission_3" target="_blank" rel="noreferrer">3 Gatherer of Light (I)</a></p>
+                  <details>
+                    <summary>2 → 12</summary>
+                    <p class="full">2 The Echo Awakens · 3 Gatherer of Light (I) · 4 Gatherer of Light (II) · 5 Those Who Lurk in Shadows (I) · 6 Those Who Lurk in Shadows (II) · 7 Those Who Lurk in Shadows (III) · 8 Remember Me in Your Dreams · 9 Born of Her Nightmares · 10 Banishing the Echo · 11 Ode of Life Bestowing · 12 A Crystalline Prophecy (Fin.)</p>
+                  </details>
+                </td>
+                <td class="blocked">—</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/Category:A_Moogle_Kupo_d%27Etat_Missions" target="_blank" rel="noreferrer">Moogle Kupo d'Etat</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/Kupo_Mission_2" target="_blank" rel="noreferrer">Drenched! It Began with a Raindrop (2)</a></td>
+                <td class="onward">
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Kupo_Mission_3" target="_blank" rel="noreferrer">3 Hasten! In a Jam in Jeuno?</a></p>
+                  <details>
+                    <summary>2 → 15</summary>
+                    <p class="full">2 Drenched! It Began with a Raindrop · 3 Hasten! In a Jam in Jeuno? · 4 Welcome! To My Decrepit Domicile · 5 Curses! A Horrifically Harrowing Hex · 6 An Errand! The Professor's Price · 7 Shock! Arrant Abuse of Authority · 8 Lender Beware! Read the Fine Print · 9 Rescue! A Moogle's Labor of Love · 10 Roar! A Cat Burglar Bares Her Fangs · 11 Relief! A Triumphant Return · 12 Joy! Summoned to a Fabulous Fete · 13 A Challenge! You Could Be a Winner · 14 Smash! A Malevolent Menace · 15 A Moogle Kupo d'Etat (Fin.)</p>
+                  </details>
+                </td>
+                <td class="blocked">—</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.bg-wiki.com/ffxi/Category:A_Shantotto_Ascension_Missions" target="_blank" rel="noreferrer">Shantotto Ascension</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/A_Shantotto_Ascension_Mission_3" target="_blank" rel="noreferrer">That Which Curdles Blood (3)</a></td>
+                <td class="onward">
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/A_Shantotto_Ascension_Mission_4" target="_blank" rel="noreferrer">4 Sugar-coated Directive</a></p>
+                  <details>
+                    <summary>3 → 15</summary>
+                    <p class="full">3 That Which Curdles Blood · 4 Sugar-coated Directive · 5 Enemy of the Empire (I) · 6 Enemy of the Empire (II) · 7 Sugar-coated Subterfuge · 8 Shantotto in Chains · 9 Fountain of Trouble · 10 Battaru Royale · 11 Romancing the Clone · 12 Sisters in Arms · 13 Project: Shantottofication · 14 An Uneasy Peace · 15 A Shantotto Ascension (Fin)</p>
+                  </details>
+                </td>
+                <td class="blocked">—</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="note">Current → end lists from <a href="https://www.bg-wiki.com/ffxi/Category:Missions" target="_blank" rel="noreferrer">BG Wiki</a>. Completed missions omitted. RoV gates shown where other lines must catch up.</p>
         </div>
       </div>
     </section>
 
-    <footer>
-      Source: Windower screenshots + findAll Cheeseplate dump + Chrome FFXI tabs.
-      Repo path: <code>docs/</code>
-    </footer>
+    <footer>Windower screenshots + findAll · docs/ · missions current→end via BG Wiki 2026-10-13</footer>
   </div>
 </body>
 </html>

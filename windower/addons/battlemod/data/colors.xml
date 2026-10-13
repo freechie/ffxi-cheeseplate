@@ -1,8 +1,9 @@
 <?xml version="1.1" ?>
 <settings>
     <!--
-        Colors are customizable based on party / alliance position. Use the colortest command to view the available colors.
-        If you wish for a color to be unchanged from its normal color, set it to 0.
+        Use //bm colortest to preview codes (1-262 unique).
+        Name colors use the battlemod palette via 0x1F/0x1E, NOT add_to_chat modes.
+        501 = red (standard battlemod red). Low codes like 5/39 are blue/yellow in-game.
     -->
     <global>
         <a10>205</a10>
@@ -21,14 +22,15 @@
         <allydmg>0</allydmg>
         <enfeebcol>501</enfeebcol>
         <itemcol>256</itemcol>
-        <mob>323</mob>
+        <misscol>501</misscol>
+        <mob>501</mob>
         <mobdmg>0</mobdmg>
         <mobspellcol>377</mobspellcol>
         <mobwscol>377</mobwscol>
         <mydmg>0</mydmg>
         <other>262</other>
         <otherdmg>0</otherdmg>
-        <p0>501</p0>
+        <p0>208</p0>
         <p1>458</p1>
         <p2>410</p2>
         <p3>492</p3>

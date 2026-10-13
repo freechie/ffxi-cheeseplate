@@ -10,11 +10,10 @@ bind f12 showfps
 bind sysrq screenshot jpg hide
 bind ^v paste
 
-// GearSwap THF set cycle helpers
+// GearSwap: job files rebind Alt+F6–F11 on load (THF.lua / DNC.lua)
+// Fallback toggles if a job file does not override them:
 bind !f9 gs c toggle TP set
 bind !f10 gs c toggle Idle set
-bind !f11 gs c th
-bind !f8 gs c sata
 
 lua load XIPivot
 lua load enemybar2

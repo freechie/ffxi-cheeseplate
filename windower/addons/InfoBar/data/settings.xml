@@ -48,9 +48,12 @@
     <cheeseplate>
         <display>
             <pos>
-                <x>701.21575927734</x>
-                <y>145.34141540527</y>
+                <x>749.77203369141</x>
+                <y>89.658081054688</y>
             </pos>
+            <text>
+                <blue>128</blue>
+            </text>
         </display>
     </cheeseplate>
 </settings>
