@@ -1,14 +1,14 @@
-# FFXI settings
+# FFXI · Cheeseplate
 
-Personal Final Fantasy XI and Windower settings. This is a snapshot of config files, not the game or Windower install.
+Personal Final Fantasy XI and Windower settings, plus the Cheeseplate (Asura) progress board. This is a snapshot of config files, not the game or Windower install.
 
 PlayOnline login files, cookies, and mail are not included.
 
 ## Progress board
 
-Cheeseplate (Asura) job, mission, and currency tracker:
+Job, mission, and currency tracker:
 
-https://freechie.github.io/ffxi-settings/
+https://freechie.github.io/ffxi-cheeseplate/
 
 Source lives in `docs/` (GitHub Pages).
 
