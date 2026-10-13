@@ -399,6 +399,47 @@
     footer a { color: var(--gold); }
     footer a:hover { color: #fff; }
 
+    .to-top {
+      position: fixed;
+      right: max(16px, env(safe-area-inset-right, 0px));
+      bottom: max(16px, env(safe-area-inset-bottom, 0px));
+      z-index: 40;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      border: 1px solid rgba(180, 200, 230, 0.45);
+      background: linear-gradient(180deg, #2c3270, #1c2258);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-shadow: inherit;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 8px 20px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .to-top.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .to-top:hover {
+      border-color: var(--select);
+      color: var(--gold);
+      text-decoration: none;
+      background: linear-gradient(180deg, #4a3a28, #2e2418);
+    }
+    .to-top:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
     @media (max-width: 720px) {
       :root { --pad: 14px; }
 
@@ -433,6 +474,13 @@
         padding: 7px 12px;
         font-size: 12px;
         min-height: 40px;
+      }
+
+      .to-top {
+        right: max(12px, env(safe-area-inset-right, 0px));
+        bottom: max(12px, env(safe-area-inset-bottom, 0px));
+        min-height: 44px;
+        min-width: 44px;
       }
 
       .jobs,
@@ -483,7 +531,7 @@
   </style>
 </head>
 <body>
-  <header class="hero">
+  <header class="hero" id="top">
     <div class="hero-inner">
       <div class="win">
         <div class="win-bar">
@@ -975,5 +1023,18 @@
       · Windower screenshots + findAll · missions current→end via BG Wiki 2026-10-13
     </footer>
   </div>
+
+  <a class="to-top" href="#top" aria-label="Back to top">Top</a>
+  <script>
+    (function () {
+      var btn = document.querySelector(".to-top");
+      if (!btn) return;
+      var toggle = function () {
+        btn.classList.toggle("is-visible", window.scrollY > 320);
+      };
+      toggle();
+      window.addEventListener("scroll", toggle, { passive: true });
+    })();
+  </script>
 </body>
 </html>
