@@ -36,6 +36,7 @@
     <addon>battlemod</addon>
     <addon>enternity</addon>
     <addon>invtracker</addon>
+    <addon>SellNPC</addon>
     <plugin>DelayMeNot</plugin>
     <plugin>Config</plugin>
     <plugin>Tickle</plugin>

@@ -1,0 +1,18 @@
+//Junk Profile
+//Passes vendor-trash drops so they do not fill inventory.
+//Load:  /ll junk
+//
+//True junk only — excludes NIN tools, seals/crests, crystals, imperial coin,
+//geodes, avatarites, skins, scrolls, keys, kupons/pells/vouchers, furniture,
+//gear, yggrete, abjurations, testimonies, gardening seeds.
+//
+//To NPC-vendor these from inventory instead, use SellNPC:
+//  //sellnpc junk
+//  then open a shop NPC window
+
+
+// Food / fish / eggs
+if item is 4368,4570,5569,4400,5954,4402,5963,4472,4515,4579,4358,5950,4484,4441,4401 then pass
+
+// Low-value mats / junk
+if item is 847,880,881,768,90,17296,912,2150,1230,641,642,1108,940,1888,612 then pass
