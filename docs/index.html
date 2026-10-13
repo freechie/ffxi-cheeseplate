@@ -82,6 +82,9 @@
       width: fit-content;
       max-width: 100%;
     }
+    .hero .win-body {
+      text-align: center;
+    }
     .hero h1 {
       margin: 0 0 6px;
       font-size: clamp(34px, 7vw, 52px);
@@ -89,12 +92,14 @@
       letter-spacing: -0.02em;
     }
     .hero p {
-      margin: 0;
+      margin: 0 auto;
       color: var(--muted);
       max-width: 42rem;
     }
     .hero .repo {
       margin-top: 10px;
+      margin-left: auto;
+      margin-right: auto;
       font-size: 13px;
       max-width: 36rem;
     }
@@ -117,19 +122,12 @@
     }
     .win-bar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
       padding: 7px 12px;
       background: var(--title);
       border-bottom: 1px solid var(--border);
       font-size: 13px;
       font-weight: 600;
-    }
-    .win-bar span:last-child {
-      color: #ff7070;
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      font-weight: 500;
     }
     .win-bar a { color: inherit; }
     .win-bar a:hover { color: var(--gold); text-decoration: none; }
@@ -427,9 +425,7 @@
       .win-bar {
         padding: 6px 10px;
         font-size: 12px;
-        gap: 8px;
       }
-      .win-bar span:last-child { letter-spacing: 0.1em; }
       .win-body, .panel-pad { padding: 12px; }
 
       nav { gap: 6px; margin-top: 12px; }
@@ -492,7 +488,6 @@
       <div class="win">
         <div class="win-bar">
           <span>Status</span>
-          <span>◀ ▶</span>
         </div>
         <div class="win-body">
           <h1>Cheeseplate</h1>
@@ -515,7 +510,7 @@
     <section id="priority">
       <h2>Priority</h2>
       <div class="panel win">
-        <div class="win-bar"><span>Do this first</span><span>◀ ▶</span></div>
+        <div class="win-bar"><span>Do this first</span></div>
         <div class="panel-pad">
           <div class="act">
             <div class="n">1</div>
@@ -568,7 +563,7 @@
       <h2>Work</h2>
       <div class="jobs">
         <div class="panel win">
-          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Dancer" target="_blank" rel="noreferrer">Dancer</a></span><span>◀ ▶</span></div>
+          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Dancer" target="_blank" rel="noreferrer">Dancer</a></span></div>
           <div class="panel-pad job">
             <div class="name">Now</div>
             <div class="lvl">91 / 99</div>
@@ -577,7 +572,7 @@
           </div>
         </div>
         <div class="panel win">
-          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Samurai" target="_blank" rel="noreferrer">Samurai</a></span><span>◀ ▶</span></div>
+          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Samurai" target="_blank" rel="noreferrer">Samurai</a></span></div>
           <div class="panel-pad job">
             <div class="name">After 99</div>
             <div class="lvl">0 / 99</div>
@@ -586,7 +581,7 @@
           </div>
         </div>
         <div class="panel win">
-          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Bard" target="_blank" rel="noreferrer">Bard</a></span><span>◀ ▶</span></div>
+          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Bard" target="_blank" rel="noreferrer">Bard</a></span></div>
           <div class="panel-pad job">
             <div class="name">After SAM</div>
             <div class="lvl">0 / 99</div>
@@ -596,7 +591,7 @@
         </div>
       </div>
       <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>Between camps</span><span>◀ ▶</span></div>
+        <div class="win-bar"><span>Between camps</span></div>
         <div class="panel-pad">
           <div class="act">
             <div class="n">1</div>
@@ -648,7 +643,7 @@
     <section id="buy">
       <h2>Buy</h2>
       <div class="panel win">
-        <div class="win-bar"><span>Redeem now</span><span>◀ ▶</span></div>
+        <div class="win-bar"><span>Redeem now</span></div>
         <div class="panel-pad">
           <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Karieyh_Haubert_%2B1" target="_blank" rel="noreferrer">Karieyh +1</a> ×4 <span class="tag">SAM</span></span><b>4× <a href="https://www.bg-wiki.com/ffxi/Kupon_A-PK109" target="_blank" rel="noreferrer">A-PK109</a></b></div>
           <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Orvail_Robe_%2B1" target="_blank" rel="noreferrer">Orvail Robe +1</a> <span class="tag">BRD</span></span><b>1× <a href="https://www.bg-wiki.com/ffxi/Kupon_A-PK109" target="_blank" rel="noreferrer">A-PK109</a></b></div>
@@ -661,7 +656,7 @@
     <section id="use">
       <h2>Use</h2>
       <div class="panel win">
-        <div class="win-bar"><span>While DNC is 91</span><span>◀ ▶</span></div>
+        <div class="win-bar"><span>While DNC is 91</span></div>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Echad_Ring" target="_blank" rel="noreferrer">Echad Ring</a></span><b>EXP +150%</b></div>
@@ -683,7 +678,7 @@
       </div>
 
       <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Alter_Ego_Points" target="_blank" rel="noreferrer">Alter ego</a> 340 / 1000</span><span>◀ ▶</span></div>
+        <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Alter_Ego_Points" target="_blank" rel="noreferrer">Alter ego</a> 340 / 1000</span></div>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row hi"><span>1 · HP</span><b>210</b></div>
@@ -705,7 +700,7 @@
       </div>
 
       <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>After DNC hits 99</span><span>◀ ▶</span></div>
+        <div class="win-bar"><span>After DNC hits 99</span></div>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Endorsement_Ring" target="_blank" rel="noreferrer">Endorsement Ring</a></span><b>CP +200%</b></div>
@@ -734,7 +729,7 @@
     <section id="spend">
       <h2>Spend</h2>
       <div class="panel win">
-        <div class="win-bar"><span>Before it caps or expires</span><span>◀ ▶</span></div>
+        <div class="win-bar"><span>Before it caps or expires</span></div>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Sparks_of_Eminence" target="_blank" rel="noreferrer">Sparks</a></span><b>76,771</b></div>
@@ -756,7 +751,7 @@
       </div>
 
       <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>After 99</span><span>◀ ▶</span></div>
+        <div class="win-bar"><span>After 99</span></div>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Dial_Key_AB" target="_blank" rel="noreferrer">Dial Key #Ab</a></span><b>×13</b></div>
@@ -782,7 +777,7 @@
       </div>
 
       <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>Why the rest is sitting</span><span>◀ ▶</span></div>
+        <div class="win-bar"><span>Why the rest is sitting</span></div>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Deeds_of_Heroism" target="_blank" rel="noreferrer">Deeds</a></span><b>20</b></div>
@@ -829,7 +824,6 @@
       <div class="panel win">
         <div class="win-bar">
           <span>Mission log</span>
-          <span>◀ ▶</span>
         </div>
         <div class="panel-pad table-scroll">
           <table>
