@@ -11,10 +11,13 @@
   <style>
     :root {
       --bg: #0b0d16;
-      --win: rgba(42, 46, 102, 0.84);
+      /* Window Type 3: indigo wash + fine horizontal scanlines */
+      --win-top: rgba(52, 62, 148, 0.92);
+      --win-mid: rgba(30, 38, 104, 0.9);
+      --win-bottom: rgba(12, 16, 48, 0.94);
       --title: linear-gradient(180deg, #6a6cbc 0%, #4a4e98 45%, #363a7a 100%);
-      --border: #9ad0e8;
-      --border-inner: rgba(18, 22, 52, 0.9);
+      --border: rgba(150, 180, 230, 0.4);
+      --border-inner: rgba(18, 22, 52, 0.85);
       --text: #ffffff;
       --muted: #c8d0e8;
       --link: #a8d0ff;
@@ -25,10 +28,16 @@
       --pad: 20px;
       --stripe: repeating-linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.18) 0px,
-        rgba(0, 0, 0, 0.18) 1px,
-        transparent 1px,
-        transparent 3px
+        rgba(0, 0, 0, 0.32) 0px,
+        rgba(0, 0, 0, 0.32) 1px,
+        rgba(255, 255, 255, 0.035) 1px,
+        rgba(255, 255, 255, 0.035) 2px
+      );
+      --win-fill: linear-gradient(
+        180deg,
+        var(--win-top) 0%,
+        var(--win-mid) 42%,
+        var(--win-bottom) 100%
       );
     }
 
@@ -110,28 +119,37 @@
     .hero .repo a:hover { color: #fff; }
     /* Window Type 3 chrome */
     .win {
-      background-color: var(--win);
-      background-image: var(--stripe);
+      position: relative;
+      background-color: #141a48;
+      background-image: var(--stripe), var(--win-fill);
       border: 1px solid var(--border);
+      border-radius: 10px;
       box-shadow:
+        inset 0 1px 0 rgba(190, 210, 255, 0.14),
         inset 0 0 0 1px var(--border-inner),
-        0 10px 28px rgba(0, 0, 0, 0.45);
-      border-radius: 0;
+        0 0 28px rgba(70, 100, 190, 0.22),
+        0 12px 32px rgba(0, 0, 0, 0.5);
       overflow: hidden;
-      backdrop-filter: blur(3px);
+      backdrop-filter: blur(4px);
     }
     .win-bar {
       display: flex;
       align-items: center;
-      padding: 7px 12px;
+      padding: 8px 14px;
       background: var(--title);
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
+      border-bottom: 1px solid rgba(150, 180, 230, 0.35);
+      font-size: 16px;
       font-weight: 600;
+      font-style: italic;
+      text-shadow:
+        0 0 1px #000,
+        1px 1px 0 rgba(0, 0, 0, 0.9),
+        -1px 0 0 rgba(0, 0, 0, 0.65);
     }
     .win-bar a { color: inherit; }
     .win-bar a:hover { color: var(--gold); text-decoration: none; }
-    .win-body, .panel-pad { padding: 14px 16px 16px; }
+    .win-body, .panel-pad { padding: 14px 16px 18px; }
+    .panel-pad:has(.note) { padding-bottom: 20px; }
 
     nav {
       display: flex;
@@ -273,10 +291,15 @@
       vertical-align: top;
     }
     th {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 500;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      font-style: italic;
       border-top: 0;
+      text-shadow:
+        0 0 1px #000,
+        1px 1px 0 rgba(0, 0, 0, 0.9),
+        -1px 0 0 rgba(0, 0, 0, 0.65);
     }
     .current { color: var(--current); }
     .current a { color: var(--current); }
@@ -302,10 +325,42 @@
     .onward .full { margin: 0; line-height: 1.65; }
     .blocked { color: #ffb080; font-size: 13px; }
     .blocked a { color: #ffb080; }
+    /* Menu-line copy (Window Settings style: italic white + gold bead) */
     .note {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 12px;
+      position: relative;
+      margin: 16px 4px 4px;
+      padding-left: 1.35rem;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      font-style: italic;
+      line-height: 1.55;
+      text-shadow:
+        0 0 1px #000,
+        1px 1px 0 #000,
+        -1px 0 0 rgba(0, 0, 0, 0.85),
+        0 -1px 0 rgba(0, 0, 0, 0.7);
+    }
+    .note::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 0.4em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 32%, #fff2b0, var(--gold) 52%, #8a6a18);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+    }
+    .note a {
+      color: #fff;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, 0.4);
+      text-underline-offset: 2px;
+    }
+    .note a:hover {
+      color: var(--gold);
+      text-decoration-color: var(--gold);
     }
 
     .grid-2 {
@@ -464,8 +519,8 @@
       h2 { font-size: 22px; gap: 8px; }
 
       .win-bar {
-        padding: 6px 10px;
-        font-size: 12px;
+        padding: 7px 12px;
+        font-size: 15px;
       }
       .win-body, .panel-pad { padding: 12px; }
 
@@ -507,6 +562,7 @@
         padding: 8px 6px;
         font-size: 12px;
       }
+      th { font-size: 15px; }
 
       .act { gap: 2px 8px; }
       .act span, .fine, .spend-item p { font-size: 12px; }
@@ -873,7 +929,8 @@
         <div class="win-bar">
           <span>Mission log</span>
         </div>
-        <div class="panel-pad table-scroll">
+        <div class="panel-pad">
+          <div class="table-scroll">
           <table>
             <thead>
               <tr>
@@ -1012,6 +1069,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
           <p class="note">Current → end lists from <a href="https://www.bg-wiki.com/ffxi/Category:Missions" target="_blank" rel="noreferrer">BG Wiki</a>. Completed missions omitted. RoV gates shown where other lines must catch up.</p>
         </div>
       </div>
