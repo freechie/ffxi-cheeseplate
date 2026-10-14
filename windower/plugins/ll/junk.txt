@@ -2,17 +2,19 @@
 //Passes vendor-trash drops so they do not fill inventory.
 //Load:  /ll junk
 //
-//True junk only — excludes NIN tools, seals/crests, crystals, imperial coin,
-//geodes, avatarites, skins, scrolls, keys, kupons/pells/vouchers, furniture,
-//gear, yggrete, abjurations, testimonies, gardening seeds.
+//Mirrors SellNPC profiles['junk'] (online lists + regret / No-NPC-Sale filter).
+//Excludes: NIN tools, seals/crests, crystals, imperial coin, geodes,
+//avatarites, skins with craft demand, scrolls, keys, kupons/pells/vouchers,
+//furniture, most gear, yggrete, abjurations, testimonies, gardening seeds,
+//cooking staples, prize powder, copper/iron ore.
 //
 //To NPC-vendor these from inventory instead, use SellNPC:
 //  //sellnpc junk
 //  then open a shop NPC window
 
 
-// Food / fish / eggs
-if item is 4368,4570,5569,4400,5954,4402,5963,4472,4515,4579,4358,5950,4484,4441,4401 then pass
+// Food / fish / eggs / produce
+if item is 612,618,4274,4358,4362,4363,4365,4368,4373,4374,4384,4388,4389,4400,4402,4421,4427,4441,4443,4448,4461,4468,4473,4474,4484,4491,4504,4566,4570,4579,5235,5469,5569,5785,5786,5787,5788,5789,5790,5793,5798,5799,5948,5950,5954,5963,6145,639,16995 then pass
 
-// Low-value mats / junk
-if item is 847,880,881,768,90,17296,912,2150,1230,641,642,1108,940,1888,612 then pass
+// Low-value mats / mob trash
+if item is 90,688,768,841,846,847,852,864,880,881,882,888,891,900,912,920,922,926,928,936,940,1108,1118,1230,1520,1617,1654,1888,1981,2150,2171,2522,3928,3929,3932,3941,4016,641,642,9147,17296,20772,21191 then pass
