@@ -17,6 +17,7 @@
     //gs c step        — Quickstep (build finishing moves)
     //gs c reverse     — Reverse Flourish (TP from FM)
     //gs c utsu        — Utsusemi: Ni (Ichi if Ni not ready)
+    //gs c binds       — rebind for current level and list number-row keys
 
   Binds (init.txt): Alt+F9 TP, Alt+F10 Idle, Alt+F7 Samba, Alt+F8 Waltz
 ]]
@@ -210,11 +211,76 @@ function get_sets()
     send_command('bind !f10 gs c toggle Idle set')
     send_command('bind !f11 gs c utsu')
 
-    send_command('input /macro book 2; wait 0.1; input /macro set 1')
-    send_command('@input /echo [GearSwap] DNC/NIN leveling — Alt+F6 weapons | F7 samba | F8 waltz | F9 TP | F10 idle | F11 utsu')
+    include('binds.lua')
+    set_binds({
+        fkeys = {
+            ['!f6'] = 'Weapons',
+            ['!f7'] = 'Haste Samba',
+            ['!f8'] = 'Best Waltz',
+            ['!f9'] = 'TP set',
+            ['!f10'] = 'Idle set',
+            ['!f11'] = 'Utsusemi',
+        },
+        ['^'] = {
+            title = 'Steps & WS',
+            {'Camps', 'tru camps'},
+            {'Haste Samba', 'input /ja "Haste Samba" <me>', 45},
+            {'Box Step', 'input /ja "Box Step" <t>', 23},
+            {'Quickstep', 'input /ja "Quickstep" <t>', 20},
+            {'Feather Step', 'input /ja "Feather Step" <t>', 83},
+            {'Stutter Step', 'input /ja "Stutter Step" <t>', 40},
+            {'Reverse', 'input /ja "Reverse Flourish" <me>', 40},
+            {'Building', 'input /ja "Building Flourish" <me>', 50},
+            {'Evisceration', 'input /ws "Evisceration" <t>'},
+            {'Dancing Edge', 'input /ws "Dancing Edge" <t>'},
+        },
+        ['!'] = {
+            title = 'Waltzes & flourishes',
+            {'C.Waltz V', 'input /ja "Curing Waltz V" <stpc>', 87},
+            {'C.Waltz IV', 'input /ja "Curing Waltz IV" <stpc>', 70},
+            {'C.Waltz III', 'input /ja "Curing Waltz III" <stpc>', 45},
+            {'D.Waltz II', 'input /ja "Divine Waltz II" <me>', 78},
+            {'Healing Waltz', 'input /ja "Healing Waltz" <stpc>', 35},
+            {'Violent', 'input /ja "Violent Flourish" <t>', 45},
+            {'Climactic', 'input /ja "Climactic Flourish" <me>', 80},
+            {'Striking', 'input /ja "Striking Flourish" <me>', 89},
+            {'Wild', 'input /ja "Wild Flourish" <t>', 60},
+            {'Presto', 'input /ja "Presto" <me>', 77},
+        },
+        ['~^'] = {
+            title = 'Utility',
+            {'Spectral Jig', 'input /ja "Spectral Jig" <me>', 25},
+            {'Chocobo Jig II', 'input /ja "Chocobo Jig II" <me>', 70},
+            {'Echad Ring', 'gs c echad'},
+            {'Caliber Ring', 'gs c caliber'},
+            {'Emperor Band', 'gs c emperor'},
+            {'Warp Ring', 'gs c warp'},
+            {'Trusts', 'tru'},
+            {'Raise trusts', 'tru raise'},
+            {'Aspir Samba II', 'input /ja "Aspir Samba II" <me>', 60},
+            {'Drain Samba III', 'input /ja "Drain Samba III" <me>', 65},
+        },
+        ['~!'] = {
+            title = 'Flourishes & toggles',
+            {'Animated', 'input /ja "Animated Flourish" <t>', 20},
+            {'Desperate', 'input /ja "Desperate Flourish" <t>', 30},
+            {'Divine Waltz', 'input /ja "Divine Waltz" <me>', 25},
+            {'Aeolian Edge', 'input /ws "Aeolian Edge" <t>'},
+            {'Shark Bite', 'input /ws "Shark Bite" <t>'},
+            {'Trance', 'input /ja "Trance" <me>'},
+            {'Food', 'input /item "Grape Daifuku" <me>'},
+            {'TP set', 'gs c toggle TP set'},
+            {'Idle set', 'gs c toggle Idle set'},
+            {'Dismiss', 'input /refa all'},
+        },
+    })
+
+    send_command('input /macro book 19; wait 0.1; input /macro set 1')
+    send_command('@input /echo [GearSwap] DNC/NIN leveling — Alt+F6 weapons | F7 samba | F8 waltz | F9 TP | F10 idle | F11 utsu | //gs c binds lists number keys')
 end
 
 function file_unload()
+    clear_binds()
     send_command('unbind !f6')
     send_command('unbind !f7')
     send_command('unbind !f8')
@@ -260,8 +326,9 @@ end
 
 local function best_waltz()
     local lvl = player.main_job_level
-    if lvl >= 80 then return 'Curing Waltz IV' end
-    if lvl >= 50 then return 'Curing Waltz III' end
+    if lvl >= 87 then return 'Curing Waltz V' end
+    if lvl >= 70 then return 'Curing Waltz IV' end
+    if lvl >= 45 then return 'Curing Waltz III' end
     if lvl >= 30 then return 'Curing Waltz II' end
     return 'Curing Waltz'
 end
@@ -358,6 +425,7 @@ end
 
 function self_command(command)
     command = command:lower()
+    if binds_command(command) then return end
 
     if command == 'toggle tp set' then
         TP_Index = TP_Index % #TP_Set_Names + 1

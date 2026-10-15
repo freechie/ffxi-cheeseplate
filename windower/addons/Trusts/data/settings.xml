@@ -6,25 +6,32 @@
         <sets>
             <default>
                 <1>August</1>
-                <2>King of Hearts</2>
+                <2>Apururu (UC)</2>
                 <3>Koru-Moru</3>
                 <4>Qultada</4>
                 <5>Shantotto II</5>
             </default>
-            <no-apururu>
+            <camps>
                 <1>August</1>
-                <2>King of Hearts</2>
+                <2>Koru-Moru</2>
+                <3>Qultada</3>
+                <4>Sakura</4>
+                <5>Shantotto II</5>
+            </camps>
+            <raise>
+                <1>August</1>
+                <2>Apururu (UC)</2>
                 <3>Koru-Moru</3>
                 <4>Qultada</4>
+                <5>Ferreous Coffin</5>
+            </raise>
+            <boss>
+                <1>Amchuchu</1>
+                <2>Apururu (UC)</2>
+                <3>King of Hearts</3>
+                <4>Koru-Moru</4>
                 <5>Shantotto II</5>
-            </no-apururu>
-            <no-apururu-boss>
-                <1>King of Hearts</1>
-                <2>Koru-Moru</2>
-                <3>Shantotto II</3>
-                <4>Amchuchu</4>
-                <5>Fablinix</5>
-            </no-apururu-boss>
+            </boss>
         </sets>
         <wait>
             <aftercast>3</aftercast>

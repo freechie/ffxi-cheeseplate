@@ -10,6 +10,7 @@
     //gs c toggle Idle set
     //gs c th   — force Treasure Hunter set while engaged
     //gs c sata — Sneak Attack, Trick Attack, then Shark Bite (Alt+F8)
+    //gs c binds — rebind for current level and list number-row keys
 ]]
 
 function get_sets()
@@ -69,11 +70,68 @@ function get_sets()
     send_command('bind !f10 gs c toggle Idle set')
     send_command('bind !f11 gs c th')
 
-    send_command('input /macro book 1; wait 0.1; input /macro set 1')
-    send_command('@input /echo [GearSwap] THF loaded — Alt+F8 SATA | F9 TP | F10 idle | F11 TH')
+    include('binds.lua')
+    set_binds({
+        fkeys = {
+            ['!f8'] = 'SATA',
+            ['!f9'] = 'TP set',
+            ['!f10'] = 'Idle set',
+            ['!f11'] = 'TH set',
+        },
+        ['^'] = {
+            title = 'Combat',
+            {'Trusts', 'tru'},
+            {'Sneak Attack', 'input /ja "Sneak Attack" <me>'},
+            {'Trick Attack', 'input /ja "Trick Attack" <me>'},
+            {'Bully', 'input /ja "Bully" <t>'},
+            {'Evisceration', 'input /ws "Evisceration" <t>'},
+            {'Aeolian Edge', 'input /ws "Aeolian Edge" <t>'},
+            {'Shark Bite', 'input /ws "Shark Bite" <t>'},
+            {'Dancing Edge', 'input /ws "Dancing Edge" <t>'},
+            {'Perfect Dodge', 'input /ja "Perfect Dodge" <me>'},
+            {'Conspirator', 'input /ja "Conspirator" <me>'},
+        },
+        ['!'] = {
+            title = 'Steal & party',
+            {'Steal', 'input /ja "Steal" <t>'},
+            {'Despoil', 'input /ja "Despoil" <t>'},
+            {'Mug', 'input /ja "Mug" <t>'},
+            {'Flee', 'input /ja "Flee" <me>'},
+            {'Hide', 'input /ja "Hide" <me>'},
+            {'Collab p1', 'input /ja "Collaborator" <p1>'},
+            {'Accomplice p1', 'input /ja "Accomplice" <p1>'},
+            {'Larceny', 'input /ja "Larceny" <t>'},
+            {'Collab p2', 'input /ja "Collaborator" <p2>'},
+            {'Accomplice p2', 'input /ja "Accomplice" <p2>'},
+        },
+        ['~^'] = {
+            title = 'Utility',
+            {'Trizek Ring', 'gs c trizek'},
+            {'Capacity Ring', 'gs c capring'},
+            {'Warp Ring', 'gs c warp'},
+            {'Food', 'input /item "Grape Daifuku" <me>'},
+            {'Raise trusts', 'tru raise'},
+            {'Camps', 'tru camps'},
+            {'TH set', 'gs c th'},
+            {'SATA', 'gs c sata'},
+            {'TP set', 'gs c toggle TP set'},
+            {'Dismiss', 'input /refa all'},
+        },
+        ['~!'] = {
+            title = 'Ranged',
+            {'Ranged', 'input /ra <t>'},
+            {'Wasp Sting', 'input /ws "Wasp Sting" <t>'},
+            {'Viper Bite', 'input /ws "Viper Bite" <t>'},
+            {'Idle set', 'gs c toggle Idle set'},
+        },
+    })
+
+    send_command('input /macro book 6; wait 0.1; input /macro set 1')
+    send_command('@input /echo [GearSwap] THF loaded — Alt+F8 SATA | F9 TP | F10 idle | F11 TH | //gs c binds lists number keys')
 end
 
 function file_unload()
+    clear_binds()
     send_command('unbind !f8')
     send_command('unbind !f9')
     send_command('unbind !f10')
@@ -160,6 +218,7 @@ end
 
 function self_command(command)
     command = command:lower()
+    if binds_command(command) then return end
 
     if command == 'toggle tp set' then
         TP_Index = TP_Index % #TP_Set_Names + 1

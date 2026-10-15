@@ -19,6 +19,7 @@ lua load XIPivot
 lua load enemybar2
 
 lua load SATACast
+lua load keylabels
 
 // RoE tip (run once after you set daily objectives in-game):
 //   //roe save daily

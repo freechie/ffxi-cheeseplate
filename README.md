@@ -21,6 +21,7 @@ Source lives in `docs/` (GitHub Pages).
 - `windower/plugins/ll/` - LightLuggage lists
 - `windower/addons/*/data/` - addon settings, filters, and GearSwap
 - `game/USER/` - in-game macros, equipment sets, and client options
+- `windower/keybinds.md` - THF / DNC / NIN number-row keybinds (set by GearSwap)
 - `game/settings.xml` - retail client profile
 - `dgvoodoo/dgVoodoo.conf` - DirectX 8 wrapper used by PlayOnline
 
