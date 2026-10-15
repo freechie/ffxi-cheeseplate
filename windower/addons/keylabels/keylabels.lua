@@ -1,23 +1,26 @@
 _addon.name = 'keylabels'
 _addon.author = 'Cheeseplate'
-_addon.version = '2.0'
+_addon.version = '2.6'
 _addon.commands = {'keylabels', 'kl'}
 
 -- Shows number-row and function-key bind labels while a modifier combo is held.
--- GearSwap's binds.lua feeds it with `kl clear`, `kl set <key> <label>`, and `kl title <prefix> <title>`.
+-- GearSwap feeds: `kl clear`, `kl set <mod> <button> <label>`, `kl title <mod> <title>`.
+-- mod is ctrl|alt|cshift|ashift|calt so Windower never sees !1/^1 in send_command.
 
 local config = require('config')
 local texts = require('texts')
 
+-- Mid-left, below Timers (recast/buffs/custom at y≈70). Keep clear of that top row.
 local defaults = {
-    pos = {x = 20, y = 300},
+    pos = {x = 20, y = 400},
     positions = {
-        heading = {x = 20, y = 300},
-        actions = {x = 20, y = 328},
-        descriptions = {x = 185, y = 328},
+        heading = {x = 20, y = 400},
+        actions = {x = 20, y = 428},
+        descriptions = {x = 185, y = 428},
     },
     locked = true,
     layout_version = 0,
+    bg = {alpha = 140, red = 8, green = 12, blue = 24, visible = true},
 }
 local settings = config.load(defaults)
 
@@ -35,6 +38,7 @@ if settings.layout_version < 2 then
 end
 
 local function visual_settings(pos, size, red, green, blue, bold)
+    local bg = settings.bg or {}
     return {
         pos = {x = pos.x, y = pos.y},
         text = {
@@ -45,24 +49,28 @@ local function visual_settings(pos, size, red, green, blue, bold)
             blue = blue,
             stroke = {width = 1, alpha = 255, red = 0, green = 0, blue = 0},
         },
-        bg = {alpha = 210, red = 8, green = 12, blue = 24},
+        bg = {
+            alpha = bg.alpha or 140,
+            red = bg.red or 8,
+            green = bg.green or 12,
+            blue = bg.blue or 24,
+        },
         padding = 4,
         flags = {draggable = false, bold = bold},
     }
 end
 
 -- These must use independent tables; sharing one makes position/color updates collide.
-local heading_box = texts.new('', visual_settings(settings.positions.heading, 10, 255, 165, 40, true))
-local left_box = texts.new('', visual_settings(settings.positions.actions, 10, 70, 170, 255, false))
-local description_box = texts.new('', visual_settings(settings.positions.descriptions, 10, 255, 255, 255, false))
-
+local heading_box
+local left_box
+local description_box
 local dragged_overlay = false
+local panels = {}
+local shown = false
 
-local panels = {
-    heading = heading_box,
-    actions = left_box,
-    descriptions = description_box,
-}
+local function destroy_box(box)
+    if box and box.destroy then box:destroy() end
+end
 
 local function apply_positions()
     for name, box in pairs(panels) do
@@ -85,11 +93,26 @@ local function make_draggable(name, box)
     end)
 end
 
-make_draggable('heading', heading_box)
-make_draggable('actions', left_box)
-make_draggable('descriptions', description_box)
-apply_positions()
-apply_lock()
+-- Text objects created before logout do not draw again. Rebuild them on login.
+local function rebuild_boxes()
+    destroy_box(heading_box)
+    destroy_box(left_box)
+    destroy_box(description_box)
+    heading_box = texts.new('', visual_settings(settings.positions.heading, 10, 255, 165, 40, true))
+    left_box = texts.new('', visual_settings(settings.positions.actions, 10, 70, 170, 255, false))
+    description_box = texts.new('', visual_settings(settings.positions.descriptions, 10, 255, 255, 255, false))
+    panels.heading = heading_box
+    panels.actions = left_box
+    panels.descriptions = description_box
+    make_draggable('heading', heading_box)
+    make_draggable('actions', left_box)
+    make_draggable('descriptions', description_box)
+    apply_positions()
+    apply_lock()
+    shown = false
+end
+
+rebuild_boxes()
 
 local KEYS = {
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
@@ -112,7 +135,11 @@ local MOD_KEYS = {
 local labels = {}
 local titles = {}
 local down = {}
-local shown
+
+-- Must match KL_MOD names in GearSwap/data/binds.lua.
+local MOD_FROM_NAME = {
+    ctrl = '^', alt = '!', cshift = '~^', ashift = '~!', calt = '^!',
+}
 
 local function held(mod)
     for code in pairs(down) do
@@ -163,20 +190,88 @@ local function update()
     description_box:show()
 end
 
+-- GearSwap's login hook reloads the job file once, about 2s in, and errors if
+-- get_player() is still nil. Retry until the character exists, then reload so
+-- binds and overlay labels are sent to the boxes rebuilt above.
+local function recover(attempt)
+    attempt = tonumber(attempt) or 1
+    local player = windower.ffxi.get_player()
+    if not player or not player.main_job_id then
+        if attempt < 12 then
+            windower.send_command('wait 2; kl recover '..(attempt + 1))
+        end
+        return
+    end
+    windower.send_command('gs reload')
+    windower.send_command('wait 2; gs c labels')
+end
+
 windower.register_event('load', function()
-    windower.send_command('gs c labels')
-    windower.add_to_chat(207, '[keylabels] v2.0 loaded - //kl unlock to arrange')
+    local player = windower.ffxi.get_player()
+    if player and player.main_job_id then
+        windower.send_command('wait 1; gs c labels')
+    end
+    windower.add_to_chat(207, '[keylabels] v2.6 loaded - //kl unlock to arrange')
 end)
+
+windower.register_event('login', function()
+    settings = config.load(defaults)
+    down = {}
+    labels = {}
+    titles = {}
+    rebuild_boxes()
+    windower.send_command('wait 3; kl recover 1')
+end)
+
+windower.register_event('logout', function()
+    down = {}
+    shown = false
+    labels = {}
+    titles = {}
+    if heading_box then heading_box:hide() end
+    if left_box then left_box:hide() end
+    if description_box then description_box:hide() end
+end)
+
+windower.register_event('job change', function()
+    windower.send_command('wait 3; gs c labels')
+end)
+
+-- Reload saves memory over the file. Read the file first so an edit to the
+-- background alpha is not replaced by the value from when the addon loaded.
+local function pull_bg()
+    local fh = io.open(windower.addon_path .. 'data/settings.xml', 'r')
+    if not fh then return end
+    local text = fh:read('*a') or ''
+    fh:close()
+    local alpha, red, green, blue
+    for body in text:gmatch('<bg>(.-)</bg>') do
+        alpha = tonumber(body:match('<alpha>(%d+)</alpha>')) or alpha
+        red = tonumber(body:match('<red>(%d+)</red>')) or red
+        green = tonumber(body:match('<green>(%d+)</green>')) or green
+        blue = tonumber(body:match('<blue>(%d+)</blue>')) or blue
+    end
+    settings.bg = settings.bg or {}
+    if alpha then settings.bg.alpha = alpha end
+    if red then settings.bg.red = red end
+    if green then settings.bg.green = green end
+    if blue then settings.bg.blue = blue end
+end
+
+local function save_settings()
+    pull_bg()
+    config.save(settings)
+end
 
 windower.register_event('mouse', function(event_type)
     if event_type == 2 and dragged_overlay then
         dragged_overlay = false
-        config.save(settings)
+        save_settings()
     end
 end)
 
 windower.register_event('unload', function()
-    config.save(settings)
+    save_settings()
 end)
 
 windower.register_event('keyboard', function(dik, pressed)
@@ -191,9 +286,14 @@ windower.register_event('addon command', function(cmd, key, ...)
         labels = {}
         titles = {}
     elseif cmd == 'set' and key then
-        labels[key] = table.concat({...}, ' ')
+        local args = {...}
+        local mod = MOD_FROM_NAME[key:lower()]
+        if mod and args[1] then
+            labels[mod..args[1]:lower()] = table.concat(args, ' ', 2)
+        end
     elseif cmd == 'title' and key then
-        titles[key] = table.concat({...}, ' ')
+        local mod = MOD_FROM_NAME[key:lower()]
+        if mod then titles[mod] = table.concat({...}, ' ') end
     elseif cmd == 'unlock' then
         settings.locked = false
         apply_lock()
@@ -202,7 +302,7 @@ windower.register_event('addon command', function(cmd, key, ...)
     elseif cmd == 'lock' then
         settings.locked = true
         apply_lock()
-        config.save(settings)
+        save_settings()
         windower.add_to_chat(207, '[keylabels] Locked and saved.')
         return
     elseif cmd == 'pos' and tonumber(key) and tonumber((...)) then
@@ -213,10 +313,16 @@ windower.register_event('addon command', function(cmd, key, ...)
             pos.x, pos.y = pos.x + dx, pos.y + dy
         end
         apply_positions()
-        config.save(settings)
+        save_settings()
+        return
+    elseif cmd == 'refresh' then
+        windower.send_command('gs c labels')
+        return
+    elseif cmd == 'recover' then
+        recover(key)
         return
     else
-        windower.add_to_chat(207, 'keylabels: //kl unlock | lock | pos <x> <y>')
+        windower.add_to_chat(207, 'keylabels: //kl unlock | lock | pos <x> <y> | refresh')
         return
     end
     shown = false

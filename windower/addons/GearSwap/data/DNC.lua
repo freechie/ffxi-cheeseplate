@@ -19,7 +19,8 @@
     //gs c utsu        - Utsusemi: Ni (Ichi if Ni not ready)
     //gs c binds       - rebind for current level and list number-row keys
 
-  Binds (init.txt): Alt+F9 TP, Alt+F10 Idle, Alt+F7 Samba, Alt+F8 Waltz
+  Binds: Alt+F1 weapons, Alt+F2 waltz, Alt+F3 TP, Alt+F4 Idle, Alt+F5 utsu
+  (Haste Samba is Ctrl+2, not on F-keys)
 ]]
 
 function get_sets()
@@ -204,26 +205,28 @@ function get_sets()
 
     apply_weapons()
 
-    send_command('bind !f6 gs c weapons')
-    send_command('bind !f7 gs c samba')
-    send_command('bind !f8 gs c waltz')
-    send_command('bind !f9 gs c toggle TP set')
-    send_command('bind !f10 gs c toggle Idle set')
-    send_command('bind !f11 gs c utsu')
+    -- Drop the old Alt+F6–F11 layout before binding F1–F5.
+    for _, key in ipairs({'!f6', '!f7', '!f8', '!f9', '!f10', '!f11'}) do
+        send_command('unbind '..key)
+    end
+    send_command('bind !f1 gs c weapons')
+    send_command('bind !f2 gs c waltz')
+    send_command('bind !f3 gs c toggle TP set')
+    send_command('bind !f4 gs c toggle Idle set')
+    send_command('bind !f5 gs c utsu')
 
     include('binds.lua')
     set_binds({
         fkeys = {
-            ['!f6'] = 'Weapons',
-            ['!f7'] = 'Haste Samba',
-            ['!f8'] = 'Best Waltz',
-            ['!f9'] = 'TP set',
-            ['!f10'] = 'Idle set',
-            ['!f11'] = 'Utsusemi',
+            ['!f1'] = 'Weapons',
+            ['!f2'] = 'Best Waltz',
+            ['!f3'] = 'TP set',
+            ['!f4'] = 'Idle set',
+            ['!f5'] = 'Utsusemi',
         },
         ['^'] = {
             title = 'Steps & WS',
-            {'Camps', 'tru camps'},
+            {'EXP', 'tru exp'},
             {'Haste Samba', 'input /ja "Haste Samba" <me>', 45},
             {'Box Step', 'input /ja "Box Step" <t>', 23},
             {'Quickstep', 'input /ja "Quickstep" <t>', 20},
@@ -275,12 +278,18 @@ function get_sets()
         },
     })
 
-    send_command('input /macro book 19; wait 0.1; input /macro set 1')
-    send_command('@input /echo [GearSwap] DNC/NIN leveling - Alt+F6 weapons | F7 samba | F8 waltz | F9 TP | F10 idle | F11 utsu | //gs c binds lists number keys')
+    send_command('input /macro book 2; wait 0.1; input /macro set 1')
+    send_command('@input /echo [GearSwap] DNC/NIN leveling - Alt+F1 weapons | F2 waltz | F3 TP | F4 idle | F5 utsu | //gs c binds lists number keys')
 end
 
 function file_unload()
     clear_binds()
+    send_command('unbind !f1')
+    send_command('unbind !f2')
+    send_command('unbind !f3')
+    send_command('unbind !f4')
+    send_command('unbind !f5')
+    -- Clear previous Alt+F6–F11 layout if this file was reloaded mid-session.
     send_command('unbind !f6')
     send_command('unbind !f7')
     send_command('unbind !f8')

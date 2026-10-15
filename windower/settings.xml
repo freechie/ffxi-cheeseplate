@@ -47,6 +47,7 @@
   </autoload>
   <profile name="">
     <consolekey>Insert</consolekey>
+    <!-- 1.4 when the game is on the 2560x1440 monitor. screenfit writes 1 on the 1920x1080 monitor. Takes effect on the next launch. -->
     <uiscale>1.4</uiscale>
     <supersampling>2</supersampling>
     <allowwinkey>true</allowwinkey>

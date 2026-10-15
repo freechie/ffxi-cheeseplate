@@ -58,9 +58,15 @@
         <whitelist />
     </global>
     <cheeseplate>
+        <!-- Offsets from the bottom-right of a 1920x1080 window. texts.lua adds the current UI size. -->
+        <flags>
+            <bottom>true</bottom>
+            <draggable>true</draggable>
+            <right>true</right>
+        </flags>
         <pos>
-            <x>1222.9438476562</x>
-            <y>709.94995117188</y>
+            <x>-697</x>
+            <y>-370</y>
         </pos>
     </cheeseplate>
 </settings>

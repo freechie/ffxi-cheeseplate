@@ -47,17 +47,18 @@
         <RecastTimerLimit>10</RecastTimerLimit>
         <BuffsTimerLimit>10</BuffsTimerLimit>
         <CustomTimerLimit>10</CustomTimerLimit>
+        <!-- Recast top-left; buff/custom on the right — mid-left is keylabels. -->
         <RecastX>20</RecastX>
-        <RecastY>500</RecastY>
-        <BuffsX>200</BuffsX>
-        <BuffsY>300</BuffsY>
-        <CustomX>380</CustomX>
-        <CustomY>300</CustomY>
+        <RecastY>70</RecastY>
+        <BuffsX>900</BuffsX>
+        <BuffsY>320</BuffsY>
+        <CustomX>900</CustomX>
+        <CustomY>520</CustomY>
         <!--If true, only items on the recast/buff lists will be displayed-->
         <WhitelistMode>false</WhitelistMode>
         <!--List of ability names to display recasts for if in whitelistMode and to exclude otherwise-->
         <AbilityRecastFilter />
-        <!--List of spell names to display recasts for if in whitelistMode and to exclude otherwise-->
+        <!--Trust names. WhitelistMode false makes this a blacklist. screenfit writes this back after Timers saves, because an unload clears it.-->
         <SpellRecastFilter>Shantotto|Naji|Kupipi|Excenmille|Ayame|Nanaa Mihgo|Curilla|Volker|Ajido-Marujido|Trion|Zeid|Lion|Tenzen|Mihli Aliapoh|Valaineral|Joachim|Naja Salaheem|Prishe|Ulmia|Shikaree Z|Cherukiki|Iron Eater|Gessho|Gadalar|Rainemard|Ingrid|Lehko Habhoka|Nashmeira|Zazarg|Ovjang|Mnejing|Sakura|Luzaf|Najelith|Aldo|Moogle|Fablinix|Maat|D. Shantotto|Star Sibyl|Karaha-Baruha|Cid|Gilgamesh|Areuhat|Semih Lafihna|Elivira|Noillurie|Lhu Mhakaracca|Ferreous Coffin|Lilisette|Mumor|Uka Totlihn|Klara|Romaa Mihgo|Kuyin Hathdenna|Rahal|Koru-Moru|Pieuje (UC)|I. Shield (UC)|Apururu (UC)|Jakoh (UC)|Flaviria (UC)|Babban|Abenzio|Rughadjeen|Kukki-Chebukki|Margret|Chacharoon|Lhe Lhangavo|Arciela|Mayakov|Qultada|Adelheid|Amchuchu|Brygid|Mildaurion|Halver|Rongelouts|Leonoyne|Maximilian|Kayeel-Payeel|Robel-Akbel|Kupofried|Selh&apos;teus|Yoran-Oran (UC)|Sylvie (UC)|Abquhbah|Balamor|August|Rosulatia|Teodor|Ullegore|Makki-Chebukki|King of Hearts|Morimar|Darrcuiln|AAHM|AAEV|AAMR|AATT|AAGK|Iroha|Ygnas|Monberaux|Cornelia|Matsui-P|Excenmille [S]|Ayame (UC)|Maat (UC)|Aldo (UC)|Naja (UC)|Lion II|Zeid II|Prishe II|Nashmeira II|Lilisette II|Tenzen II|Mumor II|Ingrid II|Arciela II|Iroha II|Shantotto II</SpellRecastFilter>
         <!--List of ability names to display buffs for if in whitelistMode and to exclude otherwise-->
         <AbilityBuffFilter />

@@ -18,7 +18,8 @@ local MODS = {
 
 -- Overlay descriptions are intentionally limited to three words.
 local DESCRIPTIONS = {
-    ['Camps'] = 'Fast leveling party',
+    ['Camps'] = 'Sakura regen party',
+    ['EXP'] = 'Kupofried EXP party',
     ['Trusts'] = 'Balanced trust party',
     ['Raise trusts'] = 'Safer raise party',
     ['Dismiss'] = 'Release all trusts',
@@ -207,15 +208,45 @@ local active = {}
 local titles = {}
 local overlay_labels = {}
 
+-- Windower treats !1/^1 as key tokens inside send_command, so overlay traffic
+-- uses words: `kl set ctrl 2 …` / `kl title alt …` (must match keylabels.lua).
+local KL_MOD_ORDER = {'^!', '~^', '~!', '^', '!'}
+local KL_MOD = {['^!'] = 'calt', ['~^'] = 'cshift', ['~!'] = 'ashift', ['^'] = 'ctrl', ['!'] = 'alt'}
+
+local function send_kl_set(fullkey, label)
+    for _, prefix in ipairs(KL_MOD_ORDER) do
+        if fullkey:sub(1, #prefix) == prefix then
+            local button = fullkey:sub(#prefix + 1)
+            if button ~= '' then
+                send_command('kl set '..KL_MOD[prefix]..' '..button..' '..label)
+            end
+            return
+        end
+    end
+end
+
 local function send_title(prefix)
-    if titles[prefix] then send_command('kl title '..prefix..' '..titles[prefix]) end
+    local name = KL_MOD[prefix]
+    if name and titles[prefix] then
+        send_command('kl title '..name..' '..titles[prefix])
+    end
+end
+
+-- Must match the books written by scripts/sync_macro_names.py.
+local MACRO_BOOKS = {THF = 1, DNC = 2, NIN = 3}
+local MACRO_SETS = {['^'] = 1, ['!'] = 1, ['~^'] = 2, ['~!'] = 2, ['^!'] = 3}
+
+local function macro_location(prefix)
+    local book = MACRO_BOOKS[player.main_job]
+    if not book then return '' end
+    return ' (book '..book..' set '..MACRO_SETS[prefix]..')'
 end
 
 local function bind_rows(rows, lvl, job)
     for _, mod in ipairs(MODS) do
         local row = rows[mod[1]]
         if row and row.title then
-            titles[mod[1]] = job..' '..row.title
+            titles[mod[1]] = job..' '..row.title..macro_location(mod[1])
             send_title(mod[1])
         end
         for i, entry in ipairs(row or {}) do
@@ -223,7 +254,7 @@ local function bind_rows(rows, lvl, job)
                 local key = mod[1]..KEYS[i]
                 send_command('bind '..key..' '..entry[2])
                 local label = overlay_text(entry[1])
-                send_command('kl set '..key..' '..label)
+                send_kl_set(key, label)
                 active[key] = label
             end
         end
@@ -233,7 +264,7 @@ end
 local function send_overlay_labels(rows)
     for key, label in pairs(rows.fkeys or {}) do
         local display = overlay_text(label)
-        send_command('kl set '..key..' '..display)
+        send_kl_set(key, display)
         overlay_labels[key] = display
     end
 end
@@ -275,10 +306,10 @@ function binds_command(command)
             send_title(prefix)
         end
         for key, label in pairs(active) do
-            send_command('kl set '..key..' '..label)
+            send_kl_set(key, label)
         end
         for key, label in pairs(overlay_labels) do
-            send_command('kl set '..key..' '..label)
+            send_kl_set(key, label)
         end
         return true
     end

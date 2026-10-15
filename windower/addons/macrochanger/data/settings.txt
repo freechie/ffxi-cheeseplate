@@ -21,7 +21,7 @@ BLM Book: 20
 BLM Page: 1
 RDM Book: 5
 RDM Page: 1
-THF Book: 6
+THF Book: 1
 THF Page: 1
 PLD Book: 7
 PLD Page: 1
@@ -35,7 +35,7 @@ RNG Book: 11
 RNG Page: 1
 SAM Book: 12
 SAM Page: 1
-NIN Book: 13
+NIN Book: 3
 NIN Page: 1
 DRG Book: 14
 DRG Page: 1
@@ -47,7 +47,7 @@ COR Book: 17
 COR Page: 1
 PUP Book: 18
 PUP Page: 1
-DNC Book: 19
+DNC Book: 2
 DNC Page: 1
 SCH Book: 20
 SCH Page: 1

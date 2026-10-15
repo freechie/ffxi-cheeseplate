@@ -2,6 +2,8 @@
 
 Number-row keybinds replace in-game macros. GearSwap sets them when a job loads and clears them on job change. Source of truth: the `set_binds` tables in `addons/GearSwap/data/THF.lua`, `DNC.lua`, `NIN.lua`, and the shared logic in `binds.lua`.
 
+Official macro books keep matching **names** (8-char max) so the in-game palette matches the overlay: THF book **1**, DNC book **2**, NIN book **3**. Set 1 = Ctrl/Alt rows, set 2 = Ctrl+Shift / Alt+Shift, set 3 = Ctrl+Alt subjob. Regenerate with `python windower/scripts/sync_macro_names.py` (close FFXI first). It writes the repo copy and the Steam client's `FFXINA\SquareEnix\FINAL FANTASY XI\USER\158678d`.
+
 | Modifier | Use |
 | --- | --- |
 | Ctrl 1-0 | Main combat row |
@@ -10,7 +12,7 @@ Number-row keybinds replace in-game macros. GearSwap sets them when a job loads 
 | Alt+Shift 1-0 | Utility, second row |
 | Ctrl+Alt 1-0 | Subjob row, picked from your current subjob |
 
-These keys take over the in-game Ctrl/Alt macro palettes. Hold a modifier combo to see its labels in the `keylabels` overlay (`addons/keylabels`, loaded from `scripts/init.txt`); `//kl pos <x> <y>` moves it. The Alt+F6 to F11 GearSwap binds are unchanged.
+These keys take over the in-game Ctrl/Alt macro palettes. Hold a modifier combo to see its labels in the `keylabels` overlay (`addons/keylabels`, loaded from `scripts/init.txt`); `//kl pos <x> <y>` moves it, and `//kl refresh` re-pulls labels from GearSwap if the overlay comes up empty. Each heading shows the matching in-game macro book and set. DNC also uses Alt+F1 weapons, Alt+F2 waltz, Alt+F3 TP, Alt+F4 idle, Alt+F5 utsu (Haste Samba is Ctrl+2 only).
 
 `//gs c binds` re-binds for your current level and prints every key in chat. Run it after leveling: actions above your level stay unbound until then.
 
@@ -20,7 +22,7 @@ Ring keys lock the ring slot in GearSwap, equip the ring, wait 11 seconds, use i
 
 | Key | Ctrl | Alt | Ctrl+Shift | Alt+Shift |
 | --- | --- | --- | --- | --- |
-| 1 | Camps trusts | Curing Waltz V | Spectral Jig | Animated Flourish |
+| 1 | EXP trusts (Kupofried) | Curing Waltz V | Spectral Jig | Animated Flourish |
 | 2 | Haste Samba | Curing Waltz IV | Chocobo Jig II | Desperate Flourish |
 | 3 | Box Step | Curing Waltz III | Echad Ring | Divine Waltz |
 | 4 | Quickstep | Divine Waltz II | Caliber Ring | Aeolian Edge |
@@ -40,7 +42,7 @@ Ring keys lock the ring slot in GearSwap, equip the ring, wait 11 seconds, use i
 | 3 | Trick Attack | Mug | Warp Ring | Viper Bite |
 | 4 | Bully | Flee | Food | Idle set toggle |
 | 5 | Evisceration | Hide | Raise trusts | |
-| 6 | Aeolian Edge | Collaborator p1 | Camps trusts | |
+| 6 | Aeolian Edge | Collaborator p1 | EXP trusts (Kupofried) | |
 | 7 | Shark Bite | Accomplice p1 | TH set toggle | |
 | 8 | Dancing Edge | Larceny | SATA (SA, TA, Shark Bite) | |
 | 9 | Perfect Dodge | Collaborator p2 | TP set toggle | |
@@ -52,7 +54,7 @@ Ring keys lock the ring slot in GearSwap, equip the ring, wait 11 seconds, use i
 
 | Key | Ctrl | Alt | Ctrl+Shift | Alt+Shift |
 | --- | --- | --- | --- | --- |
-| 1 | Camps trusts | Katon: Ni | Monomi: Ichi | Hojo: Ni |
+| 1 | EXP trusts (Kupofried) | Katon: Ni | Monomi: Ichi | Hojo: Ni |
 | 2 | Utsusemi: Ni | Hyoton: Ni | Tonko: Ni | Kurayami: Ni |
 | 3 | Utsusemi: Ichi | Huton: Ni | Echad Ring | Jubaku: Ichi |
 | 4 | Yonin | Doton: Ni | Caliber Ring | Dokumori: Ichi |

@@ -2,10 +2,7 @@
 <settings>
     <global>
         <KeyItemDisplay>true</KeyItemDisplay>
-        <Track><![CDATA[Inv: ${inventory:$usedspace}/${inventory:$maxspace}
-1: ${satchel:$usedspace}/${satchel:$maxspace}
-2: ${sack:$usedspace}/${sack:$maxspace}
-3: ${case:$usedspace}/${case:$maxspace}]]></Track>
+        <Track></Track>
         <Tracker>
             <bg>
                 <alpha>0</alpha>
@@ -49,8 +46,8 @@
     <cheeseplate>
         <Tracker>
             <pos>
-                <x>-322.84375</x>
-                <y>838.78887939453</y>
+                <x>-323</x>
+                <y>-70</y>
             </pos>
         </Tracker>
     </cheeseplate>

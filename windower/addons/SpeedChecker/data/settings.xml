@@ -40,9 +40,15 @@
         </text>
     </global>
     <cheeseplate>
+        <!-- Offsets from the bottom-right of a 1920x1080 window. -->
+        <flags>
+            <bottom>true</bottom>
+            <draggable>true</draggable>
+            <right>true</right>
+        </flags>
         <pos>
-            <x>1623.4075927734</x>
-            <y>870.25277709961</y>
+            <x>-297</x>
+            <y>-210</y>
         </pos>
     </cheeseplate>
 </settings>

@@ -10,16 +10,17 @@ bind f12 showfps
 bind sysrq screenshot jpg hide
 bind ^v paste
 
-// GearSwap: job files rebind Alt+F6–F11 on load (THF.lua / DNC.lua)
-// Fallback toggles if a job file does not override them:
+// GearSwap job files replace these once the character is in.
 bind !f9 gs c toggle TP set
 bind !f10 gs c toggle Idle set
 
 lua load XIPivot
 lua load enemybar2
 
-lua load SATACast
+// SATACast is in the launcher autoload list. Loading it here too errors
+// with "Addon SATACast already loaded."
 lua load keylabels
+lua load screenfit
 
 // RoE tip (run once after you set daily objectives in-game):
 //   //roe save daily

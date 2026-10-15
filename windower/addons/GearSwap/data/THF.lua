@@ -111,7 +111,7 @@ function get_sets()
             {'Warp Ring', 'gs c warp'},
             {'Food', 'input /item "Grape Daifuku" <me>'},
             {'Raise trusts', 'tru raise'},
-            {'Camps', 'tru camps'},
+            {'EXP', 'tru exp'},
             {'TH set', 'gs c th'},
             {'SATA', 'gs c sata'},
             {'TP set', 'gs c toggle TP set'},
@@ -126,7 +126,7 @@ function get_sets()
         },
     })
 
-    send_command('input /macro book 6; wait 0.1; input /macro set 1')
+    send_command('input /macro book 1; wait 0.1; input /macro set 1')
     send_command('@input /echo [GearSwap] THF loaded - Alt+F8 SATA | F9 TP | F10 idle | F11 TH | //gs c binds lists number keys')
 end
 
