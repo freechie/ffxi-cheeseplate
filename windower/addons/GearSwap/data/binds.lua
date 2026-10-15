@@ -16,6 +16,126 @@ local MODS = {
     {'^!', 'Ctrl+Alt'},
 }
 
+-- Overlay descriptions are intentionally limited to three words.
+local DESCRIPTIONS = {
+    ['Camps'] = 'Fast leveling party',
+    ['Trusts'] = 'Balanced trust party',
+    ['Raise trusts'] = 'Safer raise party',
+    ['Dismiss'] = 'Release all trusts',
+    ['Food'] = 'Use combat food',
+    ['Echad Ring'] = 'EXP bonus',
+    ['Caliber Ring'] = 'EXP bonus',
+    ['Emperor Band'] = 'EXP bonus',
+    ['Trizek Ring'] = 'CP bonus',
+    ['Capacity Ring'] = 'CP bonus',
+    ['Warp Ring'] = 'Return home',
+    ['TP set'] = 'Cycle TP gear',
+    ['Idle set'] = 'Cycle idle gear',
+    ['TH set'] = 'Toggle treasure hunter',
+    ['Weapons'] = 'Level-based weapons',
+    ['Best Waltz'] = 'Auto-tier heal',
+    ['Utsusemi'] = 'Create shadows (-Shihei)',
+
+    ['Haste Samba'] = 'Party haste',
+    ['Drain Samba'] = 'Party HP drain',
+    ['Drain Samba III'] = 'Party HP drain',
+    ['Aspir Samba II'] = 'Party MP drain',
+    ['Box Step'] = 'Lower enemy defense (+FMs)',
+    ['Quickstep'] = 'Lower enemy evasion (+FMs)',
+    ['Feather Step'] = 'Raise crit rate (+FMs)',
+    ['Stutter Step'] = 'Lower magic evasion (+FMs)',
+    ['Reverse'] = 'Convert moves TP (-FMs)',
+    ['Building'] = 'Boost next WS (-FMs)',
+    ['C.Waltz II'] = 'Single target heal',
+    ['C.Waltz III'] = 'Single target heal',
+    ['C.Waltz IV'] = 'Single target heal',
+    ['C.Waltz V'] = 'Single target heal',
+    ['D.Waltz II'] = 'Party healing',
+    ['Divine Waltz'] = 'Party healing',
+    ['Healing Waltz'] = 'Remove status effect',
+    ['Violent'] = 'Stun target (-1 FM)',
+    ['Climactic'] = 'Force crit hit (-FMs)',
+    ['Striking'] = 'Double attack bonus (-2 FMs)',
+    ['Wild'] = 'Enables skillchain (-2 FMs)',
+    ['Presto'] = 'Bonus FMs (+FMs)',
+    ['Animated'] = 'Provoke with moves (-1 FM)',
+    ['Desperate'] = 'Gravity with moves (-1 FM)',
+    ['Trance'] = 'Free waltzes',
+    ['Spectral Jig'] = 'Sneak and invisible',
+    ['Chocobo Jig II'] = 'Faster movement',
+
+    ['Sneak Attack'] = 'Crit from behind',
+    ['Trick Attack'] = 'Transfer enmity',
+    ['SA'] = 'Crit from behind',
+    ['TA'] = 'Transfer enmity',
+    ['SA Evisc'] = 'Sneak Evisceration',
+    ['TA Evisc'] = 'Trick Evisceration',
+    ['SATA'] = 'Sneak Trick WS',
+    ['Bully'] = 'Intimidate target',
+    ['Perfect Dodge'] = 'Evade physical attacks',
+    ['Conspirator'] = 'Party ACC bonus',
+    ['Steal'] = 'Steal item',
+    ['Despoil'] = 'Steal and debuff',
+    ['Mug'] = 'Steal gil',
+    ['Flee'] = 'Faster movement',
+    ['Hide'] = 'Shed enemy hate',
+    ['Collab p1'] = 'Take some enmity',
+    ['Collab p2'] = 'Take some enmity',
+    ['Accomplice p1'] = 'Take more enmity',
+    ['Accomplice p2'] = 'Take more enmity',
+    ['Larceny'] = 'Steal beneficial effects',
+    ['Ranged'] = 'Ranged attack',
+
+    ['Utsu Ni'] = 'Create shadows (-Shihei)',
+    ['Utsu Ichi'] = 'Create shadows (-Shihei)',
+    ['Yonin'] = 'Tank stance (enmity+ ACC-)',
+    ['Innin'] = 'Rear stance (dmg+ enmity-)',
+    ['Tonko'] = 'Invisible (-Shinobi-tabi)',
+    ['Tonko: Ni'] = 'Invisible (-Shinobi-tabi)',
+    ['Monomi'] = 'Sneak (-Sairui-Ran)',
+    ['Katon'] = 'Fire dmg (water-res-) (-Uchitake)',
+    ['Katon: Ichi'] = 'Fire dmg (water-res-) (-Uchitake)',
+    ['Katon: Ni'] = 'Fire dmg (water-res-) (-Uchitake)',
+    ['Hyoton: Ni'] = 'Ice dmg (fire-res-) (-Tsurara)',
+    ['Huton: Ichi'] = 'Wind dmg (ice-res-) (-Kawahori-Ogi)',
+    ['Huton: Ni'] = 'Wind dmg (ice-res-) (-Kawahori-Ogi)',
+    ['Doton: Ni'] = 'Earth dmg (wind-res-) (-Makibishi)',
+    ['Raiton'] = 'Lightning dmg (earth-res-) (-Hiraishin)',
+    ['Raiton: Ichi'] = 'Lightning dmg (earth-res-) (-Hiraishin)',
+    ['Raiton: Ni'] = 'Lightning dmg (earth-res-) (-Hiraishin)',
+    ['Suiton: Ichi'] = 'Water dmg (lightning-res-) (-Mizu-Deppo)',
+    ['Suiton: Ni'] = 'Water dmg (lightning-res-) (-Mizu-Deppo)',
+    ['Hojo: Ichi'] = 'Slow target (-Kaginawa)',
+    ['Hojo: Ni'] = 'Slow target (-Kaginawa)',
+    ['Kurayami: Ichi'] = 'Blind target (-Sairui-Ran)',
+    ['Kurayami: Ni'] = 'Blind target (-Sairui-Ran)',
+    ['Jubaku: Ichi'] = 'Paralyze target (-Jusatsu)',
+    ['Dokumori: Ichi'] = 'Poison target (-Kodoku)',
+    ['Mijin Gakure'] = 'Sacrifice for damage',
+
+    ['Provoke'] = 'Gain enmity',
+    ['Berserk'] = 'ATK up DEF-down',
+    ['Defender'] = 'DEF up ATK-down',
+    ['Warcry'] = 'Party ATK boost',
+    ['Aggressor'] = 'ACC up EVA-down',
+
+    ['Evisceration'] = 'Physical WS',
+    ['Aeolian Edge'] = 'AoE magic damage',
+    ['Shark Bite'] = 'Physical WS',
+    ['Dancing Edge'] = 'Physical WS',
+    ['Wasp Sting'] = 'Physical WS',
+    ['Viper Bite'] = 'Physical WS',
+    ['Blade: Jin'] = 'Physical WS',
+    ['Blade: Ten'] = 'Physical WS',
+    ['Blade: Teki'] = 'Water WS',
+    ['Blade: Chi'] = 'Earth WS',
+}
+
+local function overlay_text(label)
+    local description = DESCRIPTIONS[label]
+    return description and (label..' - '..description) or label
+end
+
 local SUB_ROWS = {
     THF = {
         {'SA', 'input /ja "Sneak Attack" <me>', 15},
@@ -102,8 +222,9 @@ local function bind_rows(rows, lvl, job)
             if lvl >= (entry[3] or 1) then
                 local key = mod[1]..KEYS[i]
                 send_command('bind '..key..' '..entry[2])
-                send_command('kl set '..key..' '..entry[1])
-                active[key] = entry[1]
+                local label = overlay_text(entry[1])
+                send_command('kl set '..key..' '..label)
+                active[key] = label
             end
         end
     end
@@ -111,8 +232,9 @@ end
 
 local function send_overlay_labels(rows)
     for key, label in pairs(rows.fkeys or {}) do
-        send_command('kl set '..key..' '..label)
-        overlay_labels[key] = label
+        local display = overlay_text(label)
+        send_command('kl set '..key..' '..display)
+        overlay_labels[key] = display
     end
 end
 

@@ -1,8 +1,8 @@
 --[[
-  Cheeseplate NIN GearSwap — keybinds only, no gear swaps yet
+  Cheeseplate NIN GearSwap - keybinds only, no gear swaps yet
 
   Commands:
-    //gs c binds — rebind for current level and list number-row keys
+    //gs c binds - rebind for current level and list number-row keys
 ]]
 
 function get_sets()
@@ -59,7 +59,7 @@ function get_sets()
     })
 
     send_command('input /macro book 13; wait 0.1; input /macro set 1')
-    send_command('@input /echo [GearSwap] NIN loaded — //gs c binds lists number keys')
+    send_command('@input /echo [GearSwap] NIN loaded - //gs c binds lists number keys')
 end
 
 function file_unload()

@@ -1,9 +1,9 @@
 --[[
-  Cheeseplate DNC/NIN GearSwap — leveling 70 → 99
+  Cheeseplate DNC/NIN GearSwap - leveling 70 -> 99
 
   Built from findAll (Crow, War Hoop, Rune Kris, Venom Kukri, Gully, Verus,
   Arctier's, Kappa, Peiste Mantle, Loquacious, Mummu/Espial at 99).
-  Missing pieces are skipped safely — fill gaps as you loot/buy.
+  Missing pieces are skipped safely - fill gaps as you loot/buy.
 
   Recommended buys (not owned yet): 2x Cermet Kukri (~62), Swift Belt,
   Suppanomimi, Brutal Earring, Rajas Ring, AF waltz pieces.
@@ -11,13 +11,13 @@
   Commands:
     //gs c toggle TP set
     //gs c toggle Idle set
-    //gs c weapons     — re-pick weapons for current level
-    //gs c samba       — Haste Samba
-    //gs c waltz       — best Curing Waltz for your level
-    //gs c step        — Quickstep (build finishing moves)
-    //gs c reverse     — Reverse Flourish (TP from FM)
-    //gs c utsu        — Utsusemi: Ni (Ichi if Ni not ready)
-    //gs c binds       — rebind for current level and list number-row keys
+    //gs c weapons     - re-pick weapons for current level
+    //gs c samba       - Haste Samba
+    //gs c waltz       - best Curing Waltz for your level
+    //gs c step        - Quickstep (build finishing moves)
+    //gs c reverse     - Reverse Flourish (TP from FM)
+    //gs c utsu        - Utsusemi: Ni (Ichi if Ni not ready)
+    //gs c binds       - rebind for current level and list number-row keys
 
   Binds (init.txt): Alt+F9 TP, Alt+F10 Idle, Alt+F7 Samba, Alt+F8 Waltz
 ]]
@@ -91,7 +91,7 @@ function get_sets()
     sets.JA['Fan Dance'] = {}
 
     -- ============================================================
-    -- WS (leveling: Dancing Edge / Evisceration → Exenterator → Rudra's)
+    -- WS (leveling: Dancing Edge / Evisceration -> Exenterator -> Rudra's)
     -- ============================================================
     sets.WS = {}
     sets.WS.Base = {
@@ -276,7 +276,7 @@ function get_sets()
     })
 
     send_command('input /macro book 19; wait 0.1; input /macro set 1')
-    send_command('@input /echo [GearSwap] DNC/NIN leveling — Alt+F6 weapons | F7 samba | F8 waltz | F9 TP | F10 idle | F11 utsu | //gs c binds lists number keys')
+    send_command('@input /echo [GearSwap] DNC/NIN leveling - Alt+F6 weapons | F7 samba | F8 waltz | F9 TP | F10 idle | F11 utsu | //gs c binds lists number keys')
 end
 
 function file_unload()

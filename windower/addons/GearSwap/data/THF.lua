@@ -1,5 +1,5 @@
 --[[
-  Cheeseplate THF GearSwap — starter
+  Cheeseplate THF GearSwap - starter
 
   Fill gear by dressing in-game, then:
     //gs export
@@ -8,9 +8,9 @@
   Commands:
     //gs c toggle TP set
     //gs c toggle Idle set
-    //gs c th   — force Treasure Hunter set while engaged
-    //gs c sata — Sneak Attack, Trick Attack, then Shark Bite (Alt+F8)
-    //gs c binds — rebind for current level and list number-row keys
+    //gs c th   - force Treasure Hunter set while engaged
+    //gs c sata - Sneak Attack, Trick Attack, then Shark Bite (Alt+F8)
+    //gs c binds - rebind for current level and list number-row keys
 ]]
 
 function get_sets()
@@ -19,7 +19,7 @@ function get_sets()
     ForceTH = false
 
     -- ============================================================
-    -- Replace these with your actual pieces (iLvl 117–119 Spark OK)
+    -- Replace these with your actual pieces (iLvl 117-119 Spark OK)
     -- ============================================================
 
     sets.JA = {}
@@ -127,7 +127,7 @@ function get_sets()
     })
 
     send_command('input /macro book 6; wait 0.1; input /macro set 1')
-    send_command('@input /echo [GearSwap] THF loaded — Alt+F8 SATA | F9 TP | F10 idle | F11 TH | //gs c binds lists number keys')
+    send_command('@input /echo [GearSwap] THF loaded - Alt+F8 SATA | F9 TP | F10 idle | F11 TH | //gs c binds lists number keys')
 end
 
 function file_unload()
