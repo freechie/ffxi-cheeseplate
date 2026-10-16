@@ -11,7 +11,7 @@
         <flags>
             <bold>false</bold>
             <bottom>false</bottom>
-            <draggable>true</draggable>
+            <draggable>false</draggable>
             <italic>false</italic>
             <right>false</right>
         </flags>
@@ -43,7 +43,7 @@
         <!-- Offsets from the bottom-right of a 1920x1080 window. -->
         <flags>
             <bottom>true</bottom>
-            <draggable>true</draggable>
+            <draggable>false</draggable>
             <right>true</right>
         </flags>
         <pos>
