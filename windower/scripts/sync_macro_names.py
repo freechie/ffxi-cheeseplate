@@ -4,7 +4,9 @@
 Books: THF 1, DNC 2, NIN 3.
   Set 1: Ctrl = ^ row, Alt = ! row
   Set 2: Ctrl = ~^ row, Alt = ~! row
-  Set 3: Ctrl = Ctrl+Alt subjob row (THF sub by default for DNC/NIN)
+  Set 3 on the DNC book is DNC/NIN.
+  Each other sub combo has its own book, set 1:
+  THF/WAR 4, NIN/WAR 7, PUP/DNC 8, NIN/THF 9, NIN/DNC 10.
 
 Macro names are capped at 8 characters (FFXI limit). Close the client before running.
 """
@@ -55,6 +57,8 @@ NAME_ALIASES = {
     "C.Waltz V": "CWaltzV",
     "C.Waltz IV": "CWaltzIV",
     "C.Waltz III": "CWaltz3",
+    "C.Waltz II": "CWaltz2",
+    "Drain Samba": "DrnSamba",
     "D.Waltz II": "DWaltz2",
     "Healing Waltz": "HealWltz",
     "Violent": "Violent",
@@ -255,7 +259,18 @@ JOBS = {
     },
 }
 
-# Ctrl+Alt subjob row from binds.lua (written to set 3 Ctrl for every job book).
+# Ctrl+Alt subjob rows from binds.lua.
+SUB_NIN = [
+    ("Utsu Ni", 'input /ma "Utsusemi: Ni" <me>'),
+    ("Utsu Ichi", 'input /ma "Utsusemi: Ichi" <me>'),
+    ("Yonin", 'input /ja "Yonin" <me>'),
+    ("Innin", 'input /ja "Innin" <me>'),
+    ("Tonko", 'input /ma "Tonko: Ichi" <me>'),
+    ("Monomi", 'input /ma "Monomi: Ichi" <me>'),
+    ("Katon", 'input /ma "Katon: Ichi" <t>'),
+    ("Raiton", 'input /ma "Raiton: Ichi" <t>'),
+]
+
 SUB_THF = [
     ("SA", 'input /ja "Sneak Attack" <me>'),
     ("TA", 'input /ja "Trick Attack" <me>'),
@@ -265,6 +280,43 @@ SUB_THF = [
     ("Mug", 'input /ja "Mug" <t>'),
     ("Flee", 'input /ja "Flee" <me>'),
     ("Hide", 'input /ja "Hide" <me>'),
+]
+
+SUB_WAR = [
+    ("Provoke", 'input /ja "Provoke" <t>'),
+    ("Berserk", 'input /ja "Berserk" <me>'),
+    ("Defender", 'input /ja "Defender" <me>'),
+    ("Warcry", 'input /ja "Warcry" <me>'),
+    ("Aggressor", 'input /ja "Aggressor" <me>'),
+]
+
+SUB_DNC = [
+    ("C.Waltz III", 'input /ja "Curing Waltz III" <stpc>'),
+    ("C.Waltz II", 'input /ja "Curing Waltz II" <stpc>'),
+    ("Haste Samba", 'input /ja "Haste Samba" <me>'),
+    ("Drain Samba", 'input /ja "Drain Samba" <me>'),
+    ("Box Step", 'input /ja "Box Step" <t>'),
+    ("Quickstep", 'input /ja "Quickstep" <t>'),
+    ("Animated", 'input /ja "Animated Flourish" <t>'),
+    ("Divine Waltz", 'input /ja "Divine Waltz" <me>'),
+    ("Healing Waltz", 'input /ja "Healing Waltz" <stpc>'),
+    ("Spectral Jig", 'input /ja "Spectral Jig" <me>'),
+]
+
+# Set 3 on the main-job books. THF and NIN keep the original /THF row.
+SUB_SETS = {
+    "THF": [(3, SUB_THF)],
+    "DNC": [(3, SUB_NIN)],
+    "NIN": [(3, SUB_THF)],
+}
+
+# One book per combo, set 1. Books 5, 6, 13, and 19 already hold other macros.
+COMBOS = [
+    (4, "THF/WAR", SUB_WAR),
+    (7, "NIN/WAR", SUB_WAR),
+    (8, "PUP/DNC", SUB_DNC),
+    (9, "NIN/THF", SUB_THF),
+    (10, "NIN/DNC", SUB_DNC),
 ]
 
 
@@ -353,11 +405,13 @@ def write_job(user_dir: Path, job: str) -> list[str]:
     rows = cfg["rows"]
     written = []
 
-    sets = [
-        (1, rows.get("^", []), rows.get("!", [])),
-        (2, rows.get("~^", []), rows.get("~!", [])),
-        (3, SUB_THF, []),
-    ]
+    sets = []
+    if rows:
+        sets.extend([
+            (1, rows.get("^", []), rows.get("!", [])),
+            (2, rows.get("~^", []), rows.get("~!", [])),
+        ])
+    sets.extend((set_no, ctrl, []) for set_no, ctrl in SUB_SETS[job])
     for set_no, ctrl, alt in sets:
         path = user_dir / set_filename(book, set_no)
         path.write_bytes(build_set(ctrl, alt))
@@ -380,23 +434,23 @@ def game_running() -> bool:
     import subprocess
 
     out = subprocess.run(
-        ["tasklist", "/m", "FFXiMain.dll", "/fi", "imagename eq pol.exe", "/nh"],
+        ["tasklist", "/fi", "imagename eq pol.exe", "/nh"],
         capture_output=True, text=True,
     ).stdout
     return "pol.exe" in out.lower()
 
 
 def main() -> int:
-    if game_running():
-        print("FFXI is loaded in pol.exe: it caches macros and will overwrite these files. Log out first.", file=sys.stderr)
-        return 1
+    running = game_running()
     repo = Path(__file__).resolve().parents[2] / "game" / "USER" / "158678d"
     live = Path(r"C:\Program Files (x86)\Steam\steamapps\common\FFXINA\SquareEnix\FINAL FANTASY XI\USER\158678d")
     targets = []
     if repo.is_dir():
         targets.append(repo)
-    if live.is_dir():
+    if live.is_dir() and not running:
         targets.append(live)
+    elif running:
+        print("PlayOnline is open, so the live macro files were left alone. Quit, then run this again.", file=sys.stderr)
     if not targets:
         print("no USER folders found", file=sys.stderr)
         return 1
@@ -416,13 +470,21 @@ def main() -> int:
             for job in ("THF", "DNC", "NIN"):
                 files = write_job(user_dir, job)
                 book = JOBS[job]["book"]
-                for set_no in (1, 2, 3):
+                for set_no in (1, 2, *(n for n, _ in SUB_SETS[job])):
                     verify(user_dir / set_filename(book, set_no))
                 print(f"  {job} book {book}: {', '.join(files)}")
+            for book, title, ctrl in COMBOS:
+                path = user_dir / set_filename(book, 1)
+                path.write_bytes(build_set(ctrl, []))
+                verify(path)
+                ttl = user_dir / "mcr.ttl"
+                if ttl.exists():
+                    update_book_title(ttl, book, title)
+                print(f"  {title} book {book}: {path.name}")
         except OSError as exc:
             print(f"  write failed (need elevation for Program Files?): {exc}")
             continue
-    print("done — log in and open macro books 1 / 2 / 3 to confirm names")
+    print("done — log in and open the book/set listed in keybinds.md")
     return 0
 
 

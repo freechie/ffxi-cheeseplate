@@ -2,7 +2,7 @@
 
 Number-row keybinds replace in-game macros. GearSwap sets them when a job loads and clears them on job change. Source of truth: the `set_binds` tables in `addons/GearSwap/data/THF.lua`, `DNC.lua`, `NIN.lua`, and the shared logic in `binds.lua`.
 
-Official macro books keep matching **names** (8-char max) so the in-game palette matches the overlay: THF book **1**, DNC book **2**, NIN book **3**. Set 1 = Ctrl/Alt rows, set 2 = Ctrl+Shift / Alt+Shift, set 3 = Ctrl+Alt subjob. Regenerate with `python windower/scripts/sync_macro_names.py` (close FFXI first). It writes the repo copy and the Steam client's `FFXINA\SquareEnix\FINAL FANTASY XI\USER\158678d`.
+Official macro books keep matching **names** (8-char max) so the in-game palette matches the overlay: THF book **1**, DNC book **2**, NIN book **3**. Set 1 = Ctrl/Alt rows, set 2 = Ctrl+Shift / Alt+Shift. DNC/NIN is book 2 set 3. The other sub combinations each have their own book. Regenerate with `python windower/scripts/sync_macro_names.py` (close FFXI first). It writes the repo copy and the Steam client's `FFXINA\SquareEnix\FINAL FANTASY XI\USER\158678d`.
 
 | Modifier | Use |
 | --- | --- |
@@ -64,6 +64,19 @@ Ring keys lock the ring slot in GearSwap, equip the ring, wait 11 seconds, use i
 | 8 | Blade: Teki | Raiton: Ichi | Trusts (default) | |
 | 9 | Blade: Chi | Suiton: Ichi | Emperor Band | |
 | 0 | Mijin Gakure | Huton: Ichi | Dismiss trusts | |
+
+## Subjob palettes
+
+Ctrl+Alt still casts the row for the subjob you have on. Switch to that book to see the same macros on the palette. Books 5, 6, 13, and 19 are already in use.
+
+| Combination | Book | Set |
+| --- | --- | --- |
+| DNC/NIN | 2 | 3 |
+| THF/WAR | 4 | 1 |
+| NIN/WAR | 7 | 1 |
+| PUP/DNC | 8 | 1 |
+| NIN/THF | 9 | 1 |
+| NIN/DNC | 10 | 1 |
 
 ## Subjob row (Ctrl+Alt)
 
