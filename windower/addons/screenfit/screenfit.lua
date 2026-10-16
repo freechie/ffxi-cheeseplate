@@ -1,6 +1,6 @@
 _addon.name = 'screenfit'
 _addon.author = 'Cheeseplate'
-_addon.version = '1.5'
+_addon.version = '1.7'
 _addon.commands = {'screenfit', 'fit'}
 
 -- Cheeseplate's HUD was laid out in a 1920x1080 window. Edge pieces are stored
@@ -23,8 +23,9 @@ local ENEMYBAR = {
     {'subtarget', 1282, 161, true, false},
     {'focustarget', 1271, 111, true, false},
 }
--- Sit above the second chat log (Window 2). The grid is 4 icons tall.
-local EQUIP = {x = 1580, y = 780, right = true, bottom = true}
+-- //ev pos 1575 900 on the 1440p UI (about 1828x1028 at scale 1.4).
+-- Right and bottom pins keep that same corner gap on the 1080p window.
+local EQUIP = {x = 1667, y = 952, right = true, bottom = true}
 
 -- These read the window size when they load. Unload saves memory over the file,
 -- so the cheeseplate block is written again after unload, then they load.
@@ -59,7 +60,7 @@ local BLOCKS = {
     ['addons\\SpeedChecker\\data\\settings.xml'] = [[<cheeseplate>
         <flags>
             <bottom>true</bottom>
-            <draggable>true</draggable>
+            <draggable>false</draggable>
             <right>true</right>
         </flags>
         <pos>
@@ -279,19 +280,27 @@ local function shift_commands(w, h)
 end
 
 local pending_w, pending_h
+-- Startup loads each HUD addon once. A later size change has to unload first,
+-- because unload writes memory back over the settings file.
+local booted = false
+
+local function load_hud()
+    for _, name in ipairs(ANCHORED) do
+        windower.send_command('lua load ' .. name)
+    end
+    windower.send_command('load timers')
+    -- DistancePlus and invtracker are not unloaded on a resize. Reload those.
+    local how = booted and 'lua r ' or 'lua load '
+    for _, name in ipairs(SNAPSHOT) do
+        windower.send_command(how .. name)
+    end
+    booted = true
+end
 
 local function commit()
     write_anchors()
     if pending_w then write_timers(pending_w, pending_h) end
-    for _, name in ipairs(ANCHORED) do
-        windower.send_command('lua load ' .. name)
-    end
-    -- apply() already unloaded Timers. Load it once. A second reload/load
-    -- here is what printed "already loaded".
-    windower.send_command('load timers')
-    for _, name in ipairs(SNAPSHOT) do
-        windower.send_command('lua r ' .. name)
-    end
+    load_hud()
     if pending_w then
         windower.add_to_chat(207, '[screenfit] HUD fit to ' .. pending_w .. 'x' .. pending_h)
     end
@@ -300,12 +309,15 @@ end
 local function apply()
     local w, h = ui_size()
     if not w or (w == applied_w and h == applied_h) then return end
+    local resize = booted
     applied_w, applied_h = w, h
     pending_w, pending_h = w, h
     shift_commands(w, h)
-    windower.send_command('unload timers')
-    for _, name in ipairs(ANCHORED) do
-        windower.send_command('lua unload ' .. name)
+    if resize then
+        windower.send_command('unload timers')
+        for _, name in ipairs(ANCHORED) do
+            windower.send_command('lua unload ' .. name)
+        end
     end
     windower.send_command('wait 1; fit commit')
 end
@@ -315,11 +327,6 @@ load_trust_filter()
 windower.register_event('load', function()
     load_trust_filter()
     windower.send_command('wait 2; fit apply')
-end)
-
-windower.register_event('login', function()
-    applied_w, applied_h = nil, nil
-    windower.send_command('wait 5; fit apply')
 end)
 
 windower.register_event('prerender', function()

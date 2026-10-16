@@ -1,15 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <settings>
   <launcher>
     <branch>stable</branch>
   </launcher>
   <autoload>
-    <addon>XIPivot</addon>
     <addon>autoenterkey</addon>
-    <addon>Debuffed</addon>
-    <addon>DistancePlus</addon>
     <addon>DressUp</addon>
-    <addon>findAll</addon>
     <addon>InfoBar</addon>
     <addon>Lookup</addon>
     <addon>macrochanger</addon>
@@ -22,9 +18,7 @@
     <addon>update</addon>
     <addon>ConsoleBG</addon>
     <addon>InfoReplacer</addon>
-    <addon>SpeedChecker</addon>
     <addon>timestamp</addon>
-    <addon>targetinfo</addon>
     <addon>GearSwap</addon>
     <addon>SATACast</addon>
     <addon>SetTarget</addon>
@@ -35,12 +29,10 @@
     <addon>BattleStations</addon>
     <addon>battlemod</addon>
     <addon>enternity</addon>
-    <addon>invtracker</addon>
     <addon>SellNPC</addon>
     <plugin>DelayMeNot</plugin>
     <plugin>Config</plugin>
     <plugin>Tickle</plugin>
-    <plugin>Timers</plugin>
     <plugin>WinControl</plugin>
     <plugin>FFXIDB</plugin>
     <plugin>MipmapFix</plugin>
@@ -49,7 +41,7 @@
     <consolekey>Insert</consolekey>
     <!-- 1.4 when the game is on the 2560x1440 monitor. screenfit writes 1 on the 1920x1080 monitor. Takes effect on the next launch. -->
     <uiscale>1.4</uiscale>
-    <supersampling>2</supersampling>
+    <supersampling>1</supersampling>
     <allowwinkey>true</allowwinkey>
     <enablefastlogin>true</enablefastlogin>
     <preventbackgroundthrottling>true</preventbackgroundthrottling>

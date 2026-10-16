@@ -14,6 +14,8 @@ bind ^v paste
 bind !f9 gs c toggle TP set
 bind !f10 gs c toggle Idle set
 
+// XIPivot is not in the launcher autoload list. Loading it in both places
+// errors with "Addon XIPivot already loaded."
 lua load XIPivot
 lua load enemybar2
 
