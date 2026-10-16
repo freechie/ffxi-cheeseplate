@@ -233,13 +233,28 @@ local function send_title(prefix)
 end
 
 -- Must match the books written by scripts/sync_macro_names.py.
-local MACRO_BOOKS = {THF = 1, DNC = 2, NIN = 3}
+local MACRO_BOOKS = {THF = 1, DNC = 2, NIN = 3, PUP = 8}
 local MACRO_SETS = {['^'] = 1, ['!'] = 1, ['~^'] = 2, ['~!'] = 2, ['^!'] = 3}
+-- Sub combos that live in their own book (set 1). DNC/NIN stays on book 2 set 3.
+local COMBO_BOOK = {
+    THF = {WAR = {4, 1}},
+    DNC = {NIN = {2, 3}},
+    NIN = {THF = {9, 1}, WAR = {7, 1}, DNC = {10, 1}},
+    PUP = {DNC = {8, 1}},
+}
 
 local function macro_location(prefix)
     local book = MACRO_BOOKS[player.main_job]
     if not book then return '' end
-    return ' (book '..book..' set '..MACRO_SETS[prefix]..')'
+    local set = MACRO_SETS[prefix]
+    if prefix == '^!' then
+        local combos = COMBO_BOOK[player.main_job]
+        local where = combos and combos[player.sub_job]
+        if where then
+            book, set = where[1], where[2]
+        end
+    end
+    return ' (book '..book..' set '..set..')'
 end
 
 local function bind_rows(rows, lvl, job)
