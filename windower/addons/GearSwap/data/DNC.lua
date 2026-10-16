@@ -278,7 +278,7 @@ function get_sets()
         },
     })
 
-    send_command('input /macro book 2; wait 0.1; input /macro set 1')
+    send_command('input /macro book 1; wait 0.1; input /macro set 1')
     send_command('@input /echo [GearSwap] DNC/NIN leveling - Alt+F1 weapons | F2 waltz | F3 TP | F4 idle | F5 utsu | //gs c binds lists number keys')
 end
 

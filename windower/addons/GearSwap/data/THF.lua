@@ -126,7 +126,7 @@ function get_sets()
         },
     })
 
-    send_command('input /macro book 1; wait 0.1; input /macro set 1')
+    send_command('input /macro book 10; wait 0.1; input /macro set 1')
     send_command('@input /echo [GearSwap] THF loaded - Alt+F8 SATA | F9 TP | F10 idle | F11 TH | //gs c binds lists number keys')
 end
 
