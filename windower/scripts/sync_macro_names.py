@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Write GearSwap overlay labels into official FFXI macro books (names + line 1).
 
-Books: THF 1, DNC 2, NIN 3.
-  Set 1: Ctrl = ^ row, Alt = ! row
-  Set 2: Ctrl = ~^ row, Alt = ~! row
-  Set 3 on the DNC book is DNC/NIN.
-  Each other sub combo has its own book, set 1:
-  THF/WAR 4, NIN/WAR 7, PUP/DNC 8, NIN/THF 9, NIN/DNC 10.
+Books are alphabetical and sequential. Main jobs use sets 1 and 2.
+Combo books are set 1 only.
+  1 DNC, 2 DNC/NIN, 3 DNC/THF, 4 DNC/WAR, 5 NIN, 6 NIN/DNC,
+  7 NIN/THF, 8 NIN/WAR, 9 PUP/DNC, 10 THF, 11 THF/WAR.
 
 Macro names are capped at 8 characters (FFXI limit). Close the client before running.
 """
@@ -100,13 +98,14 @@ NAME_ALIASES = {
     "Dokumori: Ichi": "Dokumor1",
     "Hojo: Ichi": "Hojo1",
     "Kurayami: Ichi": "Kuraya1",
+    "Aggressor": "Aggressr",
     "SA Evisc": "SA Evisc",
     "TA Evisc": "TA Evisc",
 }
 
 JOBS = {
     "THF": {
-        "book": 1,
+        "book": 10,
         "book_title": "THF",
         "rows": {
             "^": [
@@ -154,7 +153,7 @@ JOBS = {
         },
     },
     "DNC": {
-        "book": 2,
+        "book": 1,
         "book_title": "DNC",
         "rows": {
             "^": [
@@ -208,7 +207,7 @@ JOBS = {
         },
     },
     "NIN": {
-        "book": 3,
+        "book": 5,
         "book_title": "NIN",
         "rows": {
             "^": [
@@ -303,21 +302,23 @@ SUB_DNC = [
     ("Spectral Jig", 'input /ja "Spectral Jig" <me>'),
 ]
 
-# Set 3 on the main-job books. THF and NIN keep the original /THF row.
-SUB_SETS = {
-    "THF": [(3, SUB_THF)],
-    "DNC": [(3, SUB_NIN)],
-    "NIN": [(3, SUB_THF)],
-}
-
-# One book per combo, set 1. Books 5, 6, 13, and 19 already hold other macros.
+# Alphabetical combo books, set 1. Main-job books are 1 DNC, 5 NIN, 10 THF.
 COMBOS = [
-    (4, "THF/WAR", SUB_WAR),
-    (7, "NIN/WAR", SUB_WAR),
-    (8, "PUP/DNC", SUB_DNC),
-    (9, "NIN/THF", SUB_THF),
-    (10, "NIN/DNC", SUB_DNC),
+    (2, "DNC/NIN", SUB_NIN),
+    (3, "DNC/THF", SUB_THF),
+    (4, "DNC/WAR", SUB_WAR),
+    (6, "NIN/DNC", SUB_DNC),
+    (7, "NIN/THF", SUB_THF),
+    (8, "NIN/WAR", SUB_WAR),
+    (9, "PUP/DNC", SUB_DNC),
+    (11, "THF/WAR", SUB_WAR),
 ]
+
+# Sets left behind when a book changed jobs. Cleared so the palette matches the title.
+STALE_SETS = [(1, 3), (2, 2), (2, 3), (3, 2), (3, 3), (6, 2), (6, 3), (8, 2)]
+
+# Whole books that were a second copy of DNC or NIN. Removed, titles reset.
+OBSOLETE_BOOKS = [13, 19]
 
 
 def macro_name(label: str) -> str:
@@ -411,7 +412,6 @@ def write_job(user_dir: Path, job: str) -> list[str]:
             (1, rows.get("^", []), rows.get("!", [])),
             (2, rows.get("~^", []), rows.get("~!", [])),
         ])
-    sets.extend((set_no, ctrl, []) for set_no, ctrl in SUB_SETS[job])
     for set_no, ctrl, alt in sets:
         path = user_dir / set_filename(book, set_no)
         path.write_bytes(build_set(ctrl, alt))
@@ -470,7 +470,7 @@ def main() -> int:
             for job in ("THF", "DNC", "NIN"):
                 files = write_job(user_dir, job)
                 book = JOBS[job]["book"]
-                for set_no in (1, 2, *(n for n, _ in SUB_SETS[job])):
+                for set_no in (1, 2):
                     verify(user_dir / set_filename(book, set_no))
                 print(f"  {job} book {book}: {', '.join(files)}")
             for book, title, ctrl in COMBOS:
@@ -481,6 +481,20 @@ def main() -> int:
                 if ttl.exists():
                     update_book_title(ttl, book, title)
                 print(f"  {title} book {book}: {path.name}")
+            for book, set_no in STALE_SETS:
+                path = user_dir / set_filename(book, set_no)
+                path.write_bytes(build_set([], []))
+                verify(path)
+                print(f"  cleared book {book} set {set_no}: {path.name}")
+            for book in OBSOLETE_BOOKS:
+                for set_no in (1, 2, 3):
+                    path = user_dir / set_filename(book, set_no)
+                    if path.exists():
+                        path.unlink()
+                        print(f"  removed duplicate book {book} set {set_no}: {path.name}")
+                ttl = user_dir / "mcr.ttl"
+                if ttl.exists():
+                    update_book_title(ttl, book, f"Book{book}")
         except OSError as exc:
             print(f"  write failed (need elevation for Program Files?): {exc}")
             continue

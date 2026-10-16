@@ -233,14 +233,14 @@ local function send_title(prefix)
 end
 
 -- Must match the books written by scripts/sync_macro_names.py.
-local MACRO_BOOKS = {THF = 1, DNC = 2, NIN = 3, PUP = 8}
+local MACRO_BOOKS = {DNC = 1, NIN = 5, THF = 10, PUP = 9}
 local MACRO_SETS = {['^'] = 1, ['!'] = 1, ['~^'] = 2, ['~!'] = 2, ['^!'] = 3}
--- Sub combos that live in their own book (set 1). DNC/NIN stays on book 2 set 3.
+-- Alphabetical combo books, set 1. One book per combo; subjob rows are not copied elsewhere.
 local COMBO_BOOK = {
-    THF = {WAR = {4, 1}},
-    DNC = {NIN = {2, 3}},
-    NIN = {THF = {9, 1}, WAR = {7, 1}, DNC = {10, 1}},
-    PUP = {DNC = {8, 1}},
+    DNC = {NIN = {2, 1}, THF = {3, 1}, WAR = {4, 1}},
+    NIN = {DNC = {6, 1}, THF = {7, 1}, WAR = {8, 1}},
+    PUP = {DNC = {9, 1}},
+    THF = {WAR = {11, 1}},
 }
 
 local function macro_location(prefix)
@@ -258,6 +258,10 @@ local function macro_location(prefix)
 end
 
 local function bind_rows(rows, lvl, job)
+    -- Login reloads the job file before the level packet arrives. A nil
+    -- level used to abort get_sets here, which left the overlay empty.
+    lvl = tonumber(lvl) or 0
+    job = job or ''
     for _, mod in ipairs(MODS) do
         local row = rows[mod[1]]
         if row and row.title then

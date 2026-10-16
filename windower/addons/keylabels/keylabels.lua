@@ -1,6 +1,6 @@
 _addon.name = 'keylabels'
 _addon.author = 'Cheeseplate'
-_addon.version = '2.6'
+_addon.version = '2.7'
 _addon.commands = {'keylabels', 'kl'}
 
 -- Shows number-row and function-key bind labels while a modifier combo is held.
@@ -99,7 +99,7 @@ local function rebuild_boxes()
     destroy_box(left_box)
     destroy_box(description_box)
     heading_box = texts.new('', visual_settings(settings.positions.heading, 10, 255, 165, 40, true))
-    left_box = texts.new('', visual_settings(settings.positions.actions, 10, 70, 170, 255, false))
+    left_box = texts.new('', visual_settings(settings.positions.actions, 10, 120, 200, 255, false))
     description_box = texts.new('', visual_settings(settings.positions.descriptions, 10, 255, 255, 255, false))
     panels.heading = heading_box
     panels.actions = left_box
@@ -190,28 +190,48 @@ local function update()
     description_box:show()
 end
 
--- GearSwap's login hook reloads the job file once, about 2s in, and errors if
--- get_player() is still nil. Retry until the character exists, then reload so
--- binds and overlay labels are sent to the boxes rebuilt above.
-local function recover(attempt)
-    attempt = tonumber(attempt) or 1
+-- GearSwap reloads the job file on its own about 2s after login, which is
+-- before job level exists, so that pass errors and the overlay stays empty.
+-- Wait until the character is actually in, then reload once.
+local generation = 0
+local gear_loaded = false
+
+local function player_ready()
     local player = windower.ffxi.get_player()
-    if not player or not player.main_job_id then
-        if attempt < 12 then
-            windower.send_command('wait 2; kl recover '..(attempt + 1))
+    local level = player and tonumber(player.main_job_level)
+    if not player or not player.main_job_id or not player.vitals or not level or level < 1 then
+        return false
+    end
+    return windower.ffxi.get_mob_by_index(player.index) ~= nil
+end
+
+local function kick()
+    generation = generation + 1
+    windower.send_command('wait 1; kl recover '..generation..' 1')
+end
+
+local function recover(gen, attempt)
+    gen = tonumber(gen) or 0
+    attempt = tonumber(attempt) or 1
+    if gen ~= generation or gear_loaded then return end
+    if not player_ready() then
+        if attempt < 20 then
+            windower.send_command('wait 2; kl recover '..gen..' '..(attempt + 1))
         end
         return
     end
+    gear_loaded = true
     windower.send_command('gs reload')
-    windower.send_command('wait 2; gs c labels')
+    windower.send_command('wait 1; gs c labels')
+    windower.add_to_chat(207, '[keylabels] GearSwap reloaded')
 end
 
 windower.register_event('load', function()
-    local player = windower.ffxi.get_player()
-    if player and player.main_job_id then
+    if player_ready() then
+        gear_loaded = true
         windower.send_command('wait 1; gs c labels')
     end
-    windower.add_to_chat(207, '[keylabels] v2.6 loaded - //kl unlock to arrange')
+    windower.add_to_chat(207, '[keylabels] v2.7 loaded - //kl unlock to arrange')
 end)
 
 windower.register_event('login', function()
@@ -219,11 +239,14 @@ windower.register_event('login', function()
     down = {}
     labels = {}
     titles = {}
+    gear_loaded = false
     rebuild_boxes()
-    windower.send_command('wait 3; kl recover 1')
+    kick()
 end)
 
 windower.register_event('logout', function()
+    generation = generation + 1
+    gear_loaded = false
     down = {}
     shown = false
     labels = {}
@@ -319,7 +342,7 @@ windower.register_event('addon command', function(cmd, key, ...)
         windower.send_command('gs c labels')
         return
     elseif cmd == 'recover' then
-        recover(key)
+        recover(key, (...))
         return
     else
         windower.add_to_chat(207, 'keylabels: //kl unlock | lock | pos <x> <y> | refresh')

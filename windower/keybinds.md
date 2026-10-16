@@ -2,7 +2,7 @@
 
 Number-row keybinds replace in-game macros. GearSwap sets them when a job loads and clears them on job change. Source of truth: the `set_binds` tables in `addons/GearSwap/data/THF.lua`, `DNC.lua`, `NIN.lua`, and the shared logic in `binds.lua`.
 
-Official macro books keep matching **names** (8-char max) so the in-game palette matches the overlay: THF book **1**, DNC book **2**, NIN book **3**. Set 1 = Ctrl/Alt rows, set 2 = Ctrl+Shift / Alt+Shift. DNC/NIN is book 2 set 3. The other sub combinations each have their own book. Regenerate with `python windower/scripts/sync_macro_names.py` (close FFXI first). It writes the repo copy and the Steam client's `FFXINA\SquareEnix\FINAL FANTASY XI\USER\158678d`.
+Official macro books are alphabetical and sequential: **1 DNC**, **2 DNC/NIN**, **3 DNC/THF**, **4 DNC/WAR**, **5 NIN**, **6 NIN/DNC**, **7 NIN/THF**, **8 NIN/WAR**, **9 PUP/DNC**, **10 THF**, **11 THF/WAR**. Main-job books use set 1 (Ctrl/Alt) and set 2 (Ctrl+Shift/Alt+Shift). Each combo book is set 1, and that subjob row is not copied into any other book. Regenerate with `python windower/scripts/sync_macro_names.py` (close FFXI first). It writes the repo copy and the Steam client's `FFXINA\SquareEnix\FINAL FANTASY XI\USER\158678d`.
 
 | Modifier | Use |
 | --- | --- |
@@ -67,16 +67,21 @@ Ring keys lock the ring slot in GearSwap, equip the ring, wait 11 seconds, use i
 
 ## Subjob palettes
 
-Ctrl+Alt still casts the row for the subjob you have on. Switch to that book to see the same macros on the palette. Books 5, 6, 13, and 19 are already in use.
+Ctrl+Alt still casts the row for the subjob you have on. Switch to that book to see the same macros on the palette.
 
-| Combination | Book | Set |
+| Book | Name | Set |
 | --- | --- | --- |
-| DNC/NIN | 2 | 3 |
-| THF/WAR | 4 | 1 |
-| NIN/WAR | 7 | 1 |
-| PUP/DNC | 8 | 1 |
-| NIN/THF | 9 | 1 |
-| NIN/DNC | 10 | 1 |
+| 1 | DNC | 1 and 2 |
+| 2 | DNC/NIN | 1 |
+| 3 | DNC/THF | 1 |
+| 4 | DNC/WAR | 1 |
+| 5 | NIN | 1 and 2 |
+| 6 | NIN/DNC | 1 |
+| 7 | NIN/THF | 1 |
+| 8 | NIN/WAR | 1 |
+| 9 | PUP/DNC | 1 |
+| 10 | THF | 1 and 2 |
+| 11 | THF/WAR | 1 |
 
 ## Subjob row (Ctrl+Alt)
 

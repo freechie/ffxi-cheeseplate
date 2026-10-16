@@ -58,7 +58,7 @@ function get_sets()
         },
     })
 
-    send_command('input /macro book 3; wait 0.1; input /macro set 1')
+    send_command('input /macro book 5; wait 0.1; input /macro set 1')
     send_command('@input /echo [GearSwap] NIN loaded - //gs c binds lists number keys')
 end
 
