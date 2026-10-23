@@ -9,7 +9,7 @@
     //gs c toggle TP set
     //gs c toggle Idle set
     //gs c th   - force Treasure Hunter set while engaged
-    //gs c sata - Sneak Attack, Trick Attack, then Shark Bite (Alt+F8)
+    //gs c sata - Sneak Attack, Trick Attack, then Evisceration (Alt+F8)
     //gs c binds - rebind for current level and list number-row keys
 ]]
 
@@ -233,7 +233,7 @@ function self_command(command)
         send_command('@input /echo ----- Force TH: '..tostring(ForceTH)..' -----')
         if player.status == 'Engaged' then equip_tp() end
     elseif command == 'sata' then
-        send_command('@input /echo ----- SATA: Shark Bite -----')
-        send_command('input /ja "Sneak Attack" <me>; wait 1.2; input /ja "Trick Attack" <me>; wait 1.2; input /ws "Shark Bite" <t>')
+        send_command('@input /echo ----- SATA: Evisceration -----')
+        send_command('input /ja "Sneak Attack" <me>; wait 1.2; input /ja "Trick Attack" <me>; wait 1.2; input /ws "Evisceration" <t>')
     end
 end

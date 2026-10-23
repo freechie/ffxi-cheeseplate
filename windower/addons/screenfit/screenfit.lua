@@ -1,6 +1,6 @@
 _addon.name = 'screenfit'
 _addon.author = 'Cheeseplate'
-_addon.version = '1.7'
+_addon.version = '1.8'
 _addon.commands = {'screenfit', 'fit'}
 
 -- Cheeseplate's HUD was laid out in a 1920x1080 window. Edge pieces are stored
@@ -12,9 +12,12 @@ _addon.commands = {'screenfit', 'fit'}
 local BASE_W, BASE_H = 1920, 1080
 
 local TIMERS = {
-    RecastX = 20, RecastY = 70,
-    BuffsX = 900, BuffsY = 320,
-    CustomX = 900, CustomY = 520,
+    -- Under the player status window. keylabels start near y=400.
+    RecastX = 20, RecastY = 175,
+    -- One lower row, side by side, so a full stack stays above the chat
+    -- and the party list. Bottom pin keeps that gap when the height changes.
+    BuffsX = 900, BuffsY = 652,
+    CustomX = 1140, CustomY = 652,
 }
 
 -- Right-edge gap is BASE_W - x. Top-edge y stays. Bottom-edge gap is BASE_H - y.
@@ -33,15 +36,18 @@ local ANCHORED = {'Debuffed', 'targetinfo', 'SpeedChecker', 'findAll'}
 local SNAPSHOT = {'DistancePlus', 'invtracker'}
 
 local BLOCKS = {
+    -- Right anchor only. texts.lua mis-computes the grab point when right
+    -- and bottom are both set, and the first drag saves the box off-screen.
+    -- y is the 1080p top of the old bottom offset (-370).
     ['addons\\Debuffed\\data\\settings.xml'] = [[<cheeseplate>
         <flags>
-            <bottom>true</bottom>
+            <bottom>false</bottom>
             <draggable>true</draggable>
             <right>true</right>
         </flags>
         <pos>
             <x>-697</x>
-            <y>-370</y>
+            <y>710</y>
         </pos>
     </cheeseplate>]],
     ['addons\\targetinfo\\data\\settings.xml'] = [[<cheeseplate>
@@ -253,8 +259,8 @@ local function write_timers(w, h)
     if not fh then return end
     local text = fh:read('*a')
     fh:close()
-    local bx, by = place(TIMERS.BuffsX, TIMERS.BuffsY, w, h, true, false)
-    local cx, cy = place(TIMERS.CustomX, TIMERS.CustomY, w, h, true, false)
+    local bx, by = place(TIMERS.BuffsX, TIMERS.BuffsY, w, h, true, true)
+    local cx, cy = place(TIMERS.CustomX, TIMERS.CustomY, w, h, true, true)
     local values = {
         RecastX = TIMERS.RecastX, RecastY = TIMERS.RecastY,
         BuffsX = bx, BuffsY = by,

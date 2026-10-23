@@ -47,13 +47,13 @@
         <RecastTimerLimit>10</RecastTimerLimit>
         <BuffsTimerLimit>10</BuffsTimerLimit>
         <CustomTimerLimit>10</CustomTimerLimit>
-        <!-- Recast top-left; buff/custom on the right — mid-left is keylabels. -->
+        <!-- Recast under the status window. Buffs and custom share a lower row, above chat and the party list. screenfit bottom-pins those two. -->
         <RecastX>20</RecastX>
-        <RecastY>70</RecastY>
+        <RecastY>175</RecastY>
         <BuffsX>900</BuffsX>
-        <BuffsY>320</BuffsY>
-        <CustomX>900</CustomX>
-        <CustomY>520</CustomY>
+        <BuffsY>652</BuffsY>
+        <CustomX>1140</CustomX>
+        <CustomY>652</CustomY>
         <!--If true, only items on the recast/buff lists will be displayed-->
         <WhitelistMode>false</WhitelistMode>
         <!--List of ability names to display recasts for if in whitelistMode and to exclude otherwise-->
