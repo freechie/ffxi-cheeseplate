@@ -58,15 +58,15 @@
         <whitelist />
     </global>
     <cheeseplate>
-        <!-- Offsets from the bottom-right of a 1920x1080 window. texts.lua adds the current UI size. -->
+        <!-- Right edge only. Bottom+right makes the first drag jump off-screen. y is from the top: 1080-370. -->
         <flags>
-            <bottom>true</bottom>
+            <bottom>false</bottom>
             <draggable>true</draggable>
             <right>true</right>
         </flags>
         <pos>
             <x>-697</x>
-            <y>-370</y>
+            <y>710</y>
         </pos>
     </cheeseplate>
 </settings>

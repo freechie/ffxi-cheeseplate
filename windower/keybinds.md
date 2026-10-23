@@ -44,7 +44,7 @@ Ring keys lock the ring slot in GearSwap, equip the ring, wait 11 seconds, use i
 | 5 | Evisceration | Hide | Raise trusts | |
 | 6 | Aeolian Edge | Collaborator p1 | EXP trusts (Kupofried) | |
 | 7 | Shark Bite | Accomplice p1 | TH set toggle | |
-| 8 | Dancing Edge | Larceny | SATA (SA, TA, Shark Bite) | |
+| 8 | Dancing Edge | Larceny | SATA (SA, TA, Evisceration) | |
 | 9 | Perfect Dodge | Collaborator p2 | TP set toggle | |
 | 0 | Conspirator | Accomplice p2 | Dismiss trusts | |
 
