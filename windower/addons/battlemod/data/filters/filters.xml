@@ -23,36 +23,36 @@
             <healing>false</healing>
             <misses>true</misses>
             <items>true</items>
-            <uses>true</uses>
+            <uses>false</uses>
             <readies>false</readies>
-            <casting>true</casting>
+            <casting>false</casting>
             <all>false</all>
             <target>false</target>
         </party>
         <alliance>
             <melee>true</melee>
             <ranged>true</ranged>
-            <damage>true</damage>
-            <healing>true</healing>
+            <damage>false</damage>
+            <healing>false</healing>
             <misses>true</misses>
             <items>true</items>
-            <uses>true</uses>
-            <readies>true</readies>
-            <casting>true</casting>
-            <all>true</all>
+            <uses>false</uses>
+            <readies>false</readies>
+            <casting>false</casting>
+            <all>false</all>
             <target>false</target>
         </alliance>
         <others>
             <melee>true</melee>
             <ranged>true</ranged>
-            <damage>true</damage>
-            <healing>true</healing>
+            <damage>false</damage>
+            <healing>false</healing>
             <misses>true</misses>
             <items>true</items>
-            <uses>true</uses>
-            <readies>true</readies>
-            <casting>true</casting>
-            <all>true</all>
+            <uses>false</uses>
+            <readies>false</readies>
+            <casting>false</casting>
+            <all>false</all>
             <target>false</target>
         </others>
         <my_pet>

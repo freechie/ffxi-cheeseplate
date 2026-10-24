@@ -27,7 +27,7 @@
             <healing>true</healing>
             <misses>true</misses>
             <items>false</items>
-            <uses>true</uses>
+            <uses>false</uses>
             <readies>false</readies>
             <casting>false</casting>
             <all>false</all>
@@ -36,25 +36,25 @@
             <melee>true</melee>
             <ranged>true</ranged>
             <damage>false</damage>
-            <healing>true</healing>
+            <healing>false</healing>
             <misses>true</misses>
             <items>false</items>
-            <uses>true</uses>
-            <readies>true</readies>
-            <casting>true</casting>
+            <uses>false</uses>
+            <readies>false</readies>
+            <casting>false</casting>
             <all>false</all>
         </alliance>
         <others> <!-- Some guy nearby is doing something -->
             <melee>true</melee>
             <ranged>true</ranged>
-            <damage>true</damage>
-            <healing>true</healing>
+            <damage>false</damage>
+            <healing>false</healing>
             <misses>true</misses>
             <items>true</items>
-            <uses>true</uses>
-            <readies>true</readies>
-            <casting>true</casting>
-            <all>true</all>
+            <uses>false</uses>
+            <readies>false</readies>
+            <casting>false</casting>
+            <all>false</all>
         </others>
         <my_pet> <!-- Your pet is doing something -->
             <melee>false</melee>
