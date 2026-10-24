@@ -320,7 +320,27 @@
       content: "▸ ";
       color: var(--select);
     }
-    details[open] > summary::before { content: "▾ "; }
+    .onward details[open] > summary::before { content: "▾ "; }
+    details.panel > summary.win-bar {
+      display: flex;
+      cursor: pointer;
+      list-style: none;
+    }
+    details.panel > summary.win-bar::-webkit-details-marker { display: none; }
+    details.panel > summary.win-bar::before { content: none; }
+    details.panel > summary.win-bar::after {
+      content: "▸";
+      margin-left: auto;
+      padding-left: 12px;
+      color: var(--select);
+      font-style: normal;
+    }
+    details.panel[open] > summary.win-bar::after { content: "▾"; }
+    details.panel:not([open]) > summary.win-bar { border-bottom-color: transparent; }
+    details.panel > summary.win-bar:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: -2px;
+    }
     .onward summary:hover { color: var(--gold); }
     .onward .full { margin: 0; line-height: 1.65; }
     .blocked { color: #ffb080; font-size: 13px; }
@@ -595,16 +615,16 @@
         </div>
         <div class="win-body">
           <h1>Cheeseplate</h1>
-          <p>Asura · playing <a href="https://www.bg-wiki.com/ffxi/Dancer" target="_blank" rel="noreferrer">Dancer</a> 94 / <a href="https://www.bg-wiki.com/ffxi/Thief" target="_blank" rel="noreferrer">Thief</a> 47 · Thief 99 · <a href="https://www.bg-wiki.com/ffxi/Ninja" target="_blank" rel="noreferrer">Ninja</a> 70</p>
+          <p>Asura · <a href="https://www.bg-wiki.com/ffxi/Thief" target="_blank" rel="noreferrer">Thief</a> 99 · <a href="https://www.bg-wiki.com/ffxi/Dancer" target="_blank" rel="noreferrer">Dancer</a> 94 · <a href="https://www.bg-wiki.com/ffxi/Ninja" target="_blank" rel="noreferrer">Ninja</a> 70</p>
           <p class="repo">Personal Windower and game settings are in <a href="https://github.com/freechie/ffxi-cheeseplate" target="_blank" rel="noreferrer">ffxi-cheeseplate</a> on GitHub.</p>
           <nav>
             <a href="#priority">Priority</a>
             <a href="#work">Work</a>
             <a href="#ambuscade">Ambuscade</a>
-            <a href="#gear">Gear</a>
-            <a href="#buy">Buy</a>
             <a href="#use">Use</a>
+            <a href="#buy">Buy</a>
             <a href="#spend">Spend</a>
+            <a href="#gear">Gear</a>
             <a href="#missions">Missions</a>
           </nav>
         </div>
@@ -615,488 +635,429 @@
   <div class="wrap">
     <section id="priority">
       <h2>Priority</h2>
-      <div class="panel win">
-        <div class="win-bar"><span>Do this first</span></div>
+      <details class="panel win" open>
+        <summary class="win-bar"><span>Do this first</span></summary>
         <div class="panel-pad">
           <div class="act">
             <div class="n">1</div>
             <div>
-              <strong><a href="#work">Dancer 94 → 99</a></strong>
-              <span>Trust camps in Rala, Ceizak, and Yahse. Keep an experience ring on.</span>
+              <strong><a href="#work">Thief Capacity Points</a></strong>
+              <span>Until about 100 Job Points. Next cap, on Thief: Critical Hit 5/5 (9), DEX +3 (15), Triple Attack 3/5 (6). Then DEX 5/15 and Triple Attack 5/5. HP stays 8/15.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">2</div>
             <div>
-              <strong><a href="#use">Trust points · INT next</a></strong>
-              <span>HP and VIT are full. Next points go to INT, then MND, then Magic Skill.</span>
+              <strong><a href="#ambuscade">Ambuscade · item level 119</a></strong>
+              <span>Volume 2 Normal is cleared. Next wins are Volume 2 Normal and Volume 1 Very Easy, 400 hallmarks each. Set both primers again. 1 seal left.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">3</div>
             <div>
-              <strong><a href="#work">Thief Job Points</a></strong>
-              <span>On Thief, Capacity Points until about 100 Job Points. Then one Limit burst: Dagger 8/8, Critical Hit 5/5, DEX 5/15, Triple Attack 5/5. HP merits stay 8/15.</span>
+              <strong><a href="#use">Trust points · INT</a></strong>
+              <span>INT is 23/60. Hold the 1 point. The next rank costs 3. Then MND, then Magic Skill.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">4</div>
             <div>
-              <strong><a href="#buy">Turn in coupons</a></strong>
-              <span>Karieyh for Samurai, Orvail for Bard, then the Eminent weapon.</span>
+              <strong><a href="#buy">Sparks, then Brutal Earring</a></strong>
+              <span>Enlivened and Vehemence, then Ichimonji-Yofusa, then Acheron Shields. Brutal Earring is 75,000 gil.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">5</div>
             <div>
-              <strong><a href="#spend">Spend what caps or expires</a></strong>
-              <span>Sparks, Unity points, and this month's login points.</span>
+              <strong><a href="#work">Samurai is unlocked. Bard is next.</a></strong>
+              <span><a href="https://www.bg-wiki.com/ffxi/Path_of_the_Bard" target="_blank" rel="noreferrer">Path of the Bard</a>, Lower Jeuno (H-8).</span>
             </div>
           </div>
-          <div class="act">
-            <div class="n">6</div>
-            <div>
-              <strong><a href="#missions">Missions between camps</a></strong>
-              <span>Zilart, San d'Oria, Chains of Promathia, Rhapsodies, and Adoulin. Current steps only.</span>
-            </div>
-          </div>
-          <div class="act">
-            <div class="n">7</div>
-            <div>
-              <strong><a href="#work">After 99 · Samurai, then Bard</a></strong>
-              <span>Switch to Capacity Point rings. Unlock and level Samurai before Bard.</span>
-            </div>
-          </div>
-          <p class="fine" style="margin:12px 0 0;">The sections below explain each step.</p>
+          <p class="fine" style="margin:12px 0 0;">Recent: INT 23/60. Merit cap spent. Volume 2 Normal, a Volume 1 win, item level 119, Colkhab, Karieyh +1, Eminent Flute.</p>
         </div>
-      </div>
+      </details>
     </section>
 
     <section id="work">
       <h2>Work</h2>
       <div class="jobs">
         <div class="panel win">
-          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Dancer" target="_blank" rel="noreferrer">Dancer</a></span></div>
+          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Thief" target="_blank" rel="noreferrer">Thief</a></span></div>
           <div class="panel-pad job">
             <div class="name">Now</div>
-            <div class="lvl">94 / 99</div>
-            <div class="muted"><a href="https://www.bg-wiki.com/ffxi/Rala_Waterways" target="_blank" rel="noreferrer">Rala</a> · <a href="https://www.bg-wiki.com/ffxi/Ceizak_Battlegrounds" target="_blank" rel="noreferrer">Ceizak</a> · <a href="https://www.bg-wiki.com/ffxi/Yahse_Hunting_Grounds" target="_blank" rel="noreferrer">Yahse</a></div>
-            <div class="bar"><i style="width:95%"></i></div>
+            <div class="lvl">99</div>
+            <div class="muted">Capacity Points toward 100 Job Points</div>
+            <div class="bar"><i style="width:100%"></i></div>
           </div>
         </div>
         <div class="panel win">
           <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Samurai" target="_blank" rel="noreferrer">Samurai</a></span></div>
           <div class="panel-pad job">
-            <div class="name">After 99</div>
-            <div class="lvl">0 / 99</div>
-            <div class="muted">Unlock, then level before Bard</div>
-            <div class="bar"><i style="width:0%"></i></div>
+            <div class="name">Unlocked</div>
+            <div class="lvl">1 / 99</div>
+            <div class="muted">Level after the Job Point push</div>
+            <div class="bar"><i style="width:1%"></i></div>
           </div>
         </div>
         <div class="panel win">
           <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Bard" target="_blank" rel="noreferrer">Bard</a></span></div>
           <div class="panel-pad job">
-            <div class="name">After Samurai</div>
+            <div class="name">Next</div>
             <div class="lvl">0 / 99</div>
-            <div class="muted">Unlock after Samurai</div>
+            <div class="muted">Path of the Bard, Lower Jeuno</div>
             <div class="bar"><i style="width:0%"></i></div>
           </div>
         </div>
       </div>
-      <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>Between camps</span></div>
+      <details class="panel win" open style="margin-top:12px;">
+        <summary class="win-bar"><span>Between camps</span></summary>
         <div class="panel-pad">
           <div class="act">
             <div class="n">1</div>
             <div>
               <strong><a href="https://www.bg-wiki.com/ffxi/Zilart_Mission_5" target="_blank" rel="noreferrer">Zilart 5 · Headstone Pilgrimage</a></strong>
-              <span>This is the current Zilart step. Finish it before Rhapsodies 2-24. Next is 6 Through the Quicksand Caves.</span>
+              <span>Dark fragment done. Seven fragments left.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">2</div>
             <div>
               <strong><a href="https://www.bg-wiki.com/ffxi/San_d%27Oria_Mission_8-2" target="_blank" rel="noreferrer">San d'Oria 8-2 · Lightbringer</a></strong>
-              <span>Then 9-1 Breaking Barriers → 9-2 The Heir to the Light.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">3</div>
             <div>
               <strong><a href="https://www.bg-wiki.com/ffxi/Promathia_Mission_3-3" target="_blank" rel="noreferrer">Promathia 3-3 · The Road Forks</a></strong>
-              <span>Next is 3-4 Tending Aged Wounds. Rhapsodies is already past this step.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">4</div>
             <div>
               <strong><a href="https://www.bg-wiki.com/ffxi/Keep_On_Giving" target="_blank" rel="noreferrer">Rhapsodies 2-22 · Keep On Giving</a></strong>
-              <span>Next is 2-23 Past Imperfect. Finish Zilart Headstone before 2-24.</span>
+              <span>3-8 waits on <a href="https://www.bg-wiki.com/ffxi/Behind_the_Sluices" target="_blank" rel="noreferrer">Behind the Sluices</a> and the waterway facility crank.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">5</div>
             <div>
-              <strong><a href="https://www.bg-wiki.com/ffxi/Life_on_the_Frontier" target="_blank" rel="noreferrer">Adoulin 1-6 · Life on the Frontier</a></strong>
-              <span>Next is 1-7 Meeting of the Minds. Rhapsodies chapter 3 needs that later.</span>
+              <strong><a href="https://www.bg-wiki.com/ffxi/Seekers_of_Adoulin_Mission_2-2-1" target="_blank" rel="noreferrer">Adoulin 2-2-1 · Ortharsyne</a></strong>
+              <span>Yorcia Weald from Cirdas Caverns (I-7). Watercrafting and Climbing, or the Yorcia home point if it is already open.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">6</div>
             <div>
               <strong><a href="https://www.bg-wiki.com/ffxi/Aht_Urhgan_Mission_17" target="_blank" rel="noreferrer">Aht Urhgan 17</a> · <a href="https://www.bg-wiki.com/ffxi/In_the_Name_of_the_Father" target="_blank" rel="noreferrer">Wings 8</a> · side stories</strong>
-              <span>Aht Urhgan next is Passing Glory, after one game day. Wings of the Goddess needs nation quest 5 before mission 9. Side stories: <a href="https://www.bg-wiki.com/ffxi/Crystalline_Mission_2" target="_blank" rel="noreferrer">Echo Awakens</a>, <a href="https://www.bg-wiki.com/ffxi/Kupo_Mission_2" target="_blank" rel="noreferrer">Drenched</a>, <a href="https://www.bg-wiki.com/ffxi/A_Shantotto_Ascension_Mission_3" target="_blank" rel="noreferrer">Curdles Blood</a>.</span>
+              <span>Wings 8 needs nation quest 5 before mission 9.</span>
+            </div>
+          </div>
+          <div class="act">
+            <div class="n">7</div>
+            <div>
+              <strong><a href="https://www.bg-wiki.com/ffxi/Order_Up" target="_blank" rel="noreferrer">Order Up</a></strong>
+              <span>Twelve Orders, then Reja Ygridhi at the Celennia Memorial Library.</span>
             </div>
           </div>
         </div>
-      </div>
-      <p class="fine" style="margin-top:10px;">Thief 99 is 27,373 / 30,000 Capacity Points toward Job Point 1. Job Points are still 0. On Thief, Mode Switch stays on Capacity Points until about 100 Job Points. At 99, Experience mode is Capacity Points. Limit Points are merits, so they wait. After 100 Job Points, one Limit burst: Dagger 8/8, Critical Hit Rate 5/5, DEX 5/15, Triple Attack 5/5, then back to Capacity Points. HP merits are 8/15. Other jobs: Ninja 70, Warrior 48, Puppetmaster 28, Red Mage 5, and White Mage, Monk, and Black Mage at 1. Master levels are locked. Bastok and Windurst missions stay locked while the home nation is San d'Oria.</p>
+      </details>
+      <p class="fine" style="margin-top:10px;">Mode stays EXP. Capacity Points count on their own. Other jobs: Dancer 94, Ninja 70, Warrior 48, Puppetmaster 28, Red Mage 5, and White Mage, Monk, and Black Mage at 1. Master levels are locked.</p>
     </section>
 
     <section id="ambuscade">
       <h2>Ambuscade</h2>
-      <div class="panel win">
-        <div class="win-bar"><span>October · item level 117</span></div>
+      <details class="panel win" open>
+        <summary class="win-bar"><span>October · item level 119</span></summary>
         <div class="panel-pad">
           <div class="act">
             <div class="n">1</div>
             <div>
-              <strong><a href="https://www.bg-wiki.com/ffxi/Category:Ambuscade" target="_blank" rel="noreferrer">Volume 2 Easy · Lancer Jack</a></strong>
-              <span>Gear is 117. Easy asks for 114, so run Easy. Pays 300 hallmarks. A seal makes it 900.</span>
+              <strong><a href="https://www.bg-wiki.com/ffxi/Category:Ambuscade" target="_blank" rel="noreferrer">Volume 2 Normal · cleared</a></strong>
+              <span>Keep running Normal. 400 hallmarks. Use the remaining seal on one win. A seal triples it.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">2</div>
             <div>
-              <strong>Wear this when you enter</strong>
-              <span>Thief 99, Kaja Knife, Homestead Dagger, and Mummu. Volume 2 Normal, and all of Volume 1, ask for 119. Accessories are under <a href="#gear">Gear</a>.</span>
+              <strong><a href="https://www.bg-wiki.com/ffxi/Unrelenting_Dullahan" target="_blank" rel="noreferrer">Volume 1 Very Easy</a></strong>
+              <span>Also 400. Ceizak home point (H-6), south to the (G-11) conveyor, Dullahan at (I-7). Stop if it charges or boils. After a miasma weaponskill, run.</span>
             </div>
           </div>
           <div class="act">
             <div class="n">3</div>
             <div>
-              <strong>12 wins for this month's rewards</strong>
-              <span>Use a seal on the first 3 (2,700). Nine more Easy wins with no seal add 2,700. Total 5,400.</span>
+              <strong>Set both primers again</strong>
+              <span>Both are spent. Vol. 2 daily is 3 <a href="https://www.bg-wiki.com/ffxi/Wekufe" target="_blank" rel="noreferrer">Wekufe</a> from Fei'Yin home point #1. Vol. 1 daily is 1 Dullahan. A win spends the primer. Enter from the Mhaura tome (G-9).</span>
             </div>
           </div>
-          <p class="fine" style="margin:12px 0 0;">Pick up rewards from <a href="https://www.bg-wiki.com/ffxi/Gorpa-Masorpa" target="_blank" rel="noreferrer">Gorpa-Masorpa</a> in Mhaura (G-9) as the total goes up. Picking them up does not spend the points. <a href="https://www.bg-wiki.com/ffxi/Caliber_Ring" target="_blank" rel="noreferrer">Caliber Ring</a> at 370, the weapon voucher at 1,000, nuggets at 1,400, gems at 2,700, anima at 5,300. Kaja Knife is the main weapon, so the voucher starts the next dagger. <a href="https://www.bg-wiki.com/ffxi/Tauret" target="_blank" rel="noreferrer">Tauret</a> waits on 9,600 plus a pulse weapon.</p>
+          <p class="fine" style="margin:12px 0 0;">Enter on Thief in Mummu, with Kaja Knife and Homestead Dagger. Next hallmark buy is the dagger voucher at 1,000. Nuggets 1,400, gems 2,700, anima 5,300. <a href="https://www.bg-wiki.com/ffxi/Tauret" target="_blank" rel="noreferrer">Tauret</a> waits on 9,600 plus a pulse weapon. Picking up rewards does not spend the points.</p>
         </div>
-      </div>
-      <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>How to clear Easy</span></div>
+      </details>
+      <details class="panel win" open style="margin-top:12px;">
+        <summary class="win-bar"><span>Trusts and the daily</span></summary>
         <div class="panel-pad">
           <div class="spend-item">
-            <div class="row hi"><span>Ambu Daily</span><b>3 Wekufe</b></div>
-            <p>In Records of Eminence, keep <a href="https://www.bg-wiki.com/ffxi/Ambuscade_Primer_Volume_Two" target="_blank" rel="noreferrer">Ambuscade Primer Vol. 2</a>. It wants 3 undead that give experience. The Volume One primer is the Dullahan ticket, and that fight starts when the gearset reads 119.</p>
-            <br>
-            <p>Home Point warp to <a href="https://www.bg-wiki.com/ffxi/Fei%27Yin" target="_blank" rel="noreferrer">Fei'Yin</a> #1. You land at (K-8) on map 1, beside the Qu'Bia Arena door.
-              <br><br>If that crystal is missing from the list, zone in from Beaucedine Glacier and walk east to the two dolls and the cermet gate, then click the crystal there. From the crystal, the four small rooms are (K-8), (J-8), (I-9), and (J-10).<br><br>Call trusts with <code>//tru</code> and kill 3 <a href="https://www.bg-wiki.com/ffxi/Wekufe" target="_blank" rel="noreferrer">Wekufe</a>. They are ghosts and give experience at level 99.</p>
-            <br>
-            <p>When the objective completes, the primer is a temporary key item. Go to Mhaura (G-9) and examine the <a href="https://www.bg-wiki.com/ffxi/Ambuscade" target="_blank" rel="noreferrer">Ambuscade Tome</a> beside Gorpa-Masorpa. Choose Regular Ambuscade, then Easy, and enter on Thief.The gearset should still read at least 114.
-              <br><br>A win spends the primer, so kill 3 more Wekufe before the next entry.</p>
+            <div class="row hi"><span>Damage · save as <code>//tru ambu</code></span><b>faster</b></div>
+            <p>Amchuchu, Apururu (UC), Qultada, August, Shantotto II. <code>//tru ambu</code> currently matches <code>//tru boss</code>. Summon these five, then <code>//tru save ambu</code>. Amchuchu needs hate before a weaponskill. Trick or Treat is silence, terror, and amnesia.</p>
           </div>
           <div class="spend-item">
-            <div class="row hi"><span>Trusts · <code>//tru</code></span><b>default</b></div>
-            <p>August, Apururu, Koru-Moru, Qultada, Shantotto II. Silence works on Lancer Jack. He calls a skeleton, a hound, and a ghost. Kill him. His trick move silences you, terrifies you, and locks your abilities.</p>
+            <div class="row"><span>Everyday · <code>//tru</code></span><b>leave it</b></div>
+            <p>August, Apururu (UC), Koru-Moru, Qultada, Shantotto II. Capacity camps stay <code>//tru exp</code>.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span>If Easy fails</span><b>Very Easy · 200</b></div>
-            <p>Same fight, but weaker. Worth 200 hallmarks, or 600 with a seal. This month's bonus points are only for Normal and Intense, and a solo run pays none, so that waits too.</p>
+            <div class="row"><span>Same day, second Volume 1</span><b>3 Dullahans</b></div>
+            <p>The non-daily primer wants 3 Unrelenting Dullahans at the same (I-7). The daily resets at Japanese midnight. Very Easy is Dullahan only. Easy and above add the horse.</p>
           </div>
         </div>
-      </div>
-      <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>Volume 1 · when the set reads 119</span></div>
-        <div class="panel-pad">
-          <div class="spend-item">
-            <div class="row hi"><span>Register the Ceizak warp</span><b>once</b></div>
-            <p>The Dullahan for this primer is in <a href="https://www.bg-wiki.com/ffxi/Sih_Gates" target="_blank" rel="noreferrer">Sih Gates</a>. The warp that brings you back is the home point in <a href="https://www.bg-wiki.com/ffxi/Ceizak_Battlegrounds" target="_blank" rel="noreferrer">Ceizak Battlegrounds</a>, the zone above that cave. Buy the maps from <a href="https://www.bg-wiki.com/ffxi/Sifa_Alani" target="_blank" rel="noreferrer">Sifa Alani</a> inside the Scouts' Coalition in Eastern Adoulin (F-9). The Ceizak map is free. The Sih Gates map is 1,000 bayld.</p>
-            <br>
-            <p>Home point warp to <a href="https://www.bg-wiki.com/ffxi/Western_Adoulin" target="_blank" rel="noreferrer">Western Adoulin</a>. Leave through Jorius Yett at (C-9). You arrive at the Ceizak Frontier Station (K-7). Click the Waypoint there. It joins the Adoulin waypoint list. The charter from Adoulin mission 1-2 is what makes waypoints work, and that mission is already finished.</p>
-            <br>
-            <p>Walk to the home point crystal at (H-6), beside the Wildskeeper Reive, and click it. It then shows in the home point list under East Ulbuka, and that warp lands on this crystal. Keep walking south and click the waypoint at Bivouac #1 (H-9) when the device is standing. A later waypoint ride there lands closer to the cave. Waypoint rides spend Kinetic Units. Trade a crystal cluster to any waypoint to fill them. The home point ride is the one to use.</p>
-            <br>
-            <p>Knotted roots mean a Colonization Reive is blocking the trail. Join that reive and clear it. The trail opens when the reive is down. Zone south at (G-11). That entrance arrives on Sih Gates map 2. The <a href="https://www.bg-wiki.com/ffxi/Unrelenting_Dullahan" target="_blank" rel="noreferrer">Unrelenting Dullahan</a> camp is at (I-7).</p>
-            <br>
-            <p>Next time, home point warp to Ceizak and walk south from (H-6) to (G-11).</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>Dullahan ticket, then Mhaura</span><b>1 Dullahan</b></div>
-            <p>Ready when the Thief set reads item level 119. <a href="https://www.bg-wiki.com/ffxi/Ambuscade_Primer_Volume_One" target="_blank" rel="noreferrer">Volume 1</a> Very Easy is the first Dullahan battle, and it asks for 119. Easy asks for 124, Normal for 129, Difficult for 134, and Very Difficult for 139. At 119, choose Very Easy. The set reads 117, so the tome waits. The Ceizak warp above can be registered before that.</p>
-            <br>
-            <p>Set Ambuscade Primer Vol. 1 (Daily) when you are about to spend it. You can hold one Volume One primer, and a win is what spends it. The daily wants 1 Dullahan. Home point warp to Ceizak, zone at (G-11), and kill 1 at (I-7). Call trusts with <code>//tru</code> before the pull. Then examine the Ambuscade Tome in Mhaura (G-9), choose Intense Ambuscade, then Very Easy, and enter on Thief.</p>
-            <br>
-            <p>Another Volume 1 run the same day uses Ambuscade Primer Vol. 1. That objective wants 3 Unrelenting Dullahans at the same I-7 camp. The daily resets at Japanese midnight.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="gear">
-      <h2>Gear</h2>
-      <div class="panel win">
-        <div class="win-bar"><span>Thief / Dancer accessories · easiest first</span></div>
-        <div class="panel-pad">
-          <div class="spend-item">
-            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Brutal_Earring" target="_blank" rel="noreferrer">Brutal Earring</a></span><b>buy · 75,000 gil</b></div>
-            <p>Double Attack +5%, Store TP +1. Level 75, every job, so Thief and Dancer 94 both wear it. Buy 75 Ancient Beastcoins from a Curio Vendor Moogle at 1,000 gil each. The moogles are in Port San d'Oria (J-9), Port Bastok (K-13), and Port Windurst (M-4). Rhapsody in White, from Rhapsodies 1-6, puts those coins in the shop. Trade the 75 coins to <a href="https://www.bg-wiki.com/ffxi/Sagheera" target="_blank" rel="noreferrer">Sagheera</a> in Port Jeuno (I-8). Wear Belatz Pearl in the other ear until Suppanomimi. In Ambuscade, Belatz Pearl's latent is Haste +2%. Keep Loquacious Earring for spells, and Skald Breloque for Bard.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Enlivened_Ring" target="_blank" rel="noreferrer">Enlivened Ring</a> and <a href="https://www.bg-wiki.com/ffxi/Vehemence_Ring" target="_blank" rel="noreferrer">Vehemence Ring</a></span><b>bridge · 20,000 sparks</b></div>
-            <p>Buy both from <a href="https://www.bg-wiki.com/ffxi/Rolandienne" target="_blank" rel="noreferrer">Rolandienne</a> in Southern San d'Oria (G-10), 10,000 sparks each. Enlivened is Dexterity +2 and Accuracy +7. Vehemence is Strength +2 and Attack +10. Level 99, so wear them on Thief until Epona's Ring and Rajas Ring. Dancer equips them at 99.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Epona%27s_Ring" target="_blank" rel="noreferrer">Epona's Ring</a></span><b>Abyssea · Altepa</b></div>
-            <p>Double Attack +3%, Triple Attack +3%. Level 89. Thief and Dancer. In <a href="https://www.bg-wiki.com/ffxi/Abyssea_-_Altepa" target="_blank" rel="noreferrer">Abyssea – Altepa</a>, with visitant status: Long-Barreled Chariot (timed, D-11/12) drops Rusted Chariot Gear. Ironclad Smiter, popped with Tablilla Mercury and a Smoldering Arm, drops a Broken Iron Giant Spike after a red weakness. Examine a ??? at (D-10) with both to pop Rani. A blue weakness from a dagger weaponskill is what makes the ring drop. Under 50% HP, glowing eyes mean the next move is Enthrall, so step back before it goes off.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Suppanomimi" target="_blank" rel="noreferrer">Suppanomimi</a></span><b>after Zilart 13</b></div>
-            <p>Dual Wield +5. Level 72, every job. This replaces Belatz Pearl. Finish Zilart through mission 13. The current step is 5, Headstone Pilgrimage. Flag <a href="https://www.bg-wiki.com/ffxi/Divine_Might" target="_blank" rel="noreferrer">Divine Might</a> at the blank target in the Shrine of Ru'Avitau (G/H-11) before the fight. Trade one Illuminink and one Parchment to the Qu'Hau Spring in Ro'Maeve (H-6) during a full moon, between 18:00 and 06:00 game time, to make an Ark Pentasphere. Illuminink drops from Cursed Puppet and Magic Flagon in Ro'Maeve. Trade the sphere to a Shimmering Circle in La'Loff Amphitheater, beat all five Ark Angels, then pick Suppanomimi at the blank target.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Rajas_Ring" target="_blank" rel="noreferrer">Rajas Ring</a></span><b>Promathia 8-4</b></div>
-            <p>At level 75 and above: Strength +5, Dexterity +5, Store TP +5, Subtle Blow +5. Level 30, every job. Finish Chains of Promathia through 8-4, Dawn, and choose this ring. The current step is 3-3, The Road Forks.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Anu_Torque" target="_blank" rel="noreferrer">Anu Torque</a></span><b>Mog Bonanza · or Omen</b></div>
-            <p>Defense 10, Attack +20, Store TP +7, Resist Stun +10. Level 99. Thief wears it now. Dancer wears it at 99. Trade a Kupon AW-Om or Mog Kupon AW-Om to a Dealer Moogle. That coupon is a Mog Bonanza rank 3 prize. Take the torque from it. The other source is Glassy Craver (level 134) in Reisenjima Henge, inside Omen. <a href="https://www.bg-wiki.com/ffxi/Fotia_Gorget" target="_blank" rel="noreferrer">Fotia Gorget</a> stays the Evisceration swap.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="buy">
-      <h2>Buy</h2>
-      <div class="panel win">
-        <div class="win-bar"><span>Redeem now</span></div>
-        <div class="panel-pad">
-          <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Karieyh_Haubert_%2B1" target="_blank" rel="noreferrer">Karieyh +1</a> ×4 <span class="tag">Samurai</span></span><b>4× <a href="https://www.bg-wiki.com/ffxi/Kupon_A-PK109" target="_blank" rel="noreferrer">A-PK109</a></b></div>
-          <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Orvail_Robe_%2B1" target="_blank" rel="noreferrer">Orvail Robe +1</a> <span class="tag">Bard</span></span><b>1× <a href="https://www.bg-wiki.com/ffxi/Kupon_A-PK109" target="_blank" rel="noreferrer">A-PK109</a></b></div>
-          <div class="row hi"><span>Eminent weapon</span><b>1× <a href="https://www.bg-wiki.com/ffxi/Kupon_W-EMI" target="_blank" rel="noreferrer">W-EMI</a></b></div>
-          <p class="fine" style="margin:10px 0 0;">Dancer gear is set. Turn these in for Samurai and Bard.</p>
-        </div>
-      </div>
+      </details>
     </section>
 
     <section id="use">
       <h2>Use</h2>
-      <div class="panel win">
-        <div class="win-bar"><span>While Dancer is 94</span></div>
+      <details class="panel win" open>
+        <summary class="win-bar"><span>On Thief 99</span></summary>
         <div class="panel-pad">
-          <div class="spend-item">
-            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Echad_Ring" target="_blank" rel="noreferrer">Echad Ring</a></span><b>EXP +150%</b></div>
-            <p>Put it on and choose Use, then camp <a href="https://www.bg-wiki.com/ffxi/Rala_Waterways" target="_blank" rel="noreferrer">Rala</a>, <a href="https://www.bg-wiki.com/ffxi/Ceizak_Battlegrounds" target="_blank" rel="noreferrer">Ceizak</a>, or <a href="https://www.bg-wiki.com/ffxi/Yahse_Hunting_Grounds" target="_blank" rel="noreferrer">Yahse</a>. One charge, ready again after 2 hours. The bonus stops at 30,000 extra experience or after 12 hours. It can be worn at level 1 and refills by itself, so this is the ring for the climb from 94 to 99.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Caliber_Ring" target="_blank" rel="noreferrer">Caliber Ring</a></span><b>buy · 480 hallmarks</b></div>
-            <p>Same 30,000 cap and 12 hours as Echad. Three charges, each ready again after 15 minutes. Buy it from Gorpa-Masorpa in Mhaura (G-9) for 480 hallmarks, once a month. The charges never come back. Until you buy it, use Emperor Band while Echad is recharging.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Emperor_Band" target="_blank" rel="noreferrer">Emperor Band</a></span><b>EXP +50% · fill-in</b></div>
-            <p>Use this while Echad is recharging and you do not have Caliber yet. Three charges, each ready again after 15 minutes. Same 30,000 cap and 12 hours. Refill a used charge for 200 conquest points. Leave Empress Band and Chariot Band alone. This is the only conquest experience band to keep.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Cipher:_Kupofried" target="_blank" rel="noreferrer">Kupofried</a></span><b>+20% · stacks</b></div>
-            <p>Summon with <code>//tru exp</code> on experience camps. The aura is +20% experience and adds to the ring. The rings do not add to each other. Using a second ring replaces the bonus that is already on.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>Trust parties &amp; controls</span></div>
-        <div class="panel-pad">
-          <div class="spend-item">
-            <div class="row hi"><span>Default · <code>//tru</code></span><b>balanced</b></div>
-            <p>August, Apururu (UC), Koru-Moru, Qultada, Shantotto II. Apururu is the healer. Use this for normal play, and when the camp party needs more healing.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row hi"><span>EXP · <code>//tru exp</code></span><b>Kupofried +20%</b></div>
-            <p>August, Koru-Moru, Qultada, Kupofried, Shantotto II. Use this on Rala, Ceizak, or Yahse so the +20% aura adds to Echad or Emperor. Switch to the default party if waltzes are not enough healing.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>Camps · <code>//tru camps</code></span><b>Sakura regen</b></div>
-            <p>August, Koru-Moru, Qultada, Sakura, Shantotto II. Same damage party, with Sakura instead of Kupofried, when you want healing over time instead of the experience aura.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>Raise · <code>//tru raise</code></span><b>recovery</b></div>
-            <p>August, Apururu (UC), Koru-Moru, Qultada, Ferreous Coffin. Use this on risky fights, when a trust that can Raise is worth giving up Shantotto II.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>Boss · <code>//tru boss</code></span><b>survival</b></div>
-            <p>Amchuchu, Apururu (UC), King of Hearts, Koru-Moru, Shantotto II. Amchuchu holds hate while the healer and support trusts keep you up.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>GearSwap key overlay</span><b>Thief · Dancer · Ninja</b></div>
-            <p>Hold Ctrl, Alt, Ctrl+Shift, Alt+Shift, or Ctrl+Alt to see that row. GearSwap reloads the labels once you are in the game. <code>//kl unlock</code> lets you move the heading, the actions, and the descriptions. <code>//kl lock</code> saves them.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row hi"><span>Pass drops · <code>/ll junk</code></span><b>auto</b></div>
-            <p>LightLuggage does not load by itself. Each session, type <code>load ll</code>, then <code>/ll junk</code>. Trash passes as it drops and never takes a slot. Crystals, seals, Ninja tools, seeds, scrolls, and copper or iron ore stay.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>Sell that list · <code>//sellnpc junk</code></span><b>then open a shop</b></div>
-            <p>SellNPC loads with Windower. Run the command, move the stacks into your main inventory, then open any city shop. Matching stacks sell. Prize powder and copper or iron ore have their own commands: <code>//sellnpc powder</code> and <code>//sellnpc ore</code>.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel win" style="margin-top:12px;">
-
-        <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Alter_Ego_Points" target="_blank" rel="noreferrer">Alter ego</a> · HP 60/60 · VIT 60/60</span></div>
-        <div class="panel-pad">
-          <div class="spend-item">
-            <div class="row"><span>HP</span><b>60/60</b></div>
-            <p>Done. That is how much damage the trusts can take.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>VIT</span><b>60/60</b></div>
-            <p>Done. VIT is their defense, and it makes healer cures stronger.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row hi"><span>Next · INT</span><b>210 to 60</b></div>
-            <p>Set this on Thief 99, in a Mog House or Mog Garden. Open Main Menu, then Status, then Alter Ego Points. You cannot move points after you place them. INT is magic damage for Shantotto II. Ranks 1 through 60 cost 210 points. Put new points here until INT is 60/60.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>Then</span><b>MND → Magic Skill</b></div>
-            <p>MND makes cures and enfeebles stronger. Magic Skill lets Koru-Moru land Slow and Paralyze. Each one is another 210 points to reach 60. Leave STR, DEX, and Combat Skill for later. The Dancer is the one doing the killing.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>Oct 16 – Nov 9</span><b>Alter Ego Expo</b></div>
-            <p>This month's bonus does not change the point costs. From October 16 at 1:00 a.m. PDT through November 9 at 6:59 a.m. PST, summoned trusts gain 50% more HP and MP, and they resist status effects better, on top of the points above.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>After Dancer hits 99</span></div>
-        <div class="panel-pad">
-          <div class="spend-item">
-            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Endorsement_Ring" target="_blank" rel="noreferrer">Endorsement Ring</a></span><b>CP +200%</b></div>
-            <p>The strongest Capacity Point ring, once Deeds of Heroism reach 30. The reward NPC trades that tier for this ring. One charge, ready again after 2 hours. The bonus stops at 30,000 extra Capacity Points or after 12 hours. It can be worn at level 99. Deeds are at 20, so this waits for the next tier.</p>
-          </div>
           <div class="spend-item">
             <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Facility_Ring" target="_blank" rel="noreferrer">Facility Ring</a></span><b>CP +150% · use first</b></div>
-            <p>Same +150%, 30,000 Capacity Points, and 12 hours as Trizek, with three charges ready again after 15 minutes. After Dancer hits 99, use Facility charges before Trizek. The charges never come back. Buy the next one from Gorpa-Masorpa for 800 hallmarks when this one is used up.</p>
+            <p>Three charges, 15 minutes apart. The bonus stops at 30,000 extra Capacity Points or 12 hours. Buy the next one for 800 hallmarks after this one is used up.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Trizek_Ring" target="_blank" rel="noreferrer">Trizek Ring</a></span><b>CP +150%</b></div>
-            <p>One charge, ready again after 2 hours. Same 30,000 Capacity Point cap and 12 hours. It refills by itself. Use it when Facility is empty, or still recharging, between Ambuscade buys.</p>
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Trizek_Ring" target="_blank" rel="noreferrer">Trizek Ring</a></span><b>CP +150%</b></div>
+            <p>One charge, ready again after 2 hours. Use it when Facility is empty. It refills by itself.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Capacity_Ring" target="_blank" rel="noreferrer">Capacity Ring</a></span><b>CP +50%</b></div>
-            <p>Use a charge when the +150% or +200% ring is down. Each charge is ready again after 15 minutes. The cap is still 30,000. A spare is 5,000 sparks at Rolandienne, only if you want a second one. Leave <a href="https://www.bg-wiki.com/ffxi/Vocation_Ring" target="_blank" rel="noreferrer">Vocation Ring</a> alone. Its 12,000 Capacity Point cap runs out faster on these camps.</p>
+            <p>Use a charge when the +150% ring is down. A spare is 5,000 sparks. Leave Vocation Ring alone.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Aptitude_Mantle" target="_blank" rel="noreferrer">Aptitude Mantle</a></span><b>buy at 99</b></div>
-            <p>Buy this level 99 back piece from the auction house. The +1 version is +30%. Wear it when the monster dies. It adds to Facility, Trizek, Capacity, and Kupofried's +20% aura. Stop using Echad and Emperor once the job is 99.</p>
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Cipher:_Kupofried" target="_blank" rel="noreferrer">Kupofried</a></span><b><code>//tru exp</code> · +20%</b></div>
+            <p>The aura adds to whichever ring is on.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span>Dancer 94 → 99</span><b>Echad, then Caliber</b></div>
+            <p>Those last five levels use <a href="https://www.bg-wiki.com/ffxi/Echad_Ring" target="_blank" rel="noreferrer">Echad</a>, then <a href="https://www.bg-wiki.com/ffxi/Caliber_Ring" target="_blank" rel="noreferrer">Caliber</a>, then <a href="https://www.bg-wiki.com/ffxi/Emperor_Band" target="_blank" rel="noreferrer">Emperor</a>. Same camps: Rala, Ceizak, Yahse.</p>
           </div>
         </div>
-      </div>
+      </details>
+
+      <details class="panel win" open style="margin-top:12px;">
+
+        <summary class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Alter_Ego_Points" target="_blank" rel="noreferrer">Alter ego</a> · HP 60/60 · VIT 60/60 · INT 23/60</span></summary>
+        <div class="panel-pad">
+          <div class="spend-item">
+            <div class="row hi"><span>Next · INT 24</span><b>171 to 60</b></div>
+            <p>Hold the 1 point. Rank 24 costs 3. Then MND, then Magic Skill, 210 each.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span>Oct 16 – Nov 9</span><b>Alter Ego Expo</b></div>
+            <p>Trusts gain 50% more HP and MP through Nov 9. Point costs stay the same.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel win" style="margin-top:12px;">
+        <summary class="win-bar"><span>Trust parties &amp; controls</span></summary>
+        <div class="panel-pad">
+          <div class="spend-item">
+            <div class="row hi"><span>Default · <code>//tru</code></span><b>balanced</b></div>
+            <p>August, Apururu (UC), Koru-Moru, Qultada, Shantotto II.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row hi"><span>EXP · <code>//tru exp</code></span><b>Kupofried +20%</b></div>
+            <p>August, Koru-Moru, Qultada, Kupofried, Shantotto II. Use this on Capacity Point camps.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span>Camps · <code>//tru camps</code></span><b>Sakura regen</b></div>
+            <p>August, Koru-Moru, Qultada, Sakura, Shantotto II. Sakura replaces Kupofried when the camp needs regen.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span>Raise · <code>//tru raise</code></span><b>recovery</b></div>
+            <p>August, Apururu (UC), Koru-Moru, Qultada, Ferreous Coffin.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span>Boss · <code>//tru boss</code></span><b>survival</b></div>
+            <p>Amchuchu, Apururu (UC), King of Hearts, Koru-Moru, Shantotto II. <code>//tru ambu</code> is this same party. The faster Ambuscade set is under <a href="#ambuscade">Ambuscade</a>.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span>GearSwap key overlay</span><b>Thief · Dancer · Ninja</b></div>
+            <p><code>//kl unlock</code> moves the labels. <code>//kl lock</code> saves them.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row hi"><span>Pass drops · <code>/ll junk</code></span><b>auto</b></div>
+            <p>Each session: <code>load ll</code>, then <code>/ll junk</code>. Crystals, seals, ninja tools, seeds, and scrolls stay.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span>Sell that list · <code>//sellnpc junk</code></span><b>then open a shop</b></div>
+            <p>Run it, then open a city shop. <code>//sellnpc powder</code> and <code>//sellnpc ore</code> are separate.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="panel win" style="margin-top:12px;">
+        <summary class="win-bar"><span>Later Capacity gear</span></summary>
+        <div class="panel-pad">
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Endorsement_Ring" target="_blank" rel="noreferrer">Endorsement Ring</a></span><b>CP +200% · deeds 30</b></div>
+            <p>Deeds are at 20. The next prize tier is this ring.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Aptitude_Mantle" target="_blank" rel="noreferrer">Aptitude Mantle</a></span><b>buy</b></div>
+            <p>Auction house. Wear it on the killing blow. It adds to the Capacity Point ring and Kupofried.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="buy">
+      <h2>Buy</h2>
+      <details class="panel win" open>
+        <summary class="win-bar"><span>Buy now</span></summary>
+        <div class="panel-pad">
+          <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Enlivened_Ring" target="_blank" rel="noreferrer">Enlivened</a> and <a href="https://www.bg-wiki.com/ffxi/Vehemence_Ring" target="_blank" rel="noreferrer">Vehemence</a></span><b>20,000 sparks</b></div>
+          <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Ichimonji-Yofusa" target="_blank" rel="noreferrer">Ichimonji-Yofusa</a> <span class="tag">Samurai</span></span><b>7,000 sparks</b></div>
+          <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Acheron_Shield" target="_blank" rel="noreferrer">Acheron Shield</a></span><b>2,755 sparks · sell</b></div>
+          <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Brutal_Earring" target="_blank" rel="noreferrer">Brutal Earring</a></span><b>75,000 gil</b></div>
+          <p class="fine" style="margin:10px 0 0;">Karieyh +1 and the Eminent Flute are done. Hallmark buy is the dagger voucher at 1,000.</p>
+        </div>
+      </details>
     </section>
 
     <section id="spend">
       <h2>Spend</h2>
-      <div class="panel win">
-        <div class="win-bar"><span>Before it caps or expires</span></div>
+      <details class="panel win" open>
+        <summary class="win-bar"><span>Before it caps or expires</span></summary>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Sparks_of_Eminence" target="_blank" rel="noreferrer">Sparks</a></span><b>76,771</b></div>
-            <p>The cap is 99,999. Sparks past that disappear. At <a href="https://www.bg-wiki.com/ffxi/Rolandienne" target="_blank" rel="noreferrer">Rolandienne</a> in Southern San d'Oria (G-10), buy the <a href="#gear">Enlivened Ring and Vehemence Ring</a> first (10,000 sparks each). Those are the Thief bridge rings. With the rest, buy <a href="https://www.bg-wiki.com/ffxi/Acheron_Shield" target="_blank" rel="noreferrer">Acheron Shield</a> from the level 71–98 list (2,755 sparks) and sell the shield to a shop. That turns sparks into gil. The weekly exchange limit (100,000) covers this pile. Dancer armor is already set, so leave that set off the sparks list. A second <a href="https://www.bg-wiki.com/ffxi/Capacity_Ring" target="_blank" rel="noreferrer">Capacity Ring</a> is 5,000 sparks, only if you want a spare. Sell dagger skill books to a shop. They are a worse sparks buy than the shield.</p>
+            <p>Cap is 99,999. Buy order is on the <a href="#buy">Buy</a> list: both rings, Ichimonji-Yofusa, then Acheron Shields to sell.</p>
           </div>
           <div class="spend-item">
             <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Unity" target="_blank" rel="noreferrer">Unity Accolades</a> · Apururu</span><b>66,555</b></div>
-            <p>Same 99,999 cap. Apururu only boosts that unity's Wanted notorious monsters. Spend the points at any Unity NPC, such as Urbiolaine in Southern San d'Oria. Keep a few thousand for Wanted warps while you run missions. Buy <a href="https://www.bg-wiki.com/ffxi/Prize_Powder" target="_blank" rel="noreferrer">Prize Powder</a> with the rest (10 points each) and sell it to a shop. A special Gobbie Key costs 15,000. Spin the two keys when you have a free inventory slot.</p>
+            <p>Cap is 99,999. Keep a few thousand for Wanted warps. Buy Prize Powder with the rest and sell it.</p>
           </div>
           <div class="spend-item">
             <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Repeat_Login_Campaign" target="_blank" rel="noreferrer">Login points</a></span><b>Oct open</b></div>
-            <p>October points build from October 14 through November 7. The Greeter Moogle shop stays open through November 9. Up to 700 points carry into the next month. This month's trust cipher shop is done. Leftover points can buy <a href="https://www.bg-wiki.com/ffxi/Track_Pants" target="_blank" rel="noreferrer">Track Pants</a> (10 each; buy two and Synergy them into +1 movement speed) if you still want them. Otherwise stay under the 700 that carry over. Leave the Scientist's Board unless you want the furniture.</p>
+            <p>Points build through November 7. The shop stays open through November 9. Up to 700 carry over. The trust cipher shop is done.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Copper_Voucher" target="_blank" rel="noreferrer">Copper A.M.A.N. vouchers</a></span><b>43 · hold</b></div>
-            <p>Store them at a Records of Eminence NPC, up to 999. Turn them in only when you need a currency that is harder to farm. Leave the Allied Notes trade alone. Echad and Emperor already cover the rest of the Dancer levels, and Caliber is the better hallmark buy. Resistance Credits, Obsidian Fragments, or a starter pile of Escha Silt are better emergency trades later.</p>
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Copper_Voucher" target="_blank" rel="noreferrer">Copper A.M.A.N. vouchers</a></span><b>47 · hold</b></div>
+            <p>Store them at a Records of Eminence NPC. Turn them in when a currency is short.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Bayld" target="_blank" rel="noreferrer">Bayld</a></span><b>6,852</b></div>
-            <p>This pays waypoint fees in Adoulin while you do Life on the Frontier. Coalition gear costs more than this pile, so leave it for warps. Inventor lists can wait. From October 16 through November 9, a coalition assignment pays triple bayld, and a reive pays about double bayld and experience, up to the usual cap on that reive.</p>
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Bayld" target="_blank" rel="noreferrer">Bayld</a></span><b>tripled through Nov 9</b></div>
+            <p>One imprimatur per coalition slip. Reive bayld is about double, and the reive cap stays.</p>
           </div>
         </div>
-      </div>
+      </details>
 
-      <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>After 99</span></div>
+      <details class="panel win" style="margin-top:12px;">
+        <summary class="win-bar"><span>After 99</span></summary>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Dial_Key_AB" target="_blank" rel="noreferrer">Dial Key #Ab</a></span><b>spent</b></div>
-            <p>An abjuration needs the matching cursed piece. Trade both to <a href="https://www.bg-wiki.com/ffxi/Alphollon_C_Meriard" target="_blank" rel="noreferrer">Alphollon C Meriard</a> in the Northern San d'Oria cathedral (L-6). Keep Triton hands for <a href="https://www.bg-wiki.com/ffxi/Lustratio_Mittens" target="_blank" rel="noreferrer">Lustratio Mittens</a> (item level 119, for Thief, Dancer, and Bard). The gloves drop from Ma in Escha Ru'Aun, after Rhapsodies 2-29. Leave the other bases. Transitory feet become level 99 Kheper Gamashes, and the rest are other jobs or level 73. Sell the Goblin Mess Tin and Goblin Weel on the auction house. From October 16 through November 9 these boxes still add a free Adoulin dial, once per real-world day, for Skirmish stones and Delve airlixirs.</p>
+            <p>An abjuration needs the matching cursed piece. Keep Triton hands for Lustratio Mittens after Rhapsodies 2-29.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span>SP Gobbie Key</span><b>×2</b></div>
-            <p>Same goblin. It can roll any normal 50-point box prize. Spin when you have a free inventory slot.</p>
+            <p>Spin when a main-inventory slot is free.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Mars_Orb" target="_blank" rel="noreferrer">Mars</a> / <a href="https://www.bg-wiki.com/ffxi/Venus_Orb" target="_blank" rel="noreferrer">Venus</a> orb</span><b>1 / 1</b></div>
-            <p>Trade an orb to the Burning Circle in Horlais Peak, Waughroon Shrine, or Balga's Dais for <a href="https://www.bg-wiki.com/ffxi/A.M.A.N._Trove" target="_blank" rel="noreferrer">A.M.A.N. Trove</a>. Open chests and leave before the mimic. Venus has the better chests. Use one before 99. <a href="https://www.bg-wiki.com/ffxi/Greyson" target="_blank" rel="noreferrer">Greyson</a> in Lower Jeuno (G-11) sells more only to a level 99: 6 silver vouchers for Mars, 10 for Venus.</p>
+            <p>Burning Circle trove. Open chests and leave before the mimic. Greyson sells more for silver vouchers.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Mog_Pell_(Red)" target="_blank" rel="noreferrer">Mog Pell</a> red / <a href="https://www.bg-wiki.com/ffxi/Mog_Pell_(Silver)" target="_blank" rel="noreferrer">silver</a></span><b>8 / 4</b></div>
-            <p>Trade them to a <a href="https://www.bg-wiki.com/ffxi/Festive_Moogle" target="_blank" rel="noreferrer">Festive Moogle</a> in Port San d'Oria (J-9), Port Bastok (J-13), or Windurst Walls (C-14). The trust cipher list is done, so save the eight red pells for after 99. <a href="https://www.bg-wiki.com/ffxi/Mellidopt_Wing" target="_blank" rel="noreferrer">Mellidopt Wings</a> (6 per pell) are for Alluvion Skirmish gear. Visage and Faithful's IV pieces are for Escha sets. A silver pell is a job-specific cape, or the Abdhaljs materials for one. Those four wait until Dancer is 99 and you pick the cape.</p>
+            <p>Hold the 8 red for Mellidopt Wings after Samurai and Bard are 99. The 4 silver wait for a job cape.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Abdhaljs_Seal" target="_blank" rel="noreferrer">Abdhaljs</a> seal / nugget · hallmarks · gallantry</span><b>3 / 1 · 0 · 0</b></div>
-            <p>October total is 0. The plan at item level 117 is <a href="#ambuscade">Volume 2 Easy</a>. A seal triples that win. The reward picks at 370, 1,000, 1,400, 2,700, and 5,300 do not spend the points.</p>
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Abdhaljs_Seal" target="_blank" rel="noreferrer">Abdhaljs</a> seal / nugget</span><b>1 / 1</b></div>
+            <p>Use the seal on the next Normal or Very Easy win. It triples hallmarks and gallantry. Reward picks do not spend the points.</p>
           </div>
         </div>
-      </div>
+      </details>
 
-      <div class="panel win" style="margin-top:12px;">
-        <div class="win-bar"><span>Leave these for later</span></div>
+      <details class="panel win" style="margin-top:12px;">
+        <summary class="win-bar"><span>Leave these for later</span></summary>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Deeds_of_Heroism" target="_blank" rel="noreferrer">Deeds</a></span><b>20</b></div>
-            <p>A lifetime total, like total hallmarks. The reward NPC pays a prize at each step: copper vouchers at 10, a Moggiebag at 20. Claim either one if you have not claimed it yet. The next prize is at 30. The number does not go down when you claim.</p>
+            <p>Next prize is at 30, the Endorsement Ring. The number does not drop when a prize is claimed.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Conquest_Points/San_d%27Oria_Items" target="_blank" rel="noreferrer">San d'Oria CP</a></span><b>255,702</b></div>
-            <p>Aravoge in Southern San d'Oria (F-10). Buy <a href="https://www.bg-wiki.com/ffxi/Return_Ring" target="_blank" rel="noreferrer">Return Ring</a> for 2,500 conquest points. The rest covers San d'Oria Mastery Rank titles later (231,000 for all ten). Leave nation armor. Mummu stays.</p>
+            <p>Buy Return Ring for 2,500. The rest waits for Mastery Rank titles.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span>Beastmen / Kindred seals · crests K / H / S</span><b>85 / 25 · 80 / 35 / 13</b></div>
-            <p><a href="https://www.bg-wiki.com/ffxi/Curio_Vendor_Moogle" target="_blank" rel="noreferrer">Curio Vendor Moogle</a> in Port Jeuno. That menu is old armor below what you wear, plus a few gil items. Gil is about 1.75 million, so leave the crests until a specific item on that menu is the reason to trade them.</p>
+            <div class="row"><span>Beastmen / Kindred seals · crests K / H / S</span><b>86 / 28 · 89 / 41 / 16</b></div>
+            <p>Hold. Trade them when a Curio Vendor Moogle item is the reason.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Copper_Voucher" target="_blank" rel="noreferrer">Copper</a> / <a href="https://www.bg-wiki.com/ffxi/Silver_Voucher" target="_blank" rel="noreferrer">Silver</a> vouchers</span><b>43 / 4</b></div>
-            <p>One copper voucher becomes 1,000 of a currency you are short on, at Rolandienne. Hold them for now. Silver vouchers become Mars and Venus orbs at Greyson, and only at level 99. One of each orb is enough, so the four silvers wait.</p>
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Copper_Voucher" target="_blank" rel="noreferrer">Copper</a> / <a href="https://www.bg-wiki.com/ffxi/Silver_Voucher" target="_blank" rel="noreferrer">Silver</a> vouchers</span><b>47 / 5</b></div>
+            <p>Copper becomes 1,000 of a short currency at Rolandienne. Silver becomes Mars and Venus orbs at Greyson.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Valor_Points" target="_blank" rel="noreferrer">Valor</a></span><b>3,157</b></div>
-            <p>These pay for Survival Guide teleports. The cap is 50,000. Warp Ring, Homing Ring, and Wanted warps already cover travel, so this is spare.</p>
+            <p>Survival Guide teleports. Cap is 50,000. Spare.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Gobbie_Mystery_Box" target="_blank" rel="noreferrer">Daily Tally</a></span><b>22,325</b></div>
-            <p>The special dial at the Gobbie Mystery Box costs 50 and works once per real-world day. The pile is large because it only pays out one spin a day.</p>
+            <p>One special dial a day, 50 points.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Cruor" target="_blank" rel="noreferrer">Cruor</a> / <a href="https://www.bg-wiki.com/ffxi/Traverser_Stone" target="_blank" rel="noreferrer">Traverser</a></span><b>100,047 / 2,876</b></div>
-            <p>Abyssea entry stones and atma. Experience is in Rala, Ceizak, and Yahse with trusts, so this waits.</p>
+            <p>Abyssea entry. Capacity camps are in Adoulin, so this waits.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Mweya_Plasm" target="_blank" rel="noreferrer">Mweya Plasm</a></span><b>9,160</b></div>
-            <p>Reive rewards, after you clear Wildskeeper Reives. It does not buy experience.</p>
+            <p>Reive rewards. Spend after Wildskeeper Reives.</p>
           </div>
           <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Escha_Silt" target="_blank" rel="noreferrer">Escha silt</a> / <a href="https://www.bg-wiki.com/ffxi/Escha_Bead" target="_blank" rel="noreferrer">beads</a></span><b>3,194 / 2</b></div>
-            <p>Escha gear. Two beads cannot buy a piece, and that shop needs more Rhapsodies plus level 99. The silt cap is 100,000, so this is a starter pile.</p>
+            <p>Escha gear, after more Rhapsodies. Silt cap is 100,000.</p>
           </div>
         </div>
-      </div>
+      </details>
+    </section>
+
+    <section id="gear">
+      <h2>Gear</h2>
+      <details class="panel win">
+        <summary class="win-bar"><span>Thief / Dancer accessories · easiest first</span></summary>
+        <div class="panel-pad">
+          <div class="spend-item">
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Brutal_Earring" target="_blank" rel="noreferrer">Brutal Earring</a></span><b>buy · 75,000 gil</b></div>
+            <p>Double Attack +5%, Store TP +1. Buy 75 Ancient Beastcoins at 1,000 gil from a Curio Vendor Moogle, then trade them to <a href="https://www.bg-wiki.com/ffxi/Sagheera" target="_blank" rel="noreferrer">Sagheera</a> in Port Jeuno (I-8).</p>
+          </div>
+          <div class="spend-item">
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Enlivened_Ring" target="_blank" rel="noreferrer">Enlivened Ring</a> and <a href="https://www.bg-wiki.com/ffxi/Vehemence_Ring" target="_blank" rel="noreferrer">Vehemence Ring</a></span><b>bridge · 20,000 sparks</b></div>
+            <p>10,000 sparks each, from <a href="https://www.bg-wiki.com/ffxi/Rolandienne" target="_blank" rel="noreferrer">Rolandienne</a> (Southern San d'Oria, G-10). Wear both on Thief until Epona's and Rajas.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Epona%27s_Ring" target="_blank" rel="noreferrer">Epona's Ring</a></span><b>Abyssea · Altepa</b></div>
+            <p>Double Attack +3%, Triple Attack +3%. Abyssea – Altepa, after Rani. Later.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Suppanomimi" target="_blank" rel="noreferrer">Suppanomimi</a></span><b>after Zilart 13</b></div>
+            <p>Dual Wield +5. Replaces the other ear. Current Zilart step is 5. The earring is the pick at the end of mission 13.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Rajas_Ring" target="_blank" rel="noreferrer">Rajas Ring</a></span><b>Promathia 8-4</b></div>
+            <p>Strength +5, Dexterity +5, Store TP +5. Choose it at the end of Promathia. Current step is 3-3.</p>
+          </div>
+          <div class="spend-item">
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Anu_Torque" target="_blank" rel="noreferrer">Anu Torque</a></span><b>Mog Bonanza · or Omen</b></div>
+            <p>Attack +20, Store TP +7. Mog Bonanza rank 3, or Glassy Craver in Omen. Fotia Gorget stays the Evisceration swap.</p>
+          </div>
+        </div>
+      </details>
     </section>
 
     <section id="missions">
       <h2>Missions</h2>
-      <div class="panel win">
-        <div class="win-bar">
+      <details class="panel win">
+        <summary class="win-bar">
           <span>Mission log</span>
-        </div>
+        </summary>
         <div class="panel-pad">
           <div class="table-scroll">
           <table>
@@ -1137,7 +1098,7 @@
                     <p class="full">5 Headstone Pilgrimage · 6 Through the Quicksand Caves · 7 The Chamber of Oracles · 8 Return to Delkfutt's Tower · 9 Ro'Maeve · 10 The Temple of Desolation · 11 The Hall of the Gods · 12 The Mithra and the Crystal · 13 The Gate of the Gods · 14 Ark Angels · 15 The Sealed Shrine · 16 The Celestial Nexus · 17 Awakening · 18 The Last Verse · epilogue Storms of Fate / Shadows of the Departed / Apocalypse Nigh</p>
                   </details>
                 </td>
-                <td class="blocked">Rhapsodies 2-24 waits until <a href="https://www.bg-wiki.com/ffxi/Zilart_Mission_5" target="_blank" rel="noreferrer">Headstone</a> is finished</td>
+                <td class="blocked">—</td>
               </tr>
               <tr>
                 <td><a href="https://www.bg-wiki.com/ffxi/Category:Promathia_Missions" target="_blank" rel="noreferrer">Promathia</a></td>
@@ -1177,15 +1138,15 @@
               </tr>
               <tr>
                 <td><a href="https://www.bg-wiki.com/ffxi/Category:Seekers_of_Adoulin_Missions" target="_blank" rel="noreferrer">Adoulin</a></td>
-                <td class="current"><a href="https://www.bg-wiki.com/ffxi/Life_on_the_Frontier" target="_blank" rel="noreferrer">Life on the Frontier (1-6)</a></td>
+                <td class="current"><a href="https://www.bg-wiki.com/ffxi/Seekers_of_Adoulin_Mission_2-2-1" target="_blank" rel="noreferrer">Ortharsyne (2-2-1)</a></td>
                 <td class="onward">
-                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Seekers_of_Adoulin_Mission_1-7" target="_blank" rel="noreferrer">1-7 Meeting of the Minds</a></p>
+                  <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Seekers_of_Adoulin_Mission_2-2-2" target="_blank" rel="noreferrer">2-2-2 In the Presence of Royalty</a></p>
                   <details>
-                    <summary>1-6 → 5-5-1 + epilogue</summary>
-                    <p class="full">1-6 Life on the Frontier · 1-7 Meeting of the Minds · 1-8 Arciela Appears Again · Ch.2 Budding Prospects → Yggdrasil (2-1…2-7-3, incl. Behind the Sluices) · Ch.3 Return of the Exorcist → Glimmer of Portent · Ch.4 …Into the Fire → Royal Blessings · Ch.5 Arboreal Rumors → The Light Within · epilogue The Silent Forest / Ygnas Directive / Arciela Directive</p>
+                    <summary>2-2-1 → 5-5-1 + epilogue</summary>
+                    <p class="full">2-2-1 Ortharsyne · 2-2-2 In the Presence of Royalty · 2-3 The Twin World Trees → Yggdrasil (2-7-3, incl. Behind the Sluices) · Ch.3 Return of the Exorcist → Glimmer of Portent · Ch.4 …Into the Fire → Royal Blessings · Ch.5 Arboreal Rumors → The Light Within · epilogue The Silent Forest / Ygnas Directive / Arciela Directive</p>
                   </details>
                 </td>
-                <td class="blocked">Rhapsodies 3-4 needs 1-7. Later Rhapsodies needs Behind the Sluices and the waterway crank.</td>
+                <td class="blocked">Rhapsodies 3-8 needs <a href="https://www.bg-wiki.com/ffxi/Behind_the_Sluices" target="_blank" rel="noreferrer">Behind the Sluices</a> and the waterway facility crank.</td>
               </tr>
               <tr>
                 <td><a href="https://www.bg-wiki.com/ffxi/Category:Rhapsodies_of_Vanadiel_Missions" target="_blank" rel="noreferrer">Rhapsodies</a></td>
@@ -1194,10 +1155,10 @@
                   <p class="next">Next: <a href="https://www.bg-wiki.com/ffxi/Past_Imperfect" target="_blank" rel="noreferrer">2-23 Past Imperfect</a></p>
                   <details>
                     <summary>2-22 → 3-35</summary>
-                    <p class="full">2-22 Keep On Giving · 2-23 Past Imperfect · <strong>needs</strong> Zilart Headstone · 2-24 The Cursed Temple · 2-25 Wisdom of Our Forefathers · 2-26 Where Divinities Collide · 2-27 Visions of Dread · 2-28 To the Skies · 2-29 Escha - Ru'Aun · 2-30 The Decisive Heroine · 2-31 Fall from Grace · 2-32 Banishing the Darkness · 2-33 Over the Rainbow · 2-34 Cacophonous Discord · 2-35 Eddies of Despair · 2-36 Pretender to the Throne · 2-37 Banished · 2-38 Call of the Void · 2-39 Both Paths Taken · 2-40 The Man Behind the Mask · 2-41 Uncertain Futures · 3-1 Darkness Beckons · 3-2 The Brewing Storm · 3-3 The River Runs Red · <strong>needs</strong> Adoulin 1-7 · 3-4 The Crucible · 3-5 Forward Thinking · <strong>needs</strong> Adoulin Aimless Journey · 3-6 Tears of the Generals · 3-7 What He Left Behind · <strong>needs</strong> Behind the Sluices + crank · 3-8 Gone but Not Forgotten · 3-9 August Artifacts · 3-10 Solemnity · 3-11 Eyes on You · 3-12 Exploring the Ruins · 3-13 Become Something More · 3-14 Unshakable Nightmares · 3-15 What Remains of Hope · 3-16 Death Cares Not · 3-17 No Time like the Future · 3-18 Sin · 3-19 Penance · 3-20 Vessel of Light · 3-21 The Lifestream of Reisenjima · 3-22 From West to East · 3-23 Good Things Come in Threes · 3-24 Tackling the Problem · 3-25 Way to Divinity · 3-26 The Winds of Time · 3-27 Calm After the Storm · 3-28 Nary a Cloud in Sight · 3-29 An Unending Song · 3-30 A Deep Sleep · 3-31 Guardians · 3-32 Iroha in Distress · 3-33 Absolute Trust · 3-34 The Orb's Radiance · 3-35 A Rhapsody for the Ages</p>
+                    <p class="full">2-22 Keep On Giving · 2-23 Past Imperfect · 2-24 The Cursed Temple · 2-25 Wisdom of Our Forefathers · 2-26 Where Divinities Collide · 2-27 Visions of Dread · 2-28 To the Skies · 2-29 Escha - Ru'Aun · 2-30 The Decisive Heroine · 2-31 Fall from Grace · 2-32 Banishing the Darkness · 2-33 Over the Rainbow · 2-34 Cacophonous Discord · 2-35 Eddies of Despair · 2-36 Pretender to the Throne · 2-37 Banished · 2-38 Call of the Void · 2-39 Both Paths Taken · 2-40 The Man Behind the Mask · 2-41 Uncertain Futures · 3-1 Darkness Beckons · 3-2 The Brewing Storm · 3-3 The River Runs Red · 3-4 The Crucible · 3-5 Forward Thinking · 3-6 Tears of the Generals · 3-7 What He Left Behind · <strong>needs</strong> Behind the Sluices + waterway crank · 3-8 Gone but Not Forgotten · 3-9 August Artifacts · 3-10 Solemnity · 3-11 Eyes on You · 3-12 Exploring the Ruins · 3-13 Become Something More · 3-14 Unshakable Nightmares · 3-15 What Remains of Hope · 3-16 Death Cares Not · 3-17 No Time like the Future · 3-18 Sin · 3-19 Penance · 3-20 Vessel of Light · 3-21 The Lifestream of Reisenjima · 3-22 From West to East · 3-23 Good Things Come in Threes · 3-24 Tackling the Problem · 3-25 Way to Divinity · 3-26 The Winds of Time · 3-27 Calm After the Storm · 3-28 Nary a Cloud in Sight · 3-29 An Unending Song · 3-30 A Deep Sleep · 3-31 Guardians · 3-32 Iroha in Distress · 3-33 Absolute Trust · 3-34 The Orb's Radiance · 3-35 A Rhapsody for the Ages</p>
                   </details>
                 </td>
-                <td class="blocked">2-24 and later need Zilart <a href="https://www.bg-wiki.com/ffxi/Zilart_Mission_5" target="_blank" rel="noreferrer">Headstone</a>. Chapter 3 needs Adoulin 1-7, Aimless Journey, and Behind the Sluices.</td>
+                <td class="blocked">3-8 needs <a href="https://www.bg-wiki.com/ffxi/Behind_the_Sluices" target="_blank" rel="noreferrer">Behind the Sluices</a> and the waterway facility crank.</td>
               </tr>
               <tr>
                 <td><a href="https://www.bg-wiki.com/ffxi/A_Crystalline_Prophecy_Missions" target="_blank" rel="noreferrer">Crystalline Prophecy</a></td>
@@ -1238,15 +1199,14 @@
             </tbody>
           </table>
           </div>
-          <p class="note">Lists run from the current mission to the end, from <a href="https://www.bg-wiki.com/ffxi/Category:Missions" target="_blank" rel="noreferrer">BG Wiki</a>. Finished missions are left out. Rhapsodies gates are shown where another story has to catch up.</p>
         </div>
-      </div>
+      </details>
     </section>
 
     <footer>
       Progress board for Cheeseplate ·
       personal settings: <a href="https://github.com/freechie/ffxi-cheeseplate" target="_blank" rel="noreferrer">github.com/freechie/ffxi-cheeseplate</a>
-      · updated 2026-10-22 · mission lists from BG Wiki
+      · updated 2026-10-24 · mission lists from BG Wiki
     </footer>
   </div>
 
@@ -1260,6 +1220,9 @@
       };
       toggle();
       window.addEventListener("scroll", toggle, { passive: true });
+      document.querySelectorAll("summary.win-bar a").forEach(function (a) {
+        a.addEventListener("click", function (e) { e.stopPropagation(); });
+      });
     })();
   </script>
 </body>
