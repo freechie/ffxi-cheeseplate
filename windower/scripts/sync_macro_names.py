@@ -4,7 +4,7 @@
 Books are alphabetical and sequential. Main jobs use sets 1 and 2.
 Combo books are set 1 only.
   1 DNC, 2 DNC/NIN, 3 DNC/THF, 4 DNC/WAR, 5 NIN, 6 NIN/DNC,
-  7 NIN/THF, 8 NIN/WAR, 9 PUP/DNC, 10 THF, 11 THF/WAR.
+  7 NIN/THF, 8 NIN/WAR, 9 PUP/DNC, 10 THF, 11 THF/DNC, 12 THF/WAR.
 
 Macro names are capped at 8 characters (FFXI limit). Close the client before running.
 """
@@ -74,6 +74,17 @@ NAME_ALIASES = {
     "TH set": "TH set",
     "Wasp Sting": "WaspStng",
     "Viper Bite": "ViperBit",
+    "Assassin's Charge": "A.Charge",
+    "Rudra's Storm": "Rudra",
+    "Exenterator": "Exent",
+    "Mandalic Stab": "Mandalic",
+    "Shadowstitch": "Shadow",
+    "Energy Drain": "EnDrain",
+    "Mighty Strikes": "Mighty",
+    "Blade: To": "Bld To",
+    "Blade: Ei": "Bld Ei",
+    "Blade: Ku": "Bld Ku",
+    "Blade: Retsu": "BldRetsu",
     "Utsu Ni": "Utsu Ni",
     "Utsu Ichi": "UtsuIch",
     "Blade: Jin": "Bld Jin",
@@ -109,14 +120,14 @@ JOBS = {
         "book_title": "THF",
         "rows": {
             "^": [
-                ("Trusts", "tru"),
+                ("Feint", 'input /ja "Feint" <t>'),
                 ("Sneak Attack", 'input /ja "Sneak Attack" <me>'),
                 ("Trick Attack", 'input /ja "Trick Attack" <me>'),
                 ("Bully", 'input /ja "Bully" <t>'),
-                ("Evisceration", 'input /ws "Evisceration" <t>'),
-                ("Aeolian Edge", 'input /ws "Aeolian Edge" <t>'),
-                ("Shark Bite", 'input /ws "Shark Bite" <t>'),
-                ("Dancing Edge", 'input /ws "Dancing Edge" <t>'),
+                ("Hide", 'input /ja "Hide" <me>'),
+                ("Collab p1", 'input /ja "Collaborator" <p1>'),
+                ("Accomplice p1", 'input /ja "Accomplice" <p1>'),
+                ("Larceny", 'input /ja "Larceny" <t>'),
                 ("Perfect Dodge", 'input /ja "Perfect Dodge" <me>'),
                 ("Conspirator", 'input /ja "Conspirator" <me>'),
             ],
@@ -125,10 +136,10 @@ JOBS = {
                 ("Despoil", 'input /ja "Despoil" <t>'),
                 ("Mug", 'input /ja "Mug" <t>'),
                 ("Flee", 'input /ja "Flee" <me>'),
-                ("Hide", 'input /ja "Hide" <me>'),
-                ("Collab p1", 'input /ja "Collaborator" <p1>'),
-                ("Accomplice p1", 'input /ja "Accomplice" <p1>'),
-                ("Larceny", 'input /ja "Larceny" <t>'),
+                ("Evisceration", 'input /ws "Evisceration" <t>'),
+                ("Aeolian Edge", 'input /ws "Aeolian Edge" <t>'),
+                ("Shark Bite", 'input /ws "Shark Bite" <t>'),
+                ("Dancing Edge", 'input /ws "Dancing Edge" <t>'),
                 ("Collab p2", 'input /ja "Collaborator" <p2>'),
                 ("Accomplice p2", 'input /ja "Accomplice" <p2>'),
             ],
@@ -149,6 +160,12 @@ JOBS = {
                 ("Wasp Sting", 'input /ws "Wasp Sting" <t>'),
                 ("Viper Bite", 'input /ws "Viper Bite" <t>'),
                 ("Idle set", "gs c toggle Idle set"),
+                ("Assassin's Charge", 'input /ja "Assassin\'s Charge" <me>'),
+                ("Rudra's Storm", 'input /ws "Rudra\'s Storm" <t>'),
+                ("Exenterator", 'input /ws "Exenterator" <t>'),
+                ("Mandalic Stab", 'input /ws "Mandalic Stab" <t>'),
+                ("Shadowstitch", 'input /ws "Shadowstitch" <t>'),
+                ("Energy Drain", 'input /ws "Energy Drain" <t>'),
             ],
         },
     },
@@ -165,8 +182,8 @@ JOBS = {
                 ("Stutter Step", 'input /ja "Stutter Step" <t>'),
                 ("Reverse", 'input /ja "Reverse Flourish" <me>'),
                 ("Building", 'input /ja "Building Flourish" <me>'),
-                ("Evisceration", 'input /ws "Evisceration" <t>'),
-                ("Dancing Edge", 'input /ws "Dancing Edge" <t>'),
+                ("Wild", 'input /ja "Wild Flourish" <t>'),
+                ("Presto", 'input /ja "Presto" <me>'),
             ],
             "!": [
                 ("C.Waltz V", 'input /ja "Curing Waltz V" <stpc>'),
@@ -177,8 +194,8 @@ JOBS = {
                 ("Violent", 'input /ja "Violent Flourish" <t>'),
                 ("Climactic", 'input /ja "Climactic Flourish" <me>'),
                 ("Striking", 'input /ja "Striking Flourish" <me>'),
-                ("Wild", 'input /ja "Wild Flourish" <t>'),
-                ("Presto", 'input /ja "Presto" <me>'),
+                ("Evisceration", 'input /ws "Evisceration" <t>'),
+                ("Dancing Edge", 'input /ws "Dancing Edge" <t>'),
             ],
             "~^": [
                 ("Spectral Jig", 'input /ja "Spectral Jig" <me>'),
@@ -216,10 +233,10 @@ JOBS = {
                 ("Utsu Ichi", 'input /ma "Utsusemi: Ichi" <me>'),
                 ("Yonin", 'input /ja "Yonin" <me>'),
                 ("Innin", 'input /ja "Innin" <me>'),
-                ("Blade: Jin", 'input /ws "Blade: Jin" <t>'),
-                ("Blade: Ten", 'input /ws "Blade: Ten" <t>'),
-                ("Blade: Teki", 'input /ws "Blade: Teki" <t>'),
-                ("Blade: Chi", 'input /ws "Blade: Chi" <t>'),
+                ("Suiton: Ni", 'input /ma "Suiton: Ni" <t>'),
+                ("Katon: Ichi", 'input /ma "Katon: Ichi" <t>'),
+                ("Raiton: Ichi", 'input /ma "Raiton: Ichi" <t>'),
+                ("Suiton: Ichi", 'input /ma "Suiton: Ichi" <t>'),
                 ("Mijin Gakure", 'input /ja "Mijin Gakure" <t>'),
             ],
             "!": [
@@ -228,10 +245,10 @@ JOBS = {
                 ("Huton: Ni", 'input /ma "Huton: Ni" <t>'),
                 ("Doton: Ni", 'input /ma "Doton: Ni" <t>'),
                 ("Raiton: Ni", 'input /ma "Raiton: Ni" <t>'),
-                ("Suiton: Ni", 'input /ma "Suiton: Ni" <t>'),
-                ("Katon: Ichi", 'input /ma "Katon: Ichi" <t>'),
-                ("Raiton: Ichi", 'input /ma "Raiton: Ichi" <t>'),
-                ("Suiton: Ichi", 'input /ma "Suiton: Ichi" <t>'),
+                ("Blade: Jin", 'input /ws "Blade: Jin" <t>'),
+                ("Blade: Ten", 'input /ws "Blade: Ten" <t>'),
+                ("Blade: Teki", 'input /ws "Blade: Teki" <t>'),
+                ("Blade: Chi", 'input /ws "Blade: Chi" <t>'),
                 ("Huton: Ichi", 'input /ma "Huton: Ichi" <t>'),
             ],
             "~^": [
@@ -253,6 +270,10 @@ JOBS = {
                 ("Dokumori: Ichi", 'input /ma "Dokumori: Ichi" <t>'),
                 ("Hojo: Ichi", 'input /ma "Hojo: Ichi" <t>'),
                 ("Kurayami: Ichi", 'input /ma "Kurayami: Ichi" <t>'),
+                ("Blade: To", 'input /ws "Blade: To" <t>'),
+                ("Blade: Ei", 'input /ws "Blade: Ei" <t>'),
+                ("Blade: Ku", 'input /ws "Blade: Ku" <t>'),
+                ("Blade: Retsu", 'input /ws "Blade: Retsu" <t>'),
             ],
         },
     },
@@ -264,10 +285,12 @@ SUB_NIN = [
     ("Utsu Ichi", 'input /ma "Utsusemi: Ichi" <me>'),
     ("Yonin", 'input /ja "Yonin" <me>'),
     ("Innin", 'input /ja "Innin" <me>'),
-    ("Tonko", 'input /ma "Tonko: Ichi" <me>'),
+    ("Tonko: Ni", 'input /ma "Tonko: Ni" <me>'),
     ("Monomi", 'input /ma "Monomi: Ichi" <me>'),
-    ("Katon", 'input /ma "Katon: Ichi" <t>'),
-    ("Raiton", 'input /ma "Raiton: Ichi" <t>'),
+    ("Katon: Ni", 'input /ma "Katon: Ni" <t>'),
+    ("Huton: Ni", 'input /ma "Huton: Ni" <t>'),
+    ("Hojo: Ni", 'input /ma "Hojo: Ni" <t>'),
+    ("Kurayami: Ni", 'input /ma "Kurayami: Ni" <t>'),
 ]
 
 SUB_THF = [
@@ -279,6 +302,7 @@ SUB_THF = [
     ("Mug", 'input /ja "Mug" <t>'),
     ("Flee", 'input /ja "Flee" <me>'),
     ("Hide", 'input /ja "Hide" <me>'),
+    ("Perfect Dodge", 'input /ja "Perfect Dodge" <me>'),
 ]
 
 SUB_WAR = [
@@ -287,31 +311,35 @@ SUB_WAR = [
     ("Defender", 'input /ja "Defender" <me>'),
     ("Warcry", 'input /ja "Warcry" <me>'),
     ("Aggressor", 'input /ja "Aggressor" <me>'),
+    ("Mighty Strikes", 'input /ja "Mighty Strikes" <me>'),
 ]
 
 SUB_DNC = [
-    ("C.Waltz III", 'input /ja "Curing Waltz III" <stpc>'),
-    ("C.Waltz II", 'input /ja "Curing Waltz II" <stpc>'),
-    ("Haste Samba", 'input /ja "Haste Samba" <me>'),
-    ("Drain Samba", 'input /ja "Drain Samba" <me>'),
     ("Box Step", 'input /ja "Box Step" <t>'),
     ("Quickstep", 'input /ja "Quickstep" <t>'),
+    ("Haste Samba", 'input /ja "Haste Samba" <me>'),
     ("Animated", 'input /ja "Animated Flourish" <t>'),
+    ("Desperate", 'input /ja "Desperate Flourish" <t>'),
+    ("Reverse", 'input /ja "Reverse Flourish" <me>'),
+    ("Violent", 'input /ja "Violent Flourish" <t>'),
+    ("C.Waltz III", 'input /ja "Curing Waltz III" <stpc>'),
     ("Divine Waltz", 'input /ja "Divine Waltz" <me>'),
     ("Healing Waltz", 'input /ja "Healing Waltz" <stpc>'),
-    ("Spectral Jig", 'input /ja "Spectral Jig" <me>'),
 ]
+
+TRANCE = [("Trance", 'input /ja "Trance" <me>')]
 
 # Alphabetical combo books, set 1. Main-job books are 1 DNC, 5 NIN, 10 THF.
 COMBOS = [
-    (2, "DNC/NIN", SUB_NIN),
-    (3, "DNC/THF", SUB_THF),
-    (4, "DNC/WAR", SUB_WAR),
-    (6, "NIN/DNC", SUB_DNC),
-    (7, "NIN/THF", SUB_THF),
-    (8, "NIN/WAR", SUB_WAR),
-    (9, "PUP/DNC", SUB_DNC),
-    (11, "THF/WAR", SUB_WAR),
+    (2, "DNC/NIN", SUB_NIN, []),
+    (3, "DNC/THF", SUB_THF, []),
+    (4, "DNC/WAR", SUB_WAR, []),
+    (6, "NIN/DNC", SUB_DNC, JOBS["NIN"]["rows"]["!"]),
+    (7, "NIN/THF", SUB_THF, []),
+    (8, "NIN/WAR", SUB_WAR, []),
+    (9, "PUP/DNC", SUB_DNC, TRANCE),
+    (11, "THF/DNC", SUB_DNC, JOBS["THF"]["rows"]["!"]),
+    (12, "THF/WAR", SUB_WAR, []),
 ]
 
 # Sets left behind when a book changed jobs. Cleared so the palette matches the title.
@@ -473,9 +501,9 @@ def main() -> int:
                 for set_no in (1, 2):
                     verify(user_dir / set_filename(book, set_no))
                 print(f"  {job} book {book}: {', '.join(files)}")
-            for book, title, ctrl in COMBOS:
+            for book, title, ctrl, alt in COMBOS:
                 path = user_dir / set_filename(book, 1)
-                path.write_bytes(build_set(ctrl, []))
+                path.write_bytes(build_set(ctrl, alt))
                 verify(path)
                 ttl = user_dir / "mcr.ttl"
                 if ttl.exists():

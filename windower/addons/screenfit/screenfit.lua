@@ -145,7 +145,7 @@ local function write_anchors()
 end
 
 -- Menu scale is read from settings.xml when Windower launches. //fit scale reads
--- the monitor the game window is on and saves 1.4 for 2560x1440 or 1 for
+-- the monitor the game window is on and saves 1.5 for 2560x1440 or 1 for
 -- 1920x1080. Nothing checks the monitor during play. A change applies on the
 -- next launch.
 local helper_exe
@@ -189,7 +189,7 @@ local function monitor_size()
 end
 
 local function scale_for(mw, mh)
-    if (mw or 0) >= 2200 or (mh or 0) >= 1300 then return '1.4' end
+    if (mw or 0) >= 2200 or (mh or 0) >= 1300 then return '1.5' end
     return '1'
 end
 
@@ -357,6 +357,8 @@ windower.register_event('addon command', function(cmd, extra)
             write_uiscale('1', '', true)
         elseif extra == '1.4' then
             write_uiscale('1.4', '', true)
+        elseif extra == '1.5' then
+            write_uiscale('1.5', '', true)
         else
             check_monitor(true)
         end
