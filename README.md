@@ -22,7 +22,7 @@ Right now: Dancer 94 / Thief 47, with Thief 99 and Ninja 70. Finish Dancer to 99
 - `windower/plugins/settings/` — plugin configs
 - `windower/plugins/ll/` — LightLuggage drop lists
 - `windower/addons/*/data/` — addon settings, filters, and GearSwap
-- `game/USER/` — in-game macros, equipment sets, and client options. Books are in alphabetical order: 1 Dancer, 2 Dancer/Ninja, 3 Dancer/Thief, 4 Dancer/Warrior, 5 Ninja, 6 Ninja/Dancer, 7 Ninja/Thief, 8 Ninja/Warrior, 9 Puppetmaster/Dancer, 10 Thief, 11 Thief/Warrior. Rebuild them with `python windower/scripts/sync_macro_names.py` while PlayOnline is closed.
+- `game/USER/` — in-game macros, equipment sets, and client options. Books are in alphabetical order: 1 Dancer, 2 Dancer/Ninja, 3 Dancer/Thief, 4 Dancer/Warrior, 5 Ninja, 6 Ninja/Dancer, 7 Ninja/Thief, 8 Ninja/Warrior, 9 Puppetmaster/Dancer, 10 Thief, 11 Thief/Dancer, 12 Thief/Warrior. Rebuild them with `python windower/scripts/sync_macro_names.py` while PlayOnline is closed.
 - `windower/keybinds.md` — Thief, Dancer, and Ninja number-row keys. GearSwap sets them. The key overlay reloads once the character is in.
 - `game/settings.xml` — retail client profile
 - `dgvoodoo/dgVoodoo.conf` — DirectX 8 wrapper used by PlayOnline

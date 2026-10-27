@@ -214,6 +214,16 @@ function get_sets()
     send_command('bind !f3 gs c toggle TP set')
     send_command('bind !f4 gs c toggle Idle set')
     send_command('bind !f5 gs c utsu')
+    send_command('bind !f6 input /ja "Ternary Flourish" <me>')
+    send_command('bind !f7 input /ja "Contradance" <me>')
+    send_command('bind !f8 input /ja "No Foot Rise" <me>')
+    send_command('bind !f9 input /ja "Saber Dance" <me>')
+    send_command('bind !f10 input /ja "Fan Dance" <me>')
+    send_command('bind !f11 input /ws "Exenterator" <t>')
+    send_command('bind !f12 input /ws "Pyrrhic Kleos" <t>')
+    send_command('bind ^f1 input /ws "Rudra\'s Storm" <t>')
+    send_command('bind ^f2 input /ws "Shadowstitch" <t>')
+    send_command('bind ^f3 input /ws "Energy Drain" <t>')
 
     include('binds.lua')
     set_binds({
@@ -223,9 +233,19 @@ function get_sets()
             ['!f3'] = 'TP set',
             ['!f4'] = 'Idle set',
             ['!f5'] = 'Utsusemi',
+            ['!f6'] = 'Ternary',
+            ['!f7'] = 'Contradance',
+            ['!f8'] = 'No Foot Rise',
+            ['!f9'] = 'Saber Dance',
+            ['!f10'] = 'Fan Dance',
+            ['!f11'] = 'Exenterator',
+            ['!f12'] = 'Pyrrhic Kleos',
+            ['^f1'] = 'Rudra\'s Storm',
+            ['^f2'] = 'Shadowstitch',
+            ['^f3'] = 'Energy Drain',
         },
         ['^'] = {
-            title = 'Steps & WS',
+            title = 'Steps',
             {'EXP', 'tru exp'},
             {'Haste Samba', 'input /ja "Haste Samba" <me>', 45},
             {'Box Step', 'input /ja "Box Step" <t>', 23},
@@ -234,11 +254,11 @@ function get_sets()
             {'Stutter Step', 'input /ja "Stutter Step" <t>', 40},
             {'Reverse', 'input /ja "Reverse Flourish" <me>', 40},
             {'Building', 'input /ja "Building Flourish" <me>', 50},
-            {'Evisceration', 'input /ws "Evisceration" <t>'},
-            {'Dancing Edge', 'input /ws "Dancing Edge" <t>'},
+            {'Wild', 'input /ja "Wild Flourish" <t>', 60},
+            {'Presto', 'input /ja "Presto" <me>', 77},
         },
         ['!'] = {
-            title = 'Waltzes & flourishes',
+            title = 'Waltzes & WS',
             {'C.Waltz V', 'input /ja "Curing Waltz V" <stpc>', 87},
             {'C.Waltz IV', 'input /ja "Curing Waltz IV" <stpc>', 70},
             {'C.Waltz III', 'input /ja "Curing Waltz III" <stpc>', 45},
@@ -247,8 +267,8 @@ function get_sets()
             {'Violent', 'input /ja "Violent Flourish" <t>', 45},
             {'Climactic', 'input /ja "Climactic Flourish" <me>', 80},
             {'Striking', 'input /ja "Striking Flourish" <me>', 89},
-            {'Wild', 'input /ja "Wild Flourish" <t>', 60},
-            {'Presto', 'input /ja "Presto" <me>', 77},
+            {'Evisceration', 'input /ws "Evisceration" <t>'},
+            {'Dancing Edge', 'input /ws "Dancing Edge" <t>'},
         },
         ['~^'] = {
             title = 'Utility',
@@ -278,8 +298,7 @@ function get_sets()
         },
     })
 
-    send_command('input /macro book 1; wait 0.1; input /macro set 1')
-    send_command('@input /echo [GearSwap] DNC/NIN leveling - Alt+F1 weapons | F2 waltz | F3 TP | F4 idle | F5 utsu | //gs c binds lists number keys')
+    send_command('@input /echo [GearSwap] DNC - Alt+4 AoE waltz | Alt+9 Evisceration | Alt+0 Dancing Edge | Alt+F1 weapons | F2 waltz | F3 TP | F4 idle | F5 utsu')
 end
 
 function file_unload()
@@ -296,6 +315,10 @@ function file_unload()
     send_command('unbind !f9')
     send_command('unbind !f10')
     send_command('unbind !f11')
+    send_command('unbind !f12')
+    send_command('unbind ^f1')
+    send_command('unbind ^f2')
+    send_command('unbind ^f3')
 end
 
 function apply_weapons()

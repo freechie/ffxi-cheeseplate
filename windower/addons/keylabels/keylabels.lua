@@ -20,7 +20,7 @@ local defaults = {
     },
     locked = true,
     layout_version = 0,
-    bg = {alpha = 140, red = 8, green = 12, blue = 24, visible = true},
+    bg = {alpha = 200, red = 0, green = 0, blue = 0, visible = true},
 }
 local settings = config.load(defaults)
 
@@ -50,10 +50,10 @@ local function visual_settings(pos, size, red, green, blue, bold)
             stroke = {width = 1, alpha = 255, red = 0, green = 0, blue = 0},
         },
         bg = {
-            alpha = bg.alpha or 140,
-            red = bg.red or 8,
-            green = bg.green or 12,
-            blue = bg.blue or 24,
+            alpha = bg.alpha or 200,
+            red = bg.red or 0,
+            green = bg.green or 0,
+            blue = bg.blue or 0,
         },
         padding = 4,
         flags = {draggable = false, bold = bold},
