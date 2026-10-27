@@ -1,3 +1,6 @@
 .cursor/
 .vscode/
 
+windower/scripts/__pycache__/
+windower/~$keybinds.xlsx
+

@@ -43,6 +43,8 @@ function get_sets()
 
     -- Mummu combat set. Kaja Knife stays in the main hand for Evisceration.
     -- Toutatis's Cape is Sneak Attack +10 even before augments.
+    -- Enlivened sits on the left so Capacity, Trizek, and Warp can take that hand.
+    -- Vehemence stays the spare. Mummu stays on the right.
     local combat = {
         main="Kaja Knife",
         sub="Homestead Dagger",
@@ -54,6 +56,7 @@ function get_sets()
         neck="Arctier's Torque",
         waist="Patentia Sash",
         left_ear="Volley Earring",
+        left_ring="Enlivened Ring",
         right_ring="Mummu Ring",
         back="Toutatis's Cape",
     }
