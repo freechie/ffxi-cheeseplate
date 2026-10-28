@@ -1,6 +1,6 @@
 _addon.name = 'screenfit'
 _addon.author = 'Cheeseplate'
-_addon.version = '1.8'
+_addon.version = '1.9'
 _addon.commands = {'screenfit', 'fit'}
 
 -- Cheeseplate's HUD was laid out in a 1920x1080 window. Edge pieces are stored
@@ -26,9 +26,14 @@ local ENEMYBAR = {
     {'subtarget', 1282, 161, true, false},
     {'focustarget', 1271, 111, true, false},
 }
--- //ev pos 1575 900 on the 1440p UI (about 1828x1028 at scale 1.4).
--- Right and bottom pins keep that same corner gap on the 1080p window.
-local EQUIP = {x = 1667, y = 952, right = true, bottom = true}
+-- Top-left of the 4x4 grid on a 1920x1080 UI. The grid is 112px, so this
+-- sits just left of the target health bar and lines up with its bottom edge.
+-- Right and bottom pins keep that same corner gap when the UI size changes.
+local EQUIP = {x = 1674, y = 949, right = true, bottom = true}
+
+-- FFXIDB uses window pixels, not UI pixels. This is the 2560x1440 spot.
+-- The same fraction of the window is used on 1920x1080 (1514, 669).
+local MAP = {x = 2018, y = 892, w = 2560, h = 1440}
 
 -- These read the window size when they load. Unload saves memory over the file,
 -- so the cheeseplate block is written again after unload, then they load.
@@ -93,6 +98,17 @@ local function ui_size()
     local h = s.ui_y_res or s.y_res
     if not w or not h or w < 640 or h < 480 then return end
     return w, h
+end
+
+local function window_size()
+    local s = windower.get_windower_settings()
+    local w, h = s.x_res, s.y_res
+    if not w or not h or w < 640 or h < 480 then return end
+    return w, h
+end
+
+local function map_pos(sw, sh)
+    return math.floor(MAP.x * sw / MAP.w + 0.5), math.floor(MAP.y * sh / MAP.h + 0.5)
 end
 
 local function place(x, y, w, h, pin_right, pin_bottom)
@@ -276,6 +292,29 @@ local function write_timers(w, h)
     fh:close()
 end
 
+local function write_map(sw, sh)
+    local root = root_path()
+    if not root then return end
+    local path = root .. 'plugins\\settings\\ffxidb.xml'
+    local fh = io.open(path, 'r')
+    if not fh then return end
+    local text = fh:read('*a')
+    fh:close()
+    local x, y = map_pos(sw, sh)
+    local start_at = text:find('<Cheeseplate>', 1, true)
+    local end_at = text:find('</Cheeseplate>', 1, true)
+    if not start_at or not end_at then return x, y end
+    local block = text:sub(start_at, end_at + #'</Cheeseplate>' - 1)
+    block = block:gsub('(<X>)[^<]*', '%1' .. x, 1)
+    block = block:gsub('(<Y>)[^<]*', '%1' .. y, 1)
+    text = text:sub(1, start_at - 1) .. block .. text:sub(end_at + #'</Cheeseplate>')
+    fh = io.open(path, 'w')
+    if not fh then return x, y end
+    fh:write(text)
+    fh:close()
+    return x, y
+end
+
 local function shift_commands(w, h)
     local ex, ey = place(EQUIP.x, EQUIP.y, w, h, EQUIP.right, EQUIP.bottom)
     windower.send_command('ev pos ' .. ex .. ' ' .. ey)
@@ -283,6 +322,11 @@ local function shift_commands(w, h)
         local x, y = place(bar[2], bar[3], w, h, bar[4], bar[5])
         windower.send_command('eb set pos ' .. bar[1] .. ' ' .. x .. ' ' .. y)
     end
+    local sw, sh = window_size()
+    if not sw then return end
+    local mx, my = map_pos(sw, sh)
+    write_map(sw, sh)
+    windower.send_command('ffxidb pos ' .. mx .. ' ' .. my)
 end
 
 local pending_w, pending_h
