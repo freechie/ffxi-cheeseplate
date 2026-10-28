@@ -40,7 +40,7 @@
   <profile name="">
     <consolekey>Insert</consolekey>
     <!-- 1.5 when the game is on the 2560x1440 monitor. screenfit writes 1 on the 1920x1080 monitor. Takes effect on the next launch. -->
-    <uiscale>1.5</uiscale>
+    <uiscale>1</uiscale>
     <supersampling>1</supersampling>
     <allowwinkey>true</allowwinkey>
     <enablefastlogin>true</enablefastlogin>

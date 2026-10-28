@@ -34,8 +34,8 @@
         </icon>
         <left_justify>false</left_justify>
         <pos>
-            <x>1580</x>
-            <y>900</y>
+            <x>1674</x>
+            <y>949</y>
         </pos>
         <show_ammo_count>true</show_ammo_count>
         <show_encumbrance>true</show_encumbrance>
