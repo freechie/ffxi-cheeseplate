@@ -43,6 +43,7 @@ function get_sets()
 
     -- Mummu combat set. Kaja Knife stays in the main hand for Evisceration.
     -- Toutatis's Cape is Sneak Attack +10 even before augments.
+    -- Aptitude Mantle +1 is Capacity Points +30% and goes on for the weaponskill.
     -- Enlivened sits on the left so Capacity, Trizek, and Warp can take that hand.
     -- Vehemence stays the spare. Mummu stays on the right.
     local combat = {
@@ -61,7 +62,9 @@ function get_sets()
         back="Toutatis's Cape",
     }
 
-    sets.WS.Base = combat
+    local weaponskill = set_combine(combat, {back="Aptitude Mantle +1"})
+
+    sets.WS.Base = weaponskill
     sets.WS["Rudra's Storm"] = sets.WS.Base
     sets.WS.Evisceration = sets.WS.Base
     sets.WS.Exenterator = sets.WS.Base
@@ -70,9 +73,9 @@ function get_sets()
     sets.WS['Aeolian Edge'] = sets.WS.Base
     sets.WS['Dancing Edge'] = sets.WS.Base
 
-    sets.WS.SA.Base = combat
-    sets.WS.TA.Base = combat
-    sets.WS.SATA.Base = combat
+    sets.WS.SA.Base = weaponskill
+    sets.WS.TA.Base = weaponskill
+    sets.WS.SATA.Base = weaponskill
 
     TP_Set_Names = {'TP', 'TH'}
     sets.TP = {}
@@ -80,9 +83,13 @@ function get_sets()
     -- No Treasure Hunter piece yet. Chaac Belt replaces the sash when it is available.
     sets.TP.TH = set_combine(combat, {})
 
-    Idle_Set_Names = {'Move', 'Idle'}
+    -- Idle macro cycles these. Sprinter's Shoes are movement speed +12%.
+    -- Track Pants +1 are +8% and block feet, so that press clears the shoes.
+    -- Engaging puts the Mummu legs and feet back on.
+    Idle_Set_Names = {'Move', 'Pants', 'Idle'}
     sets.Idle = {}
     sets.Idle.Move = set_combine(combat, {feet="Sprinter's Shoes"})
+    sets.Idle.Pants = set_combine(combat, {legs="Track Pants +1", feet=empty})
     sets.Idle.Idle = combat
 
     sets.FastCast = {}
