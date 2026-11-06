@@ -1,6 +1,6 @@
 _addon.name = 'screenfit'
 _addon.author = 'Cheeseplate'
-_addon.version = '1.9'
+_addon.version = '2.1'
 _addon.commands = {'screenfit', 'fit'}
 
 -- Cheeseplate's HUD was laid out in a 1920x1080 window. Edge pieces are stored
@@ -30,6 +30,7 @@ local ENEMYBAR = {
 -- sits just left of the target health bar and lines up with its bottom edge.
 -- Right and bottom pins keep that same corner gap when the UI size changes.
 local EQUIP = {x = 1674, y = 949, right = true, bottom = true}
+local GEAR_COLS = 4
 
 -- FFXIDB uses window pixels, not UI pixels. This is the 2560x1440 spot.
 -- The same fraction of the window is used on 1920x1080 (1514, 669).
@@ -160,26 +161,26 @@ local function write_anchors()
     clear_track(root .. 'addons\\findAll\\data\\settings.xml')
 end
 
--- Menu scale is read from settings.xml when Windower launches. //fit scale reads
--- the monitor the game window is on and saves 1.5 for 2560x1440 or 1 for
--- 1920x1080. Nothing checks the monitor during play. A change applies on the
--- next launch.
+-- Menu scale is read from settings.xml when Windower launches. It does not
+-- change during play. Before switching monitors, run //fit 1080 or //fit 1440.
+-- That saves scale 1 or 1.45. Switch screens, then restart once.
 local helper_exe
+local helper_rebuilt = false
+
+local function compile_helper(dir, exe)
+    local csc = (os.getenv('WINDIR') or 'C:\\Windows') .. '\\Microsoft.NET\\Framework\\v4.0.30319\\csc.exe'
+    if os.execute then
+        os.execute('"' .. csc .. '" /nologo /t:exe /out:"' .. exe .. '" "' .. dir .. 'monitor.cs"')
+    end
+end
 
 local function ensure_helper()
     if helper_exe then return helper_exe end
     local dir = windower.addon_path
     local exe = dir .. 'monitor.exe'
     local fh = io.open(exe, 'rb')
-    if fh then
-        fh:close()
-        helper_exe = exe
-        return exe
-    end
-    local csc = (os.getenv('WINDIR') or 'C:\\Windows') .. '\\Microsoft.NET\\Framework\\v4.0.30319\\csc.exe'
-    if os.execute then
-        os.execute('"' .. csc .. '" /nologo /t:exe /out:"' .. exe .. '" "' .. dir .. 'monitor.cs"')
-    end
+    if not fh then compile_helper(dir, exe) end
+    if fh then fh:close() end
     fh = io.open(exe, 'rb')
     if not fh then return end
     fh:close()
@@ -187,25 +188,39 @@ local function ensure_helper()
     return exe
 end
 
-local function monitor_size()
+-- Returns primary w,h,x,y, current w,h,x,y, moved.
+local function run_monitor(move)
     local exe = ensure_helper()
     if not exe or not io.popen then return end
     local out = windower.addon_path .. 'monitor.txt'
-    local fh = io.popen('"' .. exe .. '" "' .. out .. '"', 'r')
-    if not fh then return end
-    fh:close()
+    local cmd = '"' .. exe .. '" "' .. out .. '"'
+    if move then cmd = cmd .. ' move' end
+    local fh = io.popen(cmd, 'r')
+    if fh then fh:close() end
     local rf = io.open(out, 'r')
     if not rf then return end
-    local line = rf:read('*a') or ''
+    local text = rf:read('*a') or ''
     rf:close()
-    local mw, mh = line:match('(%d+)%s*x%s*(%d+)')
-    mw, mh = tonumber(mw), tonumber(mh)
-    if not mw or not mh or mw < 640 or mh < 480 then return end
-    return mw, mh
+    if not text:find('primary ', 1, true) and not helper_rebuilt then
+        helper_rebuilt = true
+        helper_exe = nil
+        compile_helper(windower.addon_path, exe)
+        helper_exe = exe
+        return run_monitor(move)
+    end
+    local function grab(key)
+        local w, h, x, y = text:match(key .. ' (%d+)x(%d+) ([%-]?%d+) ([%-]?%d+)')
+        return tonumber(w), tonumber(h), tonumber(x), tonumber(y)
+    end
+    local pw, ph, px, py = grab('primary')
+    local cw, ch, cx, cy = grab('current')
+    if not pw or not cw then return end
+    local moved = text:match('moved (%d)') == '1'
+    return pw, ph, px, py, cw, ch, cx, cy, moved
 end
 
 local function scale_for(mw, mh)
-    if (mw or 0) >= 2200 or (mh or 0) >= 1300 then return '1.5' end
+    if (mw or 0) >= 2200 or (mh or 0) >= 1300 then return '1.45' end
     return '1'
 end
 
@@ -222,29 +237,31 @@ local function write_uiscale(scale, label, report)
         if report then
             windower.add_to_chat(207, '[screenfit] UI scale ' .. scale .. ' already saved' .. label .. '. Restart the game to apply it.')
         end
-        return
+        return false
     end
     text = text:gsub('<uiscale>[^<]*</uiscale>', '<uiscale>' .. scale .. '</uiscale>', 1)
     fh = io.open(path, 'w')
     if not fh then return end
     fh:write(text)
     fh:close()
-    windower.add_to_chat(207, '[screenfit] UI scale ' .. scale .. ' saved' .. label .. '. Restart the game to apply it.')
+    if report then
+        windower.add_to_chat(207, '[screenfit] UI scale ' .. scale .. ' saved' .. label .. '. Restart the game to apply it.')
+    end
+    return true
 end
 
-local function check_monitor(report)
-    local ok, mw, mh = pcall(monitor_size)
-    if not ok or not mw then
-        local s = windower.get_windower_settings()
-        mw = s.x_res or s.ui_x_res
-        mh = s.y_res or s.ui_y_res
-        if report then
-            windower.add_to_chat(207, '[screenfit] Could not read the active monitor. Using the window size instead.')
-        end
-    end
-    if not mw then return end
-    local label = ' for the ' .. mw .. 'x' .. mh .. ' monitor'
-    write_uiscale(scale_for(mw, mh), label, report)
+local PRESETS = {
+    ['1080'] = {scale = '1', label = '1920x1080'},
+    ['1440'] = {scale = '1.45', label = '2560x1440'},
+}
+
+-- Save the menu scale for the monitor you are about to switch to.
+local function prepare_monitor(kind)
+    local preset = PRESETS[kind]
+    if not preset then return false end
+    write_uiscale(preset.scale, '', false)
+    windower.add_to_chat(207, '[screenfit] Menu scale ' .. preset.scale .. ' saved for the ' .. preset.label .. ' monitor. Switch to that screen, then restart PlayOnline once.')
+    return true
 end
 
 -- Unloading Timers saves its memory over Timers.xml and wipes this list.
@@ -315,9 +332,62 @@ local function write_map(sw, sh)
     return x, y
 end
 
+local function gear_pos(w, h)
+    return place(EQUIP.x, EQUIP.y, w, h, EQUIP.right, EQUIP.bottom)
+end
+
+local function read_equip(text)
+    local x, y, span
+    local size = tonumber(text:match('<size>(%d+)</size>')) or 28
+    for px, py in text:gmatch('<pos>%s*<x>([^<]*)</x>%s*<y>([^<]*)</y>') do
+        x, y = tonumber(px), tonumber(py)
+    end
+    span = size * GEAR_COLS
+    return x, y, span
+end
+
+local function gear_offscreen(x, y, span, w, h)
+    if not x or not y then return true end
+    return x < 0 or y < 0 or (x + span) > (w + 2) or (y + span) > (h + 2)
+end
+
+-- EquipViewer saves whatever is in memory on unload. Write the corner position
+-- into the file first, then tell the running addon, so a 1080p coordinate
+-- cannot stay parked past the edge of a larger monitor's UI.
+local function write_equip(x, y)
+    local root = root_path()
+    if not root then return end
+    local path = root .. 'addons\\equipviewer\\data\\settings.xml'
+    local fh = io.open(path, 'r')
+    if not fh then return end
+    local text = fh:read('*a')
+    fh:close()
+    local updated = text:gsub('(<pos>%s*<x>)[^<]*(</x>%s*<y>)[^<]*', '%1' .. x .. '%2' .. y)
+    if updated == text then return end
+    fh = io.open(path, 'w')
+    if not fh then return end
+    fh:write(updated)
+    fh:close()
+end
+
+local function place_gear(w, h, force)
+    local root = root_path()
+    if not root then return end
+    local path = root .. 'addons\\equipviewer\\data\\settings.xml'
+    local fh = io.open(path, 'r')
+    if not fh then return end
+    local text = fh:read('*a')
+    fh:close()
+    local x, y = gear_pos(w, h)
+    local fx, fy, span = read_equip(text)
+    if fx == x and fy == y then return end
+    if not force and fx and not gear_offscreen(fx, fy, span, w, h) then return end
+    write_equip(x, y)
+    windower.send_command('ev pos ' .. x .. ' ' .. y)
+end
+
 local function shift_commands(w, h)
-    local ex, ey = place(EQUIP.x, EQUIP.y, w, h, EQUIP.right, EQUIP.bottom)
-    windower.send_command('ev pos ' .. ex .. ' ' .. ey)
+    place_gear(w, h, true)
     for _, bar in ipairs(ENEMYBAR) do
         local x, y = place(bar[2], bar[3], w, h, bar[4], bar[5])
         windower.send_command('eb set pos ' .. bar[1] .. ' ' .. x .. ' ' .. y)
@@ -389,7 +459,10 @@ end)
 windower.register_event('addon command', function(cmd, extra)
     cmd = cmd and cmd:lower()
     extra = extra and extra:lower()
-    if cmd == 'commit' then
+    if cmd == '1080' or cmd == '1440' then
+        prepare_monitor(cmd)
+        return
+    elseif cmd == 'commit' then
         commit()
         return
     elseif cmd == 'apply' or cmd == 'now' then
@@ -397,16 +470,25 @@ windower.register_event('addon command', function(cmd, extra)
         apply()
         return
     elseif cmd == 'scale' then
-        if extra == '1' or extra == '1.0' then
+        if extra == '1080' or extra == '1440' then
+            prepare_monitor(extra)
+        elseif extra == '1' or extra == '1.0' then
             write_uiscale('1', '', true)
         elseif extra == '1.4' then
             write_uiscale('1.4', '', true)
+        elseif extra == '1.45' then
+            write_uiscale('1.45', '', true)
         elseif extra == '1.5' then
             write_uiscale('1.5', '', true)
         else
-            check_monitor(true)
+            local _, _, _, _, cw, ch = run_monitor(false)
+            if not cw then
+                windower.add_to_chat(207, '[screenfit] Could not read the monitor. Use //fit 1080 or //fit 1440.')
+                return
+            end
+            write_uiscale(scale_for(cw, ch), ' for the ' .. cw .. 'x' .. ch .. ' monitor', true)
         end
         return
     end
-    windower.add_to_chat(207, 'screenfit: //fit scale')
+    windower.add_to_chat(207, 'screenfit: //fit 1080 | //fit 1440')
 end)

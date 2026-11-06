@@ -21,9 +21,10 @@ MODS = [
     ("~^", "Ctrl+Shift"),
     ("~!", "Alt+Shift"),
     ("^!", "Ctrl+Alt"),
+    ("~^!", "Ctrl+Alt+Shift"),
 ]
 MOD_NAME = dict(MODS)
-PREFIXES = ["^!", "~^", "~!", "^", "!"]
+PREFIXES = ["~^!", "^!", "~^", "~!", "^", "!"]
 F_SCAN = ["!", "^", "~!", "~^"]
 MACRO_BOOKS = {"DNC": 1, "NIN": 5, "THF": 10}
 MACRO_SETS = {"^": 1, "!": 1, "~^": 2, "~!": 2, "^!": 3}
@@ -95,7 +96,7 @@ DESC = {
     "TA": "Move hate",
     "SA Evisc": "Sneak WS",
     "TA Evisc": "Trick WS",
-    "SATA": "Sneak Trick WS",
+    "SATA": "SA TA Charge WS",
     "Bully": "Intimidate",
     "Perfect Dodge": "Evade",
     "Conspirator": "Party acc",
@@ -478,7 +479,9 @@ def book_for(main, sub, prefix):
         return dnc_book
     if dnc_book and prefix == "^!":
         return book, 1
-    set_no = MACRO_SETS[prefix]
+    set_no = MACRO_SETS.get(prefix)
+    if set_no is None:
+        return "", ""
     if prefix == "^!" and sub and sub in combos:
         return combos[sub]
     return book, set_no

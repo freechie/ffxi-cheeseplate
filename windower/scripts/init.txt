@@ -22,7 +22,9 @@ lua load enemybar2
 // SATACast is in the launcher autoload list. Loading it here too errors
 // with "Addon SATACast already loaded."
 lua load keylabels
+lua load padmacros
 lua load screenfit
+lua load scenepace
 
 // RoE tip (run once after you set daily objectives in-game):
 //   //roe save daily

@@ -9,7 +9,7 @@
     //gs c toggle TP set
     //gs c toggle Idle set
     //gs c th   - force Treasure Hunter set while engaged
-    //gs c sata - Sneak Attack, Trick Attack, then Evisceration (Alt+F8, Ctrl+Shift+8)
+    //gs c sata - Sneak Attack, Trick Attack, Assassin's Charge, then Evisceration (Alt+F8, Ctrl+Shift+8)
     //gs c binds - rebind for current level and list number-row keys
 ]]
 
@@ -302,8 +302,17 @@ function self_command(command)
         end
         -- Stay engaged. /attackoff drops the target and releases the camera.
         -- Hit this just after a swing so the weaponskill lands before the next one.
-        sata_ready_at = os.clock() + 4
-        send_command('@input /echo ----- SATA: Evisceration -----')
-        send_command('input /ja "Sneak Attack" <me>; wait 1; input /ja "Trick Attack" <me>; wait 1; input /ws "Evisceration" <t>')
+        -- Charge triples that weaponskill. It goes on last so a swing during the
+        -- Sneak Attack and Trick Attack waits does not spend it.
+        local chain = 'input /ja "Sneak Attack" <me>; wait 1; input /ja "Trick Attack" <me>; wait 1; '
+        if (recasts[67] or 0) <= 0 then
+            chain = chain..'input /ja "Assassin\'s Charge" <me>; wait 1; '
+            sata_ready_at = os.clock() + 5
+            send_command('@input /echo ----- SATA: Charge into Evisceration -----')
+        else
+            sata_ready_at = os.clock() + 4
+            send_command('@input /echo ----- SATA: Evisceration, Charge still cooling -----')
+        end
+        send_command(chain..'input /ws "Evisceration" <t>')
     end
 end

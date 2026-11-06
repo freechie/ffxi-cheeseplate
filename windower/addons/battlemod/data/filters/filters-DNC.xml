@@ -43,12 +43,12 @@
             <target>false</target>
         </alliance>
         <others>
-            <melee>true</melee>
-            <ranged>true</ranged>
+            <melee>false</melee>
+            <ranged>false</ranged>
             <damage>false</damage>
             <healing>false</healing>
-            <misses>true</misses>
-            <items>true</items>
+            <misses>false</misses>
+            <items>false</items>
             <uses>false</uses>
             <readies>false</readies>
             <casting>false</casting>
@@ -126,16 +126,16 @@
                 <all>true</all>
             </alliance>
             <others>
-                <melee>true</melee>
-                <ranged>true</ranged>
-                <damage>true</damage>
-                <healing>true</healing>
+                <melee>false</melee>
+                <ranged>false</ranged>
+                <damage>false</damage>
+                <healing>false</healing>
                 <misses>true</misses>
                 <items>true</items>
                 <uses>true</uses>
-                <readies>true</readies>
-                <casting>true</casting>
-                <all>true</all>
+                <readies>false</readies>
+                <casting>false</casting>
+                <all>false</all>
             </others>
             <my_pet>
                 <melee>true</melee>
@@ -236,16 +236,16 @@
                 <all>true</all>
             </alliance>
             <others>
-                <melee>true</melee>
-                <ranged>true</ranged>
-                <damage>true</damage>
-                <healing>true</healing>
+                <melee>false</melee>
+                <ranged>false</ranged>
+                <damage>false</damage>
+                <healing>false</healing>
                 <misses>true</misses>
                 <items>true</items>
                 <uses>true</uses>
-                <readies>true</readies>
-                <casting>true</casting>
-                <all>true</all>
+                <readies>false</readies>
+                <casting>false</casting>
+                <all>false</all>
             </others>
             <my_pet>
                 <melee>true</melee>

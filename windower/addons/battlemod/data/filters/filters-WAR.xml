@@ -45,12 +45,12 @@
             <all>false</all>
         </alliance>
         <others> <!-- Some guy nearby is doing something -->
-            <melee>true</melee>
-            <ranged>true</ranged>
+            <melee>false</melee>
+            <ranged>false</ranged>
             <damage>false</damage>
             <healing>false</healing>
-            <misses>true</misses>
-            <items>true</items>
+            <misses>false</misses>
+            <items>false</items>
             <uses>false</uses>
             <readies>false</readies>
             <casting>false</casting>
@@ -110,11 +110,11 @@
 				<all>false</all>
 			</alliance>
 			<others> <!-- He's targeting some guy nearby -->
-				<melee>true</melee>
-				<ranged>true</ranged>
-				<damage>true</damage>
-				<healing>true</healing>
-				<misses>true</misses>
+				<melee>false</melee>
+				<ranged>false</ranged>
+				<damage>false</damage>
+				<healing>false</healing>
+				<misses>false</misses>
 				<readies>false</readies>
 				<casting>false</casting>
 				<all>false</all>

@@ -5,7 +5,7 @@ _addon.commands = {'keylabels', 'kl'}
 
 -- Shows number-row and function-key bind labels while a modifier combo is held.
 -- GearSwap feeds: `kl clear`, `kl set <mod> <button> <label>`, `kl title <mod> <title>`.
--- mod is ctrl|alt|cshift|ashift|calt so Windower never sees !1/^1 in send_command.
+-- mod is ctrl|alt|cshift|ashift|calt|cast so Windower never sees !1/^1 in send_command.
 
 local config = require('config')
 local texts = require('texts')
@@ -124,6 +124,7 @@ local TITLES = {
     ['~^'] = 'Ctrl+Shift',
     ['~!'] = 'Alt+Shift',
     ['^!'] = 'Ctrl+Alt',
+    ['~^!'] = 'Ctrl+Alt+Shift',
 }
 -- DirectInput scan codes: left and right of each modifier.
 local MOD_KEYS = {
@@ -135,10 +136,21 @@ local MOD_KEYS = {
 local labels = {}
 local titles = {}
 local down = {}
+local forced
+local pad_view
+-- Gamepad names for keys 1-0, and the same buttons again for F1-F11 while RB is held.
+local PAD_BUTTON = {
+    ['1'] = 'Up', ['3'] = 'Down',
+    ['5'] = 'Window', ['6'] = 'L3', ['7'] = 'Cancel', ['8'] = 'Menu',
+    ['9'] = 'Minus', ['0'] = 'Plus',
+    f1 = 'Up', f3 = 'Down',
+    f5 = 'Window', f6 = 'L3', f7 = 'Cancel', f8 = 'Menu',
+    f9 = 'Minus', f10 = 'Plus', f11 = 'R3',
+}
 
 -- Must match KL_MOD names in GearSwap/data/binds.lua.
 local MOD_FROM_NAME = {
-    ctrl = '^', alt = '!', cshift = '~^', ashift = '~!', calt = '^!',
+    ctrl = '^', alt = '!', cshift = '~^', ashift = '~!', calt = '^!', cast = '~^!',
 }
 
 local function held(mod)
@@ -150,23 +162,31 @@ end
 
 local function current_prefix()
     local c, a, s = held('ctrl'), held('alt'), held('shift')
+    if c and a and s then return '~^!' end
     if c and a then return '^!' end
     if c then return s and '~^' or '^' end
     if a then return s and '~!' or '!' end
 end
 
+local function button_for(k)
+    if pad_view == 'pad' and k:sub(1, 1) ~= 'f' then return PAD_BUTTON[k] or k end
+    if pad_view == 'fpad' and k:sub(1, 1) == 'f' then return PAD_BUTTON[k] or k:upper() end
+end
+
 local function update()
-    local prefix = current_prefix()
-    if prefix == shown then return end
-    shown = prefix
+    local prefix = forced or current_prefix()
+    local sig = (prefix or '')..':'..(pad_view or '')
+    if shown ~= false and sig == shown then return end
+    shown = sig
 
     local left_lines = {}
     local description_lines = {}
     if prefix then
         for _, k in ipairs(KEYS) do
             local label = labels[prefix..k]
-            if label then
-                local display_key = k:match('^f') and k:upper() or k
+            local button = button_for(k)
+            if label and (not pad_view or button) then
+                local display_key = button and string.format('%-8s', button) or (k:match('^f') and k:upper() or k)
                 local action, description = label:match('^(.-) %- (.+)$')
                 action = action or label
                 left_lines[#left_lines + 1] = display_key..'  '..action
@@ -177,11 +197,20 @@ local function update()
     if #left_lines == 0 then
         left_box:hide()
         description_box:hide()
-        heading_box:hide()
+        if prefix == '~^!' then
+            local heading = TITLES[prefix]
+            if titles[prefix] then heading = heading..': '..titles[prefix] end
+            if pad_view == 'fpad' then heading = heading..'  + RB' end
+            heading_box:text(heading)
+            heading_box:show()
+        else
+            heading_box:hide()
+        end
         return
     end
     local heading = TITLES[prefix]
     if titles[prefix] then heading = heading..': '..titles[prefix] end
+    if pad_view == 'fpad' then heading = heading..'  + RB' end
     heading_box:text(heading)
     left_box:text(table.concat(left_lines, '\n'))
     description_box:text(table.concat(description_lines, '\n'))
@@ -237,6 +266,8 @@ end)
 windower.register_event('login', function()
     settings = config.load(defaults)
     down = {}
+    forced = nil
+    pad_view = nil
     labels = {}
     titles = {}
     gear_loaded = false
@@ -248,6 +279,8 @@ windower.register_event('logout', function()
     generation = generation + 1
     gear_loaded = false
     down = {}
+    forced = nil
+    pad_view = nil
     shown = false
     labels = {}
     titles = {}
@@ -317,6 +350,14 @@ windower.register_event('addon command', function(cmd, key, ...)
     elseif cmd == 'title' and key then
         local mod = MOD_FROM_NAME[key:lower()]
         if mod then titles[mod] = table.concat({...}, ' ') end
+    elseif cmd == 'show' and key then
+        forced = MOD_FROM_NAME[key:lower()]
+        local view = ...
+        if type(view) == 'string' then view = view:lower() end
+        pad_view = (view == 'pad' or view == 'fpad') and view or nil
+    elseif cmd == 'hide' then
+        forced = nil
+        pad_view = nil
     elseif cmd == 'unlock' then
         settings.locked = false
         apply_lock()

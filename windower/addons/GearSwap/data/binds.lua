@@ -14,6 +14,7 @@ local MODS = {
     {'~^', 'Ctrl+Shift'},
     {'~!', 'Alt+Shift'},
     {'^!', 'Ctrl+Alt'},
+    {'~^!', 'Ctrl+Alt+Shift'},
 }
 
 -- Overlay descriptions stay short. Ability recasts are the base time, before merits.
@@ -81,7 +82,7 @@ local DESCRIPTIONS = {
     ['TA'] = 'Move hate',
     ['SA Evisc'] = 'Sneak WS',
     ['TA Evisc'] = 'Trick WS',
-    ['SATA'] = 'Sneak Trick WS',
+    ['SATA'] = 'SA TA Charge WS',
     ['Bully'] = 'Intimidate',
     ['Perfect Dodge'] = 'Evade',
     ['Conspirator'] = 'Party acc',
@@ -279,13 +280,21 @@ SUB_ROWS.DNC.title = 'Dancer'
 
 local main_rows = {}
 local active = {}
+local commands = {}
 local titles = {}
 local overlay_labels = {}
+local PAD_MOD = {
+    ctrl = '^', alt = '!', cshift = '~^', ashift = '~!', calt = '^!', cast = '~^!',
+}
 
 -- Windower treats !1/^1 as key tokens inside send_command, so overlay traffic
 -- uses words: `kl set ctrl 2 …` / `kl title alt …` (must match keylabels.lua).
-local KL_MOD_ORDER = {'^!', '~^', '~!', '^', '!'}
-local KL_MOD = {['^!'] = 'calt', ['~^'] = 'cshift', ['~!'] = 'ashift', ['^'] = 'ctrl', ['!'] = 'alt'}
+-- Longest prefix first, or ~^!1 is read as Ctrl+Shift.
+local KL_MOD_ORDER = {'~^!', '^!', '~^', '~!', '^', '!'}
+local KL_MOD = {
+    ['~^!'] = 'cast', ['^!'] = 'calt', ['~^'] = 'cshift', ['~!'] = 'ashift',
+    ['^'] = 'ctrl', ['!'] = 'alt',
+}
 
 local function send_kl_set(fullkey, label)
     for _, prefix in ipairs(KL_MOD_ORDER) do
@@ -337,6 +346,7 @@ local function macro_location(prefix)
             book, set = where[1], where[2]
         end
     end
+    if not set then return '' end
     return ' book '..book..' set '..set
 end
 
@@ -360,6 +370,7 @@ local function bind_rows(rows, lvl, job)
                 local label = overlay_text(entry[1])
                 send_kl_set(key, label)
                 active[key] = label
+                commands[key] = entry[2]
             end
         end
     end
@@ -379,6 +390,7 @@ function clear_binds()
     end
     send_command('kl clear')
     active = {}
+    commands = {}
     titles = {}
     overlay_labels = {}
 end
@@ -431,6 +443,7 @@ local function bind_entry(key, entry)
     local label = overlay_text(entry[1])
     send_kl_set(key, label)
     active[key] = label
+    commands[key] = entry[2]
 end
 
 local function bind_overflow(list, lvl)
@@ -512,6 +525,13 @@ function sub_job_change()
 end
 
 function binds_command(command)
+    local pad_mod, pad_key = command:match('^pad (%S+) (%S+)$')
+    if pad_mod then
+        local prefix = PAD_MOD[pad_mod]
+        local cmd = prefix and commands[prefix..pad_key]
+        if cmd then send_command(cmd) end
+        return true
+    end
     if CHAINS[command] then
         send_command(CHAINS[command])
         return true

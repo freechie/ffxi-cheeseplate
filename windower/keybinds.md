@@ -11,6 +11,30 @@ Official macro books are alphabetical and sequential: **1 DNC**, **2 DNC/NIN**, 
 | Ctrl+Shift 1-0 | Utility (rings, warp, trusts) |
 | Alt+Shift 1-0 | Utility, second row. While Dancer is subbed, Trance uses the first free function key |
 | Ctrl+Alt 1-0 | Subjob row. While Dancer is subbed, this is the main combat row Ctrl used to hold |
+| Ctrl+Alt+Shift 1-0 | Sixth set. The same pad buttons pick its keys once the row has entries |
+
+On the controller, hold a trigger and press a pad button. The overlay lists the button names. D-pad left and right stay on targeting, so keys 2 and 4 stay on the number row. Hold RB with that trigger for the function-key row. One tap of LB still toggles autorun. Load it with `//lua l padmacros`.
+
+| Hold | Page |
+| --- | --- |
+| LT | Alt: Steal & WS |
+| RT | Ctrl: Dancer |
+| LT+RT | Ctrl+Alt: Combat |
+| LB+LT | Alt+Shift: Ranged |
+| LB+RT | Ctrl+Shift: Utility |
+| LB+LT+RT | Ctrl+Alt+Shift |
+
+| Button | Row | With RB |
+| --- | --- | --- |
+| Up | 1 | F1 |
+| Down | 3 | F3 |
+| Window | 5 | F5 |
+| L3 | 6 | F6 |
+| Cancel | 7 | F7 |
+| Menu | 8 | F8 |
+| Minus | 9 | F9 |
+| Plus | 0 | F10 |
+| R3 |  | F11 |
 
 These keys take over the in-game Ctrl/Alt macro palettes. Hold a modifier combo to see its labels in the `keylabels` overlay (`addons/keylabels`, loaded from `scripts/init.txt`); `//kl pos <x> <y>` moves it, and `//kl refresh` re-pulls labels from GearSwap if the overlay comes up empty. Each heading shows the matching in-game macro book and set. DNC also uses Alt+F1 weapons, Alt+F2 waltz, Alt+F3 TP, Alt+F4 idle, Alt+F5 utsu (Haste Samba is Ctrl+2 only).
 
@@ -46,7 +70,7 @@ Alt+F6 Ternary Flourish. Alt+F7 Contradance. Alt+F8 No Foot Rise. Alt+F9 Saber D
 | 5 | Hide | Evisceration | Raise trusts | Assassin's Charge |
 | 6 | Collaborator p1 | Aeolian Edge | EXP trusts (Kupofried) | Rudra's Storm |
 | 7 | Accomplice p1 | Shark Bite | TH set toggle | Exenterator |
-| 8 | Larceny | Dancing Edge | SATA (SA, TA, Evisceration) | Mandalic Stab |
+| 8 | Larceny | Dancing Edge | SATA (SA, TA, Charge, Evisceration) | Mandalic Stab |
 | 9 | Perfect Dodge | Collaborator p2 | TP set toggle | Shadowstitch |
 | 0 | Conspirator | Accomplice p2 | Dismiss trusts | Energy Drain |
 
