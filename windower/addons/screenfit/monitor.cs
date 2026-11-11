@@ -1,14 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
 class MonitorQuery {
     const uint MONITOR_DEFAULTTONEAREST = 2;
-    const int MONITORINFOF_PRIMARY = 1;
-    const int SW_RESTORE = 9;
-    const uint SWP_NOZORDER = 0x0004;
-    const uint SWP_SHOWWINDOW = 0x0040;
+    const int WS_CAPTION = 0x00C00000;
+    const int GWL_STYLE = -16;
 
     delegate bool MonitorEnum(IntPtr monitor, IntPtr hdc, ref Rect rect, IntPtr data);
 
@@ -25,10 +24,13 @@ class MonitorQuery {
     static extern bool GetMonitorInfo(IntPtr monitor, ref MonitorInfo info);
 
     [DllImport("user32.dll")]
-    static extern bool SetWindowPos(IntPtr hwnd, IntPtr after, int x, int y, int cx, int cy, uint flags);
+    static extern bool GetWindowRect(IntPtr hwnd, out Rect rect);
 
-    [DllImport("user32.dll")]
-    static extern bool ShowWindow(IntPtr hwnd, int cmd);
+    [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
+    static extern int GetWindowLong32(IntPtr hwnd, int index);
+
+    [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
+    static extern IntPtr GetWindowLongPtr64(IntPtr hwnd, int index);
 
     [StructLayout(LayoutKind.Sequential)]
     struct Rect {
@@ -43,8 +45,13 @@ class MonitorQuery {
         public int Flags;
     }
 
-    static IntPtr primaryMon;
+    static List<MonitorInfo> monitors = new List<MonitorInfo>();
     static MonitorEnum enumProc;
+
+    static int GetStyle(IntPtr hwnd) {
+        if (IntPtr.Size == 8) return (int)GetWindowLongPtr64(hwnd, GWL_STYLE).ToInt64();
+        return GetWindowLong32(hwnd, GWL_STYLE);
+    }
 
     static MonitorInfo Info(IntPtr monitor) {
         MonitorInfo info = new MonitorInfo();
@@ -57,54 +64,48 @@ class MonitorQuery {
         return a.Left == b.Left && a.Top == b.Top && a.Right == b.Right && a.Bottom == b.Bottom;
     }
 
-    static string Line(string key, MonitorInfo info) {
-        int w = info.Monitor.Right - info.Monitor.Left;
-        int h = info.Monitor.Bottom - info.Monitor.Top;
-        return key + " " + w + "x" + h + " " + info.Monitor.Left + " " + info.Monitor.Top;
+    static string Box(Rect rect) {
+        return (rect.Right - rect.Left) + "x" + (rect.Bottom - rect.Top) + " " + rect.Left + " " + rect.Top;
     }
 
     static bool EnumOne(IntPtr monitor, IntPtr hdc, ref Rect rect, IntPtr data) {
-        MonitorInfo info = Info(monitor);
-        if ((info.Flags & MONITORINFOF_PRIMARY) != 0) primaryMon = monitor;
+        monitors.Add(Info(monitor));
         return true;
     }
 
     static int Main(string[] args) {
-        bool move = false;
-        string outPath = null;
-        foreach (string arg in args) {
-            if (arg == "move") move = true;
-            else outPath = arg;
-        }
-
+        string outPath = args.Length > 0 ? args[0] : null;
         IntPtr hwnd = FindWindow("FFXiClass", null);
         if (hwnd == IntPtr.Zero) return 1;
 
-        primaryMon = IntPtr.Zero;
         enumProc = EnumOne;
         EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero, enumProc, IntPtr.Zero);
-        if (primaryMon == IntPtr.Zero) return 2;
-        MonitorInfo primary = Info(primaryMon);
+        if (monitors.Count == 0) return 2;
 
-        int moved = 0;
-        if (move) {
-            IntPtr currentMon = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-            MonitorInfo current = Info(currentMon);
-            if (!Same(current.Monitor, primary.Monitor)) {
-                int w = primary.Monitor.Right - primary.Monitor.Left;
-                int h = primary.Monitor.Bottom - primary.Monitor.Top;
-                ShowWindow(hwnd, SW_RESTORE);
-                if (SetWindowPos(hwnd, IntPtr.Zero, primary.Monitor.Left, primary.Monitor.Top, w, h, SWP_NOZORDER | SWP_SHOWWINDOW))
-                    moved = 1;
-            }
+        IntPtr currentMon = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+        MonitorInfo current = Info(currentMon);
+        int here = 0;
+        MonitorInfo primary = monitors[0];
+        for (int i = 0; i < monitors.Count; i++) {
+            if ((monitors[i].Flags & 1) != 0) primary = monitors[i];
+            if (Same(monitors[i].Monitor, current.Monitor)) here = i;
         }
 
-        IntPtr nowMon = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-        MonitorInfo now = Info(nowMon);
+        Rect window;
+        GetWindowRect(hwnd, out window);
+        bool framed = (GetStyle(hwnd) & WS_CAPTION) != 0;
+
         StringBuilder text = new StringBuilder();
-        text.AppendLine(Line("primary", primary));
-        text.AppendLine(Line("current", now));
-        text.AppendLine("moved " + moved);
+        text.AppendLine("frame " + (framed ? 1 : 0));
+        text.AppendLine("here " + here);
+        text.AppendLine("primary " + Box(primary.Monitor));
+        text.AppendLine("current " + Box(current.Monitor));
+        text.AppendLine("window " + Box(window));
+        text.AppendLine("count " + monitors.Count);
+        for (int i = 0; i < monitors.Count; i++) {
+            text.AppendLine("mon " + i + " " + Box(monitors[i].Monitor));
+            text.AppendLine("work " + i + " " + Box(monitors[i].Work));
+        }
         if (outPath != null) File.WriteAllText(outPath, text.ToString());
         else Console.Write(text.ToString());
         return 0;

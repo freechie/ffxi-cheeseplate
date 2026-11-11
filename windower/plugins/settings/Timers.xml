@@ -47,9 +47,9 @@
         <RecastTimerLimit>10</RecastTimerLimit>
         <BuffsTimerLimit>10</BuffsTimerLimit>
         <CustomTimerLimit>10</CustomTimerLimit>
-        <!-- Recast under the status window. Buffs and custom share a lower row, above chat and the party list. screenfit bottom-pins those two. -->
+        <!-- Recast below the items menu. Buffs and custom share a lower row, above chat and the party list. screenfit bottom-pins those two. -->
         <RecastX>20</RecastX>
-        <RecastY>175</RecastY>
+        <RecastY>340</RecastY>
         <BuffsX>900</BuffsX>
         <BuffsY>652</BuffsY>
         <CustomX>1140</CustomX>

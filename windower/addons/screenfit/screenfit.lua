@@ -1,6 +1,6 @@
 _addon.name = 'screenfit'
 _addon.author = 'Cheeseplate'
-_addon.version = '2.1'
+_addon.version = '2.3'
 _addon.commands = {'screenfit', 'fit'}
 
 -- Cheeseplate's HUD was laid out in a 1920x1080 window. Edge pieces are stored
@@ -12,8 +12,8 @@ _addon.commands = {'screenfit', 'fit'}
 local BASE_W, BASE_H = 1920, 1080
 
 local TIMERS = {
-    -- Under the player status window. keylabels start near y=400.
-    RecastX = 20, RecastY = 175,
+    -- Left stack. keylabels start at y=400.
+    RecastX = 20, RecastY = 340,
     -- One lower row, side by side, so a full stack stays above the chat
     -- and the party list. Bottom pin keeps that gap when the height changes.
     BuffsX = 900, BuffsY = 652,
@@ -161,9 +161,9 @@ local function write_anchors()
     clear_track(root .. 'addons\\findAll\\data\\settings.xml')
 end
 
--- Menu scale is read from settings.xml when Windower launches. It does not
--- change during play. Before switching monitors, run //fit 1080 or //fit 1440.
--- That saves scale 1 or 1.45. Switch screens, then restart once.
+-- Menu scale is read from settings.xml when Windower launches. Moving the
+-- window saves the scale for the window size just set. The menus use it on
+-- the next launch. The HUD refits as soon as the window size changes.
 local helper_exe
 local helper_rebuilt = false
 
@@ -188,35 +188,50 @@ local function ensure_helper()
     return exe
 end
 
--- Returns primary w,h,x,y, current w,h,x,y, moved.
-local function run_monitor(move)
+-- Reads the game window. The window can be changed only from inside Windower,
+-- so this helper never moves it.
+local function run_monitor()
     local exe = ensure_helper()
     if not exe or not io.popen then return end
     local out = windower.addon_path .. 'monitor.txt'
+    os.remove(out)
     local cmd = '"' .. exe .. '" "' .. out .. '"'
-    if move then cmd = cmd .. ' move' end
     local fh = io.popen(cmd, 'r')
     if fh then fh:close() end
     local rf = io.open(out, 'r')
     if not rf then return end
     local text = rf:read('*a') or ''
     rf:close()
-    if not text:find('primary ', 1, true) and not helper_rebuilt then
+    if not text:find('here ', 1, true) and not helper_rebuilt then
         helper_rebuilt = true
         helper_exe = nil
         compile_helper(windower.addon_path, exe)
         helper_exe = exe
-        return run_monitor(move)
+        return run_monitor()
     end
     local function grab(key)
         local w, h, x, y = text:match(key .. ' (%d+)x(%d+) ([%-]?%d+) ([%-]?%d+)')
         return tonumber(w), tonumber(h), tonumber(x), tonumber(y)
     end
-    local pw, ph, px, py = grab('primary')
-    local cw, ch, cx, cy = grab('current')
-    if not pw or not cw then return end
-    local moved = text:match('moved (%d)') == '1'
-    return pw, ph, px, py, cw, ch, cx, cy, moved
+    local ww, wh, wx, wy = grab('window')
+    if not ww then return end
+    local mons = {}
+    for i, w, h, x, y in text:gmatch('mon (%d+) (%d+)x(%d+) ([%-]?%d+) ([%-]?%d+)') do
+        mons[tonumber(i)] = {w = tonumber(w), h = tonumber(h), x = tonumber(x), y = tonumber(y)}
+    end
+    for i, w, h, x, y in text:gmatch('work (%d+) (%d+)x(%d+) ([%-]?%d+) ([%-]?%d+)') do
+        local mon = mons[tonumber(i)]
+        if mon then
+            mon.ww, mon.wh, mon.wx, mon.wy = tonumber(w), tonumber(h), tonumber(x), tonumber(y)
+        end
+    end
+    return {
+        ww = ww, wh = wh, wx = wx, wy = wy,
+        framed = text:match('frame (%d)') == '1',
+        here = tonumber(text:match('here (%d+)')) or 0,
+        count = tonumber(text:match('count (%d+)')) or 1,
+        mons = mons,
+    }
 end
 
 local function scale_for(mw, mh)
@@ -248,6 +263,106 @@ local function write_uiscale(scale, label, report)
         windower.add_to_chat(207, '[screenfit] UI scale ' .. scale .. ' saved' .. label .. '. Restart the game to apply it.')
     end
     return true
+end
+
+local function log_line(msg)
+    local fh = io.open(windower.addon_path .. 'screenfit.log', 'a')
+    if not fh then return end
+    fh:write(os.date('%H:%M:%S ') .. msg .. '\n')
+    fh:close()
+end
+
+local function describe(info)
+    if not info then return 'unread' end
+    local frame = info.framed and 'on' or 'off'
+    return 'frame ' .. frame .. ' ' .. (info.ww or 0) .. 'x' .. (info.wh or 0) .. ' at ' .. (info.wx or 0) .. ',' .. (info.wy or 0)
+end
+
+-- Borderless mode snaps the window back onto the whole monitor. A move only
+-- counts once the frame matches and the rect is no longer that monitor.
+local function landed(info, x, y, w, h, want_frame, mon)
+    if not info or info.framed ~= want_frame then return false end
+    if math.abs((info.wx or 0) - x) > 30 or math.abs((info.wy or 0) - y) > 30 then return false end
+    if mon and (w ~= mon.w or h ~= mon.h) then
+        if info.ww == mon.w and info.wh == mon.h and (info.wx or 0) == mon.x and (info.wy or 0) == mon.y then
+            return false
+        end
+    end
+    if math.abs(info.ww - w) > 64 or math.abs(info.wh - h) > 64 then return false end
+    return true
+end
+
+local function place_window(mode)
+    local info = run_monitor()
+    if not info or not info.mons[info.here] then
+        windower.add_to_chat(207, '[screenfit] Could not read the game window.')
+        return
+    end
+    local index = info.here
+    if mode == 'other' then
+        if info.count < 2 then
+            windower.add_to_chat(207, '[screenfit] Only one monitor is connected.')
+            return
+        end
+        index = (info.here + 1) % info.count
+    end
+    local mon = info.mons[index]
+    if not mon then
+        windower.add_to_chat(207, '[screenfit] Could not read the monitor.')
+        return
+    end
+    local framed = mode == 'window'
+    local x, y, w, h
+    if framed then
+        x, y, w, h = mon.wx or mon.x, mon.wy or mon.y, mon.ww or mon.w, mon.wh or mon.h
+    else
+        x, y, w, h = mon.x, mon.y, mon.w, mon.h
+    end
+
+    local function push()
+        local now = run_monitor()
+        if now and now.framed ~= framed then
+            log_line('window_toggleframe')
+            windower.send_command('window_toggleframe')
+            coroutine.sleep(0.35)
+        end
+        log_line('wincontrol move ' .. x .. ' ' .. y .. ' resize ' .. w .. ' ' .. h)
+        windower.send_command('wincontrol move ' .. x .. ' ' .. y)
+        windower.send_command('wincontrol resize ' .. w .. ' ' .. h)
+        coroutine.sleep(0.5)
+        return run_monitor()
+    end
+
+    log_line('place ' .. mode .. ' from ' .. describe(info))
+    local after = push()
+    log_line('after ' .. describe(after))
+    if not landed(after, x, y, w, h, framed, mon) then
+        log_line('window_togglefullscreen')
+        windower.send_command('window_togglefullscreen')
+        coroutine.sleep(0.4)
+        after = push()
+        log_line('after unlock ' .. describe(after))
+    end
+
+    if not landed(after, x, y, w, h, framed, mon) then
+        windower.add_to_chat(207, '[screenfit] The window stayed ' .. describe(after) .. '.')
+        return
+    end
+
+    local aw, ah = after.ww, after.wh
+    local scale = scale_for(aw, ah)
+    local saved = write_uiscale(scale, ' for the ' .. aw .. 'x' .. ah .. ' window', false)
+    local moved = after.ww ~= info.ww or after.wh ~= info.wh or (after.wx or 0) ~= (info.wx or 0) or (after.wy or 0) ~= (info.wy or 0)
+    if moved then
+        windower.send_command('fit apply')
+    end
+    local how = after.framed and 'Windowed' or 'Borderless'
+    local where = how .. ' ' .. aw .. 'x' .. ah .. '. Menu scale ' .. scale .. '.'
+    if saved then
+        windower.add_to_chat(207, '[screenfit] ' .. where .. ' Restart PlayOnline to apply the menu scale. The HUD refits now.')
+    else
+        windower.add_to_chat(207, '[screenfit] ' .. where)
+    end
 end
 
 local PRESETS = {
@@ -433,8 +548,10 @@ local function apply()
     applied_w, applied_h = w, h
     pending_w, pending_h = w, h
     shift_commands(w, h)
+    -- Timers saves its current spot over the file on unload. Unload first on
+    -- a fresh load too, so a reload cannot write the old spot back.
+    windower.send_command('unload timers')
     if resize then
-        windower.send_command('unload timers')
         for _, name in ipairs(ANCHORED) do
             windower.send_command('lua unload ' .. name)
         end
@@ -481,14 +598,17 @@ windower.register_event('addon command', function(cmd, extra)
         elseif extra == '1.5' then
             write_uiscale('1.5', '', true)
         else
-            local _, _, _, _, cw, ch = run_monitor(false)
-            if not cw then
-                windower.add_to_chat(207, '[screenfit] Could not read the monitor. Use //fit 1080 or //fit 1440.')
+            local info = run_monitor()
+            if not info then
+                windower.add_to_chat(207, '[screenfit] Could not read the window. Use //fit 1080 or //fit 1440.')
                 return
             end
-            write_uiscale(scale_for(cw, ch), ' for the ' .. cw .. 'x' .. ch .. ' monitor', true)
+            write_uiscale(scale_for(info.ww, info.wh), ' for the ' .. info.ww .. 'x' .. info.wh .. ' window', true)
         end
         return
+    elseif cmd == 'window' or cmd == 'fill' or cmd == 'other' then
+        place_window(cmd)
+        return
     end
-    windower.add_to_chat(207, 'screenfit: //fit 1080 | //fit 1440')
+    windower.add_to_chat(207, 'screenfit: //fit window | //fit fill | //fit other')
 end)
