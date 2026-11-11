@@ -242,44 +242,6 @@
     ol.todo span, .muted { color: var(--muted); }
     .todo a, .muted a, .panel-pad a { color: var(--link); }
 
-    .jobs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .job .name { font-weight: 600; color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
-    .job .lvl {
-      position: relative;
-      margin: 8px 0 4px;
-      font-size: 26px;
-      font-weight: 600;
-      color: var(--current);
-      padding-left: 14px;
-    }
-    .job .lvl::before {
-      content: "▸";
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: var(--select);
-      font-size: 16px;
-      line-height: 1.7;
-    }
-    .bar {
-      height: 12px;
-      margin-top: 12px;
-      border: 1px solid rgba(158, 180, 216, 0.45);
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.4);
-      overflow: hidden;
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45);
-    }
-    .bar > i {
-      display: block;
-      height: 100%;
-      background: linear-gradient(180deg, #7eb8ff, #3a6fd4 55%, #244a9a);
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
@@ -571,10 +533,7 @@
         min-width: 44px;
       }
 
-      .jobs,
       .grid-2 { grid-template-columns: 1fr; }
-
-      .job .lvl { font-size: 24px; }
 
       .row {
         flex-wrap: wrap;
@@ -677,55 +636,18 @@
             <div class="n">4</div>
             <div>
               <strong><a href="#use">Endorsement Ring</a></strong>
-              <span>Claimed. Capacity Points +200%. Use it first on the Yztarg camp. One charge, ready again after 2 hours. Brutal Earring waits on Promathia 7-5.</span>
+              <span>Claimed. Capacity Points +200%. Use it first on the Yztarg camp. One charge, ready again after 2 hours.</span>
             </div>
           </div>
-          <div class="act">
-            <div class="n">5</div>
-            <div>
-              <strong><a href="#work">Samurai and Bard are unlocked.</a></strong>
-              <span>Level both after the Job Point push.</span>
-            </div>
-          </div>
-          <p class="note"><strong>Rhapsodies is complete.</strong> <a href="https://www.bg-wiki.com/ffxi/Rhapsody_in_Fuchsia" target="_blank" rel="noreferrer">Rhapsody in Fuchsia</a> is already Capacity Points +30%. Between camps, clear one <a href="#battle">Geas Fete</a> name in the same zone. The other stories wait until after the Job Point push.</p>
+          <p class="note">Between camps, clear one <a href="#battle">Geas Fete</a> name in the same zone.</p>
           <p class="sub">Town stop this week: copper vouchers to sparks at Rolandienne, then <a href="#buy">Acheron Shields</a>. Sell them in San d'Oria. This spark week ends Sunday at 11:00 a.m. Eastern.</p>
-          <p class="sub">Recent: Promathia is 5-1. Adoulin is Clear Skies. Rhapsodies complete. Mummu +1 at item level 119. Toutatis's Cape augmented. Belatz Pearl on the right ear. Geas Fete is the Tauret path. Bard unlocked. INT 23/60.</p>
         </div>
       </details>
     </section>
 
     <section id="work">
       <h2>Work</h2>
-      <div class="jobs">
-        <div class="panel win">
-          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Thief" target="_blank" rel="noreferrer">Thief</a></span></div>
-          <div class="panel-pad job">
-            <div class="name">Now</div>
-            <div class="lvl">99</div>
-            <div class="muted">Escha – Zi'Tah Yztargs, (K-12)</div>
-            <div class="bar"><i style="width:100%"></i></div>
-          </div>
-        </div>
-        <div class="panel win">
-          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Samurai" target="_blank" rel="noreferrer">Samurai</a></span></div>
-          <div class="panel-pad job">
-            <div class="name">Unlocked</div>
-            <div class="lvl">1 / 99</div>
-            <div class="muted">Level after the Job Point push</div>
-            <div class="bar"><i style="width:1%"></i></div>
-          </div>
-        </div>
-        <div class="panel win">
-          <div class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Bard" target="_blank" rel="noreferrer">Bard</a></span></div>
-          <div class="panel-pad job">
-            <div class="name">Unlocked</div>
-            <div class="lvl">1 / 99</div>
-            <div class="muted">Level after the Job Point push</div>
-            <div class="bar"><i style="width:1%"></i></div>
-          </div>
-        </div>
-      </div>
-      <details class="panel win" open style="margin-top:12px;">
+      <details class="panel win" open>
         <summary class="win-bar"><span>Between camps</span></summary>
         <div class="panel-pad">
           <p class="fine" style="margin:0 0 12px;">When the Endorsement Ring is recharging, use Facility, then Trizek, then a Capacity Ring charge, and clear one Geas Fete name.</p>
@@ -736,51 +658,9 @@
               <span>First of twelve tier 1 names. One Holy Sword from Rolandienne, then that trinket from Affi. Any <code>???</code> in Escha – Zi'Tah. With the Ninja/Dancer tanking, call Sakura or Apururu (UC), then Koru-Moru, Qultada, and Shantotto II. The tank engages first. Details are under <a href="#battle">Battle</a>.</span>
             </div>
           </div>
-          <div class="act">
-            <div class="n">2</div>
-            <div>
-              <strong><a href="https://www.bg-wiki.com/ffxi/Zilart_Mission_5" target="_blank" rel="noreferrer">Zilart 5 · Headstone Pilgrimage</a></strong>
-              <span>After the Job Point push. Dark fragment done. Seven fragments left.</span>
-            </div>
-          </div>
-          <div class="act">
-            <div class="n">3</div>
-            <div>
-              <strong><a href="https://www.bg-wiki.com/ffxi/San_d%27Oria_Mission_8-2" target="_blank" rel="noreferrer">San d'Oria 8-2 · Lightbringer</a></strong>
-              <span>After the Job Point push.</span>
-            </div>
-          </div>
-          <div class="act">
-            <div class="n">4</div>
-            <div>
-              <strong><a href="https://www.bg-wiki.com/ffxi/Promathia_Mission_5-1" target="_blank" rel="noreferrer">Promathia 5-1 · The Enduring Tumult of War</a></strong>
-              <span>After the Job Point push. Zone into Port Bastok, talk to Cid, then enter Pso'Xja from the Nue Tower in Beaucedine Glacier (F-7). Brutal Earring opens at 7-5.</span>
-            </div>
-          </div>
-          <div class="act">
-            <div class="n">5</div>
-            <div>
-              <strong><a href="https://www.bg-wiki.com/ffxi/Seekers_of_Adoulin_Mission_3-3-5" target="_blank" rel="noreferrer">Adoulin 3-3-5 · Clear Skies</a></strong>
-              <span>After the Job Point push. Talk to Levil in the Pioneers' Coalition after one game day. Next is The Man in Black. Card Jailer Teodor skips that minigame for 1,000 gil.</span>
-            </div>
-          </div>
-          <div class="act">
-            <div class="n">6</div>
-            <div>
-              <strong><a href="https://www.bg-wiki.com/ffxi/Aht_Urhgan_Mission_17" target="_blank" rel="noreferrer">Aht Urhgan 17</a> · <a href="https://www.bg-wiki.com/ffxi/In_the_Name_of_the_Father" target="_blank" rel="noreferrer">Wings 8</a> · side stories</strong>
-              <span>After the Job Point push. Wings 8 needs nation quest 5 before mission 9.</span>
-            </div>
-          </div>
-          <div class="act">
-            <div class="n">7</div>
-            <div>
-              <strong><a href="https://www.bg-wiki.com/ffxi/Order_Up" target="_blank" rel="noreferrer">Order Up</a></strong>
-              <span>After the Job Point push. Twelve Orders, then Reja Ygridhi at the Celennia Memorial Library.</span>
-            </div>
-          </div>
         </div>
       </details>
-      <p class="fine" style="margin-top:10px;">Mode stays EXP. Capacity Points count on their own. Grind Job Points on <a href="https://www.bg-wiki.com/ffxi/Eschan_Yztarg" target="_blank" rel="noreferrer">Eschan Yztargs</a> in Escha – Zi'Tah, at (K-12) next to Portal #6. They are level 107–110. Enter from the Qufim home point through the <a href="https://www.bg-wiki.com/ffxi/Undulating_Confluence" target="_blank" rel="noreferrer">Undulating Confluence</a> at (G-8). Keep a <a href="https://www.bg-wiki.com/ffxi/Mollifier" target="_blank" rel="noreferrer">Mollifier</a> up so a Yztarg kill does not pop an NM. It drops when you zone, and Affi's shop hides it while it is active. Use <code>//tru exp</code>. The same zone is the Geas Fete gate for Tauret. Rhapsodies is complete, so <a href="https://www.bg-wiki.com/ffxi/Rhapsody_in_Fuchsia" target="_blank" rel="noreferrer">Fuchsia</a> already adds Capacity Points +30%, and Reisenjima is open. On the way through San d'Oria, turn copper vouchers into sparks at Rolandienne and buy Acheron Shields. This spark week ends Sunday at 11:00 a.m. Eastern. Other jobs: Dancer 94, Ninja 70, Warrior 48, Puppetmaster 28, Red Mage 5, Samurai 1, Bard 1, and White Mage, Monk, and Black Mage at 1. Master levels are locked.</p>
+      <p class="fine" style="margin-top:10px;">Mode stays EXP. Capacity Points count on their own. Grind Job Points on <a href="https://www.bg-wiki.com/ffxi/Eschan_Yztarg" target="_blank" rel="noreferrer">Eschan Yztargs</a> in Escha – Zi'Tah, at (K-12) next to Portal #6. They are level 107–110. Enter from the Qufim home point through the <a href="https://www.bg-wiki.com/ffxi/Undulating_Confluence" target="_blank" rel="noreferrer">Undulating Confluence</a> at (G-8). Keep a <a href="https://www.bg-wiki.com/ffxi/Mollifier" target="_blank" rel="noreferrer">Mollifier</a> up so a Yztarg kill does not pop an NM. It drops when you zone, and Affi's shop hides it while it is active. Use <code>//tru exp</code>.</p>
     </section>
 
     <section id="ambuscade">
@@ -792,7 +672,7 @@
             <div class="n">1</div>
             <div>
               <strong><a href="https://www.bg-wiki.com/ffxi/Tauret" target="_blank" rel="noreferrer">Tauret</a></strong>
-              <span>Every total-hallmark line under 9,600 is claimed. Trade <a href="https://www.bg-wiki.com/ffxi/Kaja_Knife" target="_blank" rel="noreferrer">Kaja Knife</a>, <a href="https://www.bg-wiki.com/ffxi/Abdhaljs_Matter" target="_blank" rel="noreferrer">Abdhaljs Matter</a> ×5, and any pulse weapon to <a href="https://www.bg-wiki.com/ffxi/Gorpa-Masorpa" target="_blank" rel="noreferrer">Gorpa-Masorpa</a> (Mhaura, G-9). The pulse weapon is consumed. Leave it unequipped. Weapon type does not matter.</span>
+              <span>Trade <a href="https://www.bg-wiki.com/ffxi/Kaja_Knife" target="_blank" rel="noreferrer">Kaja Knife</a>, <a href="https://www.bg-wiki.com/ffxi/Abdhaljs_Matter" target="_blank" rel="noreferrer">Abdhaljs Matter</a> ×5, and any pulse weapon to <a href="https://www.bg-wiki.com/ffxi/Gorpa-Masorpa" target="_blank" rel="noreferrer">Gorpa-Masorpa</a> (Mhaura, G-9). The pulse weapon is consumed. Leave it unequipped. Weapon type does not matter.</span>
             </div>
           </div>
           <div class="act">
@@ -806,26 +686,22 @@
             <div class="n">3</div>
             <div>
               <strong>Hold the rest</strong>
-              <span>Mummu is +1 in every slot, so the five armor chits wait for one later set: <a href="https://www.bg-wiki.com/ffxi/Inyanga_Jubbah" target="_blank" rel="noreferrer">Inyanga</a> when Bard is 99, or <a href="https://www.bg-wiki.com/ffxi/Flamma_Korazin" target="_blank" rel="noreferrer">Flamma</a> when Samurai is 99. The weapon voucher starts a Tokko weapon, and Kaja Knife is already past that, so it waits for another job at 99. The replica voucher is cosmetic. The dagger is the <a href="https://www.bg-wiki.com/ffxi/Qutrub_Knife" target="_blank" rel="noreferrer">Qutrub Knife</a>. Hold metal ×20, nuggets ×6, gems ×5, and anima ×5. The October total was 9,700, and every line under 9,600 was claimed. Those lines start over at the November update. Tauret does not use that total.</span>
+              <span>Mummu is +1 in every slot, so the five armor chits wait for one later set: <a href="https://www.bg-wiki.com/ffxi/Inyanga_Jubbah" target="_blank" rel="noreferrer">Inyanga</a> when Bard is 99, or <a href="https://www.bg-wiki.com/ffxi/Flamma_Korazin" target="_blank" rel="noreferrer">Flamma</a> when Samurai is 99. The weapon voucher starts a Tokko weapon, and Kaja Knife is already past that, so it waits for another job at 99. The replica voucher is cosmetic. The dagger is the <a href="https://www.bg-wiki.com/ffxi/Qutrub_Knife" target="_blank" rel="noreferrer">Qutrub Knife</a>. Hold metal ×20, nuggets ×6, gems ×5, and anima ×5. Tauret does not use the monthly hallmark total.</span>
             </div>
           </div>
           <p class="fine" style="margin:12px 0 0;">Another Facility Ring waits until the current charges are empty. Buy it then for 800 hallmarks.</p>
         </div>
       </details>
-      <details class="panel win" open style="margin-top:12px;">
+      <details class="panel win" style="margin-top:12px;">
         <summary class="win-bar"><span>Trusts and the daily</span></summary>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row hi"><span>Damage · <code>//tru ambu</code></span><b><code>//tru ambuapu</code></b></div>
-            <p>Amchuchu, Sakura, Qultada, August, Shantotto II. <code>//tru ambuapu</code> swaps in Apururu (UC). Amchuchu needs hate before a weaponskill. Trick or Treat is silence, terror, and amnesia.</p>
+            <p>Amchuchu, Sakura, Qultada, August, Shantotto II. <code>//tru ambuapu</code> swaps in Apururu (UC). Amchuchu needs hate before a weaponskill.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span>Everyday · <code>//tru</code></span><b>leave it</b></div>
-            <p>August, Sakura, Koru-Moru, Qultada, Shantotto II. Capacity camps stay <code>//tru exp</code>.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Unrelenting_Dullahan" target="_blank" rel="noreferrer">Volume 1 Very Easy</a></span><b>later</b></div>
-            <p>Dullahan at Ceizak (I-7), from the (H-6) home point south to the (G-11) conveyor. Stop if it charges or boils. After a miasma weaponskill, run. A daily primer is one. A second entry the same day wants three.</p>
+            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Category:Ambuscade" target="_blank" rel="noreferrer">Volume 2 Very Easy</a></span><b>later</b></div>
+            <p>Mantids, from the Ambuscade Tome in Mhaura (G-9). Stay out of the front and stun Mantodean Reprisal. Volume One is Moogles: leave the helper moogles up, and stand in one's aura during the boss special. Stay off the Steward. One primer for the day's first win. A second win the same day wants three. Set this month's Ambuscade Records of Eminence for the primer.</p>
           </div>
         </div>
       </details>
@@ -867,17 +743,13 @@
         </div>
       </details>
 
-      <details class="panel win" open style="margin-top:12px;">
+      <details class="panel win" style="margin-top:12px;">
 
         <summary class="win-bar"><span><a href="https://www.bg-wiki.com/ffxi/Alter_Ego_Points" target="_blank" rel="noreferrer">Alter ego</a> · HP 60/60 · VIT 60/60 · INT 23/60</span></summary>
         <div class="panel-pad">
           <div class="spend-item">
             <div class="row hi"><span>Next · INT 24</span><b>171 to 60</b></div>
             <p>Hold the 1 point. Rank 24 costs 3. Then MND, then Magic Skill, 210 each.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span>Oct 16 – Nov 9</span><b>Alter Ego Expo</b></div>
-            <p>Ended Nov 9. Point costs stay the same. INT 24 is still the next rank.</p>
           </div>
         </div>
       </details>
@@ -920,19 +792,6 @@
         </div>
       </details>
 
-      <details class="panel win" style="margin-top:12px;">
-        <summary class="win-bar"><span>Later Capacity gear</span></summary>
-        <div class="panel-pad">
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Endorsement_Ring" target="_blank" rel="noreferrer">Endorsement Ring</a></span><b>CP +200% · use first</b></div>
-            <p>Claimed. One charge, ready again after 2 hours. Use it on the Yztarg camp before Facility. Combat rings stay Enlivened and Mummu.</p>
-          </div>
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Aptitude_Mantle_%2B1" target="_blank" rel="noreferrer">Aptitude Mantle +1</a></span><b>CP +30% · killing blow</b></div>
-            <p>GearSwap puts it on for the weaponskill. It adds to the Capacity Point ring and Kupofried. Toutatis's Cape stays the combat back: DEX+24, Accuracy+20 Attack+20, Weapon skill damage +10%.</p>
-          </div>
-        </div>
-      </details>
     </section>
 
     <section id="buy">
@@ -942,7 +801,6 @@
         <div class="panel-pad">
           <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Brutal_Earring" target="_blank" rel="noreferrer">Brutal Earring</a></span><b>Promathia 7-5 · 75,000 gil</b></div>
           <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Acheron_Shield" target="_blank" rel="noreferrer">Acheron Shield</a></span><b>2,755 sparks · sell</b></div>
-          <p class="fine" style="margin:10px 0 0;">Town stop this week. Turn copper vouchers into sparks at Rolandienne, buy the shields, and sell them in San d'Oria. This spark week ends Sunday at 11:00 a.m. Eastern. Brutal waits on Promathia 7-5.</p>
         </div>
       </details>
     </section>
@@ -961,16 +819,12 @@
             <p>Cap is 99,999. The weekly spend limit resets Sunday at 11:00 a.m. Eastern. Keep these for Wanted warps.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Repeat_Login_Campaign" target="_blank" rel="noreferrer">Login points</a></span><b>October shop closed</b></div>
-            <p>The shop closed November 9. Track Pants +1 are done: movement speed +8%, boots off while worn. Hold the <a href="https://www.bg-wiki.com/ffxi/Lost_Sickle" target="_blank" rel="noreferrer">Lost Sickle</a> for Abyssea. Trust ciphers are done.</p>
-          </div>
-          <div class="spend-item">
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Copper_Voucher" target="_blank" rel="noreferrer">Copper A.M.A.N. vouchers</a></span><b>48 · sparks</b></div>
             <p>Rolandienne turns each one into 1,000 sparks. Those sparks become Acheron Shields.</p>
           </div>
           <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Bayld" target="_blank" rel="noreferrer">Bayld</a></span><b>triple bonus ended</b></div>
-            <p>The triple bayld bonus ended November 9. One imprimatur per coalition slip.</p>
+            <div class="row hi"><span><a href="https://www.bg-wiki.com/ffxi/Escha_Silt" target="_blank" rel="noreferrer">Escha silt</a> / <a href="https://www.bg-wiki.com/ffxi/Escha_Bead" target="_blank" rel="noreferrer">beads</a></span><b>3,194 / 2</b></div>
+            <p>Tribulens for a Geas Fete pop. The price starts at 1,000 silt and climbs, then falls again after about 30 minutes. A mollifier is 500 silt and drops when you zone. Silt cap is 100,000.</p>
           </div>
         </div>
       </details>
@@ -1036,10 +890,6 @@
             <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Mweya_Plasm" target="_blank" rel="noreferrer">Mweya Plasm</a></span><b>9,160</b></div>
             <p>Reive rewards. Spend after Wildskeeper Reives.</p>
           </div>
-          <div class="spend-item">
-            <div class="row"><span><a href="https://www.bg-wiki.com/ffxi/Escha_Silt" target="_blank" rel="noreferrer">Escha silt</a> / <a href="https://www.bg-wiki.com/ffxi/Escha_Bead" target="_blank" rel="noreferrer">beads</a></span><b>3,194 / 2</b></div>
-            <p>Tribulens for a Geas Fete pop. The price starts at 1,000 silt and climbs, then falls again after about 30 minutes. A mollifier is 500 silt and drops when you zone. Silt cap is 100,000.</p>
-          </div>
         </div>
       </details>
     </section>
@@ -1087,7 +937,7 @@
 
     <section id="battle">
       <h2>Battle</h2>
-      <details class="panel win" open>
+      <details class="panel win">
         <summary class="win-bar"><span>What is open</span></summary>
         <div class="panel-pad">
           <div class="table-scroll">
@@ -1108,7 +958,7 @@
               <tr>
                 <td><a href="https://www.bg-wiki.com/ffxi/Ambuscade" target="_blank" rel="noreferrer">Ambuscade</a></td>
                 <td class="current">Open</td>
-                <td class="onward">Volume One and Volume Two are the current entries. Very Easy Dullahan is the safe clear. Tauret comes from the pulse weapon, so the monthly hallmark total can wait.</td>
+                <td class="onward">Volume One is Moogles. Volume Two is Mantids. Very Easy Volume Two is the safe clear. Tauret comes from the pulse weapon, so the monthly hallmark total can wait.</td>
               </tr>
               <tr>
                 <td><a href="https://www.bg-wiki.com/ffxi/Omen" target="_blank" rel="noreferrer">Omen</a></td>
