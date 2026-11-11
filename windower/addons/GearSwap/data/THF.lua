@@ -46,6 +46,7 @@ function get_sets()
     -- Aptitude Mantle +1 is Capacity Points +30% and goes on for the weaponskill.
     -- Enlivened sits on the left so Capacity, Trizek, and Warp can take that hand.
     -- Vehemence stays the spare. Mummu stays on the right.
+    -- Belatz Pearl is the spare melee ear: DEX+2 and Accuracy+3.
     local combat = {
         main="Kaja Knife",
         sub="Homestead Dagger",
@@ -57,6 +58,7 @@ function get_sets()
         neck="Arctier's Torque",
         waist="Patentia Sash",
         left_ear="Volley Earring",
+        right_ear="Belatz Pearl",
         left_ring="Enlivened Ring",
         right_ring="Mummu Ring",
         back="Toutatis's Cape",

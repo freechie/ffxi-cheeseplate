@@ -6,7 +6,7 @@
         <sets>
             <default>
                 <1>August</1>
-                <2>Apururu (UC)</2>
+                <2>Sakura</2>
                 <3>Koru-Moru</3>
                 <4>Qultada</4>
                 <5>Shantotto II</5>
@@ -27,18 +27,53 @@
             </exp>
             <raise>
                 <1>August</1>
-                <2>Apururu (UC)</2>
+                <2>Sakura</2>
                 <3>Koru-Moru</3>
                 <4>Qultada</4>
                 <5>Ferreous Coffin</5>
             </raise>
             <boss>
                 <1>Amchuchu</1>
-                <2>Apururu (UC)</2>
+                <2>Sakura</2>
                 <3>King of Hearts</3>
                 <4>Koru-Moru</4>
                 <5>Shantotto II</5>
             </boss>
+            <ambu>
+                <1>Amchuchu</1>
+                <2>Sakura</2>
+                <3>Qultada</3>
+                <4>August</4>
+                <5>Shantotto II</5>
+            </ambu>
+            <apu>
+                <1>August</1>
+                <2>Apururu (UC)</2>
+                <3>Koru-Moru</3>
+                <4>Qultada</4>
+                <5>Shantotto II</5>
+            </apu>
+            <raiseapu>
+                <1>August</1>
+                <2>Apururu (UC)</2>
+                <3>Koru-Moru</3>
+                <4>Qultada</4>
+                <5>Ferreous Coffin</5>
+            </raiseapu>
+            <bossapu>
+                <1>Amchuchu</1>
+                <2>Apururu (UC)</2>
+                <3>King of Hearts</3>
+                <4>Koru-Moru</4>
+                <5>Shantotto II</5>
+            </bossapu>
+            <ambuapu>
+                <1>Amchuchu</1>
+                <2>Apururu (UC)</2>
+                <3>Qultada</3>
+                <4>August</4>
+                <5>Shantotto II</5>
+            </ambuapu>
         </sets>
         <wait>
             <aftercast>3</aftercast>
