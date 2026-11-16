@@ -173,7 +173,7 @@ function get_sets()
     -- ============================================================
     -- Idle
     -- ============================================================
-    Idle_Set_Names = {'Idle', 'Move'}
+    Idle_Set_Names = {'Idle'}
     sets.Idle = {}
     sets.Idle.Idle = {
         head="Crow Beret",
@@ -185,7 +185,6 @@ function get_sets()
         back="Peiste Mantle",
         ammo="War Hoop",
     }
-    sets.Idle.Move = set_combine(sets.Idle.Idle, {feet="Sprinter's Shoes"})
 
     -- ============================================================
     -- Magic (Utsusemi from /NIN)

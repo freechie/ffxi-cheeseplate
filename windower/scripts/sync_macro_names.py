@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Write GearSwap overlay labels into official FFXI macro books (names + line 1).
 
-Books are alphabetical and sequential. Main jobs use sets 1 and 2.
-Combo books are set 1 only.
-  1 DNC, 2 DNC/NIN, 3 DNC/THF, 4 DNC/WAR, 5 NIN, 6 NIN/DNC,
-  7 NIN/THF, 8 NIN/WAR, 9 PUP/DNC, 10 THF, 11 THF/DNC, 12 THF/WAR.
+Maintained now:
+  1 THF/DNC — set 1 Ctrl=Dancer, Alt=openers;
+    set 2 Ctrl=utility (Spectral/Drain II/Aspir + THF JAs), Alt=Aeolian.
+
+Books 2–20 are blanked. DNC-main and NIN-main books return when those jobs hit 99.
 
 Macro names are capped at 8 characters (FFXI limit). Close the client before running.
 """
@@ -57,6 +58,8 @@ NAME_ALIASES = {
     "C.Waltz III": "CWaltz3",
     "C.Waltz II": "CWaltz2",
     "Drain Samba": "DrnSamba",
+    "Drain Samba II": "DrnSmb2",
+    "Aspir Samba": "AspSamba",
     "D.Waltz II": "DWaltz2",
     "Healing Waltz": "HealWltz",
     "Violent": "Violent",
@@ -66,6 +69,12 @@ NAME_ALIASES = {
     "Chocobo Jig II": "ChocoJig",
     "Aspir Samba II": "AspSmb2",
     "Drain Samba III": "DrnSmb3",
+    "Collaborator": "Collab",
+    "Accomplice": "Accomp",
+    "Bully": "Bully",
+    "Steal": "Steal",
+    "Mug": "Mug",
+    "Wild": "WildFlur",
     "Animated": "Animated",
     "Desperate": "Desperat",
     "Divine Waltz": "DivWaltz",
@@ -112,241 +121,62 @@ NAME_ALIASES = {
     "Aggressor": "Aggressr",
     "SA Evisc": "SA Evisc",
     "TA Evisc": "TA Evisc",
+    "SA opener": "SA open",
+    "TA opener": "TA open",
+    "Despoil": "Despoil",
 }
 
 JOBS = {
     "THF": {
-        "book": 10,
-        "book_title": "THF",
-        "rows": {
-            "^": [
-                ("Feint", 'input /ja "Feint" <t>'),
-                ("Sneak Attack", 'input /ja "Sneak Attack" <me>'),
-                ("Trick Attack", 'input /ja "Trick Attack" <me>'),
-                ("Bully", 'input /ja "Bully" <t>'),
-                ("Hide", 'input /ja "Hide" <me>'),
-                ("Collab p1", 'input /ja "Collaborator" <p1>'),
-                ("Accomplice p1", 'input /ja "Accomplice" <p1>'),
-                ("Larceny", 'input /ja "Larceny" <t>'),
-                ("Perfect Dodge", 'input /ja "Perfect Dodge" <me>'),
-                ("Conspirator", 'input /ja "Conspirator" <me>'),
-            ],
-            "!": [
-                ("Steal", 'input /ja "Steal" <t>'),
-                ("Despoil", 'input /ja "Despoil" <t>'),
-                ("Mug", 'input /ja "Mug" <t>'),
-                ("Flee", 'input /ja "Flee" <me>'),
-                ("Evisceration", 'input /ws "Evisceration" <t>'),
-                ("Aeolian Edge", 'input /ws "Aeolian Edge" <t>'),
-                ("Shark Bite", 'input /ws "Shark Bite" <t>'),
-                ("Dancing Edge", 'input /ws "Dancing Edge" <t>'),
-                ("Collab p2", 'input /ja "Collaborator" <p2>'),
-                ("Accomplice p2", 'input /ja "Accomplice" <p2>'),
-            ],
-            "~^": [
-                ("Trizek Ring", "gs c trizek"),
-                ("Capacity Ring", "gs c capring"),
-                ("Warp Ring", "gs c warp"),
-                ("Food", 'input /item "Grape Daifuku" <me>'),
-                ("Raise trusts", "tru raise"),
-                ("EXP", "tru exp"),
-                ("TH set", "gs c th"),
-                ("SATA", "gs c sata"),
-                ("TP set", "gs c toggle TP set"),
-                ("Dismiss", "input /refa all"),
-            ],
-            "~!": [
-                ("Ranged", "input /ra <t>"),
-                ("Wasp Sting", 'input /ws "Wasp Sting" <t>'),
-                ("Viper Bite", 'input /ws "Viper Bite" <t>'),
-                ("Idle set", "gs c toggle Idle set"),
-                ("Assassin's Charge", 'input /ja "Assassin\'s Charge" <me>'),
-                ("Rudra's Storm", 'input /ws "Rudra\'s Storm" <t>'),
-                ("Exenterator", 'input /ws "Exenterator" <t>'),
-                ("Mandalic Stab", 'input /ws "Mandalic Stab" <t>'),
-                ("Shadowstitch", 'input /ws "Shadowstitch" <t>'),
-                ("Energy Drain", 'input /ws "Energy Drain" <t>'),
-            ],
-        },
-    },
-    "DNC": {
         "book": 1,
-        "book_title": "DNC",
+        "book_title": "THF/DNC",
         "rows": {
             "^": [
-                ("EXP", "tru exp"),
-                ("Haste Samba", 'input /ja "Haste Samba" <me>'),
                 ("Box Step", 'input /ja "Box Step" <t>'),
                 ("Quickstep", 'input /ja "Quickstep" <t>'),
-                ("Feather Step", 'input /ja "Feather Step" <t>'),
+                ("Haste Samba", 'input /ja "Haste Samba" <me>'),
                 ("Stutter Step", 'input /ja "Stutter Step" <t>'),
                 ("Reverse", 'input /ja "Reverse Flourish" <me>'),
-                ("Building", 'input /ja "Building Flourish" <me>'),
-                ("Wild", 'input /ja "Wild Flourish" <t>'),
-                ("Presto", 'input /ja "Presto" <me>'),
+                ("Violent", 'input /ja "Violent Flourish" <t>'),
+                ("C.Waltz III", 'input /ja "Curing Waltz III" <stpc>'),
+                ("Healing Waltz", 'input /ja "Healing Waltz" <stpc>'),
+                ("Divine Waltz", 'input /ja "Divine Waltz" <me>'),
+                ("Animated", 'input /ja "Animated Flourish" <t>'),
             ],
             "!": [
-                ("C.Waltz V", 'input /ja "Curing Waltz V" <stpc>'),
-                ("C.Waltz IV", 'input /ja "Curing Waltz IV" <stpc>'),
-                ("C.Waltz III", 'input /ja "Curing Waltz III" <stpc>'),
-                ("D.Waltz II", 'input /ja "Divine Waltz II" <me>'),
-                ("Healing Waltz", 'input /ja "Healing Waltz" <stpc>'),
-                ("Violent", 'input /ja "Violent Flourish" <t>'),
-                ("Climactic", 'input /ja "Climactic Flourish" <me>'),
-                ("Striking", 'input /ja "Striking Flourish" <me>'),
                 ("Evisceration", 'input /ws "Evisceration" <t>'),
-                ("Dancing Edge", 'input /ws "Dancing Edge" <t>'),
+                ("SA opener", "gs c saopen"),
+                ("TA opener", "gs c taopen"),
+                ("SATA", "gs c sata"),
+                ("Feint", 'input /ja "Feint" <t>'),
+                ("Hide", 'input /ja "Hide" <me>'),
+                ("Despoil", 'input /ja "Despoil" <t>'),
+                ("Conspirator", 'input /ja "Conspirator" <me>'),
+                ("Perfect Dodge", 'input /ja "Perfect Dodge" <me>'),
+                ("Flee", 'input /ja "Flee" <me>'),
             ],
+            # Set 2 Ctrl: utility. Building / Chocobo Jig II need DNC main (sub cap 49).
             "~^": [
                 ("Spectral Jig", 'input /ja "Spectral Jig" <me>'),
-                ("Chocobo Jig II", 'input /ja "Chocobo Jig II" <me>'),
-                ("Echad Ring", "gs c echad"),
-                ("Caliber Ring", "gs c caliber"),
-                ("Emperor Band", "gs c emperor"),
-                ("Warp Ring", "gs c warp"),
-                ("Trusts", "tru"),
-                ("Raise trusts", "tru raise"),
-                ("Aspir Samba II", 'input /ja "Aspir Samba II" <me>'),
-                ("Drain Samba III", 'input /ja "Drain Samba III" <me>'),
+                ("Drain Samba II", 'input /ja "Drain Samba II" <me>'),
+                ("Aspir Samba", 'input /ja "Aspir Samba" <me>'),
+                ("Assassin's Charge", 'input /ja "Assassin\'s Charge" <me>'),
+                ("Collaborator", 'input /ja "Collaborator" <stpt>'),
+                ("Accomplice", 'input /ja "Accomplice" <stpt>'),
+                ("Bully", 'input /ja "Bully" <t>'),
+                ("Steal", 'input /ja "Steal" <t>'),
+                ("Mug", 'input /ja "Mug" <t>'),
+                ("Wild", 'input /ja "Wild Flourish" <t>'),
             ],
             "~!": [
-                ("Animated", 'input /ja "Animated Flourish" <t>'),
-                ("Desperate", 'input /ja "Desperate Flourish" <t>'),
-                ("Divine Waltz", 'input /ja "Divine Waltz" <me>'),
                 ("Aeolian Edge", 'input /ws "Aeolian Edge" <t>'),
-                ("Shark Bite", 'input /ws "Shark Bite" <t>'),
-                ("Trance", 'input /ja "Trance" <me>'),
-                ("Food", 'input /item "Grape Daifuku" <me>'),
-                ("TP set", "gs c toggle TP set"),
-                ("Idle set", "gs c toggle Idle set"),
-                ("Dismiss", "input /refa all"),
-            ],
-        },
-    },
-    "NIN": {
-        "book": 5,
-        "book_title": "NIN",
-        "rows": {
-            "^": [
-                ("EXP", "tru exp"),
-                ("Utsu Ni", 'input /ma "Utsusemi: Ni" <me>'),
-                ("Utsu Ichi", 'input /ma "Utsusemi: Ichi" <me>'),
-                ("Yonin", 'input /ja "Yonin" <me>'),
-                ("Innin", 'input /ja "Innin" <me>'),
-                ("Suiton: Ni", 'input /ma "Suiton: Ni" <t>'),
-                ("Katon: Ichi", 'input /ma "Katon: Ichi" <t>'),
-                ("Raiton: Ichi", 'input /ma "Raiton: Ichi" <t>'),
-                ("Suiton: Ichi", 'input /ma "Suiton: Ichi" <t>'),
-                ("Mijin Gakure", 'input /ja "Mijin Gakure" <t>'),
-            ],
-            "!": [
-                ("Katon: Ni", 'input /ma "Katon: Ni" <t>'),
-                ("Hyoton: Ni", 'input /ma "Hyoton: Ni" <t>'),
-                ("Huton: Ni", 'input /ma "Huton: Ni" <t>'),
-                ("Doton: Ni", 'input /ma "Doton: Ni" <t>'),
-                ("Raiton: Ni", 'input /ma "Raiton: Ni" <t>'),
-                ("Blade: Jin", 'input /ws "Blade: Jin" <t>'),
-                ("Blade: Ten", 'input /ws "Blade: Ten" <t>'),
-                ("Blade: Teki", 'input /ws "Blade: Teki" <t>'),
-                ("Blade: Chi", 'input /ws "Blade: Chi" <t>'),
-                ("Huton: Ichi", 'input /ma "Huton: Ichi" <t>'),
-            ],
-            "~^": [
-                ("Monomi", 'input /ma "Monomi: Ichi" <me>'),
-                ("Tonko: Ni", 'input /ma "Tonko: Ni" <me>'),
-                ("Echad Ring", "gs c echad"),
-                ("Caliber Ring", "gs c caliber"),
-                ("Warp Ring", "gs c warp"),
-                ("Food", 'input /item "Grape Daifuku" <me>'),
-                ("Raise trusts", "tru raise"),
-                ("Trusts", "tru"),
-                ("Emperor Band", "gs c emperor"),
-                ("Dismiss", "input /refa all"),
-            ],
-            "~!": [
-                ("Hojo: Ni", 'input /ma "Hojo: Ni" <t>'),
-                ("Kurayami: Ni", 'input /ma "Kurayami: Ni" <t>'),
-                ("Jubaku: Ichi", 'input /ma "Jubaku: Ichi" <t>'),
-                ("Dokumori: Ichi", 'input /ma "Dokumori: Ichi" <t>'),
-                ("Hojo: Ichi", 'input /ma "Hojo: Ichi" <t>'),
-                ("Kurayami: Ichi", 'input /ma "Kurayami: Ichi" <t>'),
-                ("Blade: To", 'input /ws "Blade: To" <t>'),
-                ("Blade: Ei", 'input /ws "Blade: Ei" <t>'),
-                ("Blade: Ku", 'input /ws "Blade: Ku" <t>'),
-                ("Blade: Retsu", 'input /ws "Blade: Retsu" <t>'),
             ],
         },
     },
 }
 
-# Ctrl+Alt subjob rows from binds.lua.
-SUB_NIN = [
-    ("Utsu Ni", 'input /ma "Utsusemi: Ni" <me>'),
-    ("Utsu Ichi", 'input /ma "Utsusemi: Ichi" <me>'),
-    ("Yonin", 'input /ja "Yonin" <me>'),
-    ("Innin", 'input /ja "Innin" <me>'),
-    ("Tonko: Ni", 'input /ma "Tonko: Ni" <me>'),
-    ("Monomi", 'input /ma "Monomi: Ichi" <me>'),
-    ("Katon: Ni", 'input /ma "Katon: Ni" <t>'),
-    ("Huton: Ni", 'input /ma "Huton: Ni" <t>'),
-    ("Hojo: Ni", 'input /ma "Hojo: Ni" <t>'),
-    ("Kurayami: Ni", 'input /ma "Kurayami: Ni" <t>'),
-]
-
-SUB_THF = [
-    ("SA", 'input /ja "Sneak Attack" <me>'),
-    ("TA", 'input /ja "Trick Attack" <me>'),
-    ("SA Evisc", "gs c saevisc"),
-    ("TA Evisc", "gs c taevisc"),
-    ("Steal", 'input /ja "Steal" <t>'),
-    ("Mug", 'input /ja "Mug" <t>'),
-    ("Flee", 'input /ja "Flee" <me>'),
-    ("Hide", 'input /ja "Hide" <me>'),
-    ("Perfect Dodge", 'input /ja "Perfect Dodge" <me>'),
-]
-
-SUB_WAR = [
-    ("Provoke", 'input /ja "Provoke" <t>'),
-    ("Berserk", 'input /ja "Berserk" <me>'),
-    ("Defender", 'input /ja "Defender" <me>'),
-    ("Warcry", 'input /ja "Warcry" <me>'),
-    ("Aggressor", 'input /ja "Aggressor" <me>'),
-    ("Mighty Strikes", 'input /ja "Mighty Strikes" <me>'),
-]
-
-SUB_DNC = [
-    ("Box Step", 'input /ja "Box Step" <t>'),
-    ("Quickstep", 'input /ja "Quickstep" <t>'),
-    ("Haste Samba", 'input /ja "Haste Samba" <me>'),
-    ("Animated", 'input /ja "Animated Flourish" <t>'),
-    ("Desperate", 'input /ja "Desperate Flourish" <t>'),
-    ("Reverse", 'input /ja "Reverse Flourish" <me>'),
-    ("Violent", 'input /ja "Violent Flourish" <t>'),
-    ("C.Waltz III", 'input /ja "Curing Waltz III" <stpc>'),
-    ("Divine Waltz", 'input /ja "Divine Waltz" <me>'),
-    ("Healing Waltz", 'input /ja "Healing Waltz" <stpc>'),
-]
-
-TRANCE = [("Trance", 'input /ja "Trance" <me>')]
-
-# Alphabetical combo books, set 1. Main-job books are 1 DNC, 5 NIN, 10 THF.
-COMBOS = [
-    (2, "DNC/NIN", SUB_NIN, []),
-    (3, "DNC/THF", SUB_THF, []),
-    (4, "DNC/WAR", SUB_WAR, []),
-    (6, "NIN/DNC", SUB_DNC, JOBS["NIN"]["rows"]["!"]),
-    (7, "NIN/THF", SUB_THF, []),
-    (8, "NIN/WAR", SUB_WAR, []),
-    (9, "PUP/DNC", SUB_DNC, TRANCE),
-    (11, "THF/DNC", SUB_DNC, JOBS["THF"]["rows"]["!"]),
-    (12, "THF/WAR", SUB_WAR, []),
-]
-
-# Sets left behind when a book changed jobs. Cleared so the palette matches the title.
-STALE_SETS = [(1, 3), (2, 2), (2, 3), (3, 2), (3, 3), (6, 2), (6, 3), (8, 2)]
-
-# Whole books that were a second copy of DNC or NIN. Removed, titles reset.
-OBSOLETE_BOOKS = [13, 19]
+# Blank every book after THF/DNC. DNC/NIN books are recreated at 99.
+BLANK_BOOKS = list(range(2, 21))
 
 
 def macro_name(label: str) -> str:
@@ -355,11 +185,16 @@ def macro_name(label: str) -> str:
 
 
 def to_macro_line(cmd: str) -> str:
-    """Convert GearSwap bind command to something usable as a macro line."""
+    """Convert a GearSwap bind into a line the in-game macro book will run.
+
+    A macro line that starts with // is a comment, so the client never sends it.
+    Typing //gs in chat still works because Windower reads the chat box directly.
+    /console is the command the macro book can actually execute.
+    """
     if cmd.startswith("input "):
         return cmd[len("input ") :]
     if cmd.startswith("gs ") or cmd.startswith("tru") or cmd.startswith("kl "):
-        return "//" + cmd
+        return "/console " + cmd
     return cmd
 
 
@@ -495,38 +330,25 @@ def main() -> int:
                     print(f"  (skip ttl backup: {exc})")
         print(f"== {user_dir}")
         try:
-            for job in ("THF", "DNC", "NIN"):
+            for job in JOBS:
                 files = write_job(user_dir, job)
                 book = JOBS[job]["book"]
                 for set_no in (1, 2):
                     verify(user_dir / set_filename(book, set_no))
                 print(f"  {job} book {book}: {', '.join(files)}")
-            for book, title, ctrl, alt in COMBOS:
-                path = user_dir / set_filename(book, 1)
-                path.write_bytes(build_set(ctrl, alt))
-                verify(path)
-                ttl = user_dir / "mcr.ttl"
-                if ttl.exists():
-                    update_book_title(ttl, book, title)
-                print(f"  {title} book {book}: {path.name}")
-            for book, set_no in STALE_SETS:
-                path = user_dir / set_filename(book, set_no)
-                path.write_bytes(build_set([], []))
-                verify(path)
-                print(f"  cleared book {book} set {set_no}: {path.name}")
-            for book in OBSOLETE_BOOKS:
-                for set_no in (1, 2, 3):
+            ttl = user_dir / "mcr.ttl"
+            for book in BLANK_BOOKS:
+                for set_no in range(1, 11):
                     path = user_dir / set_filename(book, set_no)
-                    if path.exists():
-                        path.unlink()
-                        print(f"  removed duplicate book {book} set {set_no}: {path.name}")
-                ttl = user_dir / "mcr.ttl"
+                    path.write_bytes(build_set([], []))
+                    verify(path)
                 if ttl.exists():
                     update_book_title(ttl, book, f"Book{book}")
+                print(f"  blanked book {book}")
         except OSError as exc:
             print(f"  write failed (need elevation for Program Files?): {exc}")
             continue
-    print("done — log in and open the book/set listed in keybinds.md")
+    print("done — log in and open book 1 (THF/DNC)")
     return 0
 
 

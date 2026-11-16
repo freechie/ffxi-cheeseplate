@@ -9,12 +9,85 @@
     //gs c toggle TP set
     //gs c toggle Idle set
     //gs c th   - force Treasure Hunter set while engaged
-    //gs c sata - Sneak Attack, Trick Attack, Assassin's Charge, then Evisceration (Alt+F8, Ctrl+Shift+8)
+    //gs c saopen / taopen / sata - openers (skip JAs on recast, then Evisceration)
+    //gs c cp   - toggle Aptitude Mantle for the whole fight (on while farming CP)
     //gs c binds - rebind for current level and list number-row keys
+
+  Macro book 1 = THF/DNC (Ctrl dancer, Alt openers).
 ]]
 
 -- Blocks a second press from queuing another Evisceration on top of the first.
 local sata_ready_at = 0
+
+-- Ability recast ids: SA 64, TA 66, Feint 68. Assassin's Charge is its own macro.
+local RECAST_SA, RECAST_TA, RECAST_FEINT = 64, 66, 68
+
+local function ability_ready(recasts, id)
+    if not recasts then return true end
+    return (recasts[id] or 0) <= 0
+end
+
+local function opener_chat(msg)
+    windower.add_to_chat(207, '[THF] '..msg)
+end
+
+-- Engaged <t> is enough even if the type packet briefly lags behind MONSTER.
+local function has_fight_target()
+    local t = player.target
+    if not t or not t.id or t.id == 0 then return false end
+    if t.type == 'MONSTER' then return true end
+    return player.status == 'Engaged'
+end
+
+-- steps: {recast_id, windower input command}
+-- Always ends with Evisceration when TP allows. Skips any JA still on recast.
+local function run_opener(label, steps)
+    if os.clock() < sata_ready_at then
+        opener_chat(label..' ignored (chain still running)')
+        return
+    end
+    if (player.tp or 0) < 1000 then
+        opener_chat(label..' needs 1000 TP (have '..tostring(player.tp or 0)..')')
+        return
+    end
+    if not has_fight_target() then
+        opener_chat(label..' needs a monster target (or be engaged)')
+        return
+    end
+    local recasts = windower.ffxi.get_ability_recasts()
+    local parts = {}
+    local waits = 0
+    for _, step in ipairs(steps) do
+        local id, cmd = step[1], step[2]
+        if ability_ready(recasts, id) then
+            parts[#parts + 1] = cmd
+            waits = waits + 1
+        end
+    end
+    parts[#parts + 1] = 'input /ws "Evisceration" <t>'
+    -- One second per JA + a beat so the WS is not clipped by the next press.
+    sata_ready_at = os.clock() + math.max(1.5, waits * 1.2 + 0.5)
+    if waits == 0 then
+        opener_chat(label..': WS only (openers on recast)')
+    else
+        opener_chat(label..': '..waits..' JA(s) then Evisceration')
+    end
+    windower.send_command(table.concat(parts, '; wait 1.2; '))
+end
+
+-- On while Job Points are the goal. Both bonuses are checked when the mob dies,
+-- so the mantle and Jubilee Ring stay on idle, engaged, and weaponskills.
+-- Jubilee takes the left hand. Mummu stays on the right. Use-rings borrow the
+-- left hand, then //gs c regear puts Jubilee back. //gs c cp returns Toutatis
+-- and Enlivened until the next toggle.
+local CpMode = true
+
+local function apply_cp(set)
+    if CpMode then
+        return set_combine(set, {back="Aptitude Mantle +1", left_ring="Jubilee Ring"})
+    end
+    return set
+end
 
 function get_sets()
     TP_Index = 1
@@ -41,30 +114,36 @@ function get_sets()
     sets.WS.TA = {}
     sets.WS.SATA = {}
 
-    -- Mummu combat set. Kaja Knife stays in the main hand for Evisceration.
+    -- Mummu combat set with Meg legs. Kaja Knife stays main for Evisceration.
     -- Toutatis's Cape is Sneak Attack +10 even before augments.
-    -- Aptitude Mantle +1 is Capacity Points +30% and goes on for the weaponskill.
-    -- Enlivened sits on the left so Capacity, Trizek, and Warp can take that hand.
+    -- Aptitude Mantle +1 is Capacity Points +30%. CpMode wears it the whole fight.
+    -- With CpMode off, Toutatis stays on combat and Aptitude swaps in for the weaponskill.
+    -- WS: Meg Gloves (WSD+5%) and Mummu Kecks (crit) over TP hands/legs.
+    -- Enlivened sits on the left when CP mode is off. Jubilee replaces it while CP mode is on.
     -- Vehemence stays the spare. Mummu stays on the right.
-    -- Belatz Pearl is the spare melee ear: DEX+2 and Accuracy+3.
+    -- Eabani is DW; Belatz Pearl is the spare melee ear.
     local combat = {
         main="Kaja Knife",
         sub="Homestead Dagger",
         head="Mummu Bonnet +1",
-        body="Mummu Jacket +1",
+        body="Mummu Jacket +2",
         hands="Mummu Wrists +1",
-        legs="Mummu Kecks +1",
+        legs="Meg. Chausses +2",
         feet="Mummu Gamash. +1",
         neck="Arctier's Torque",
         waist="Patentia Sash",
-        left_ear="Volley Earring",
+        left_ear="Eabani Earring",
         right_ear="Belatz Pearl",
         left_ring="Enlivened Ring",
         right_ring="Mummu Ring",
         back="Toutatis's Cape",
     }
 
-    local weaponskill = set_combine(combat, {back="Aptitude Mantle +1"})
+    local weaponskill = set_combine(combat, {
+        hands="Meg. Gloves +1",
+        legs="Mummu Kecks +1",
+        back="Aptitude Mantle +1",
+    })
 
     sets.WS.Base = weaponskill
     sets.WS["Rudra's Storm"] = sets.WS.Base
@@ -85,12 +164,10 @@ function get_sets()
     -- No Treasure Hunter piece yet. Chaac Belt replaces the sash when it is available.
     sets.TP.TH = set_combine(combat, {})
 
-    -- Idle macro cycles these. Sprinter's Shoes are movement speed +12%.
-    -- Track Pants +1 are +8% and block feet, so that press clears the shoes.
-    -- Engaging puts the Mummu legs and feet back on.
-    Idle_Set_Names = {'Move', 'Pants', 'Idle'}
+    -- Idle macro cycles these. Track Pants +1 are +8% movement and clear feet.
+    -- Engaging puts combat legs and feet back on.
+    Idle_Set_Names = {'Pants', 'Idle'}
     sets.Idle = {}
-    sets.Idle.Move = set_combine(combat, {feet="Sprinter's Shoes"})
     sets.Idle.Pants = set_combine(combat, {legs="Track Pants +1", feet=empty})
     sets.Idle.Idle = combat
 
@@ -98,102 +175,91 @@ function get_sets()
     sets.SneakAttack = combat
     sets.TrickAttack = combat
 
-    send_command('bind !f8 gs c sata')
-    send_command('bind !f9 gs c toggle TP set')
-    send_command('bind !f10 gs c toggle Idle set')
-    send_command('bind !f11 gs c th')
-
+    -- Clear old Alt+F layouts if this file was reloaded mid-session.
+    for _, key in ipairs({'!f1', '!f2', '!f3', '!f4', '!f5', '!f6', '!f7', '!f8', '!f9', '!f10', '!f11'}) do
+        send_command('unbind '..key)
+    end
+    -- SATA is Alt+4 on set 1. F-keys: TP / Idle / TH on F1–F3 (bound in set_binds).
     include('binds.lua')
     set_binds({
         fkeys = {
-            ['!f8'] = 'SATA',
-            ['!f9'] = 'TP set',
-            ['!f10'] = 'Idle set',
-            ['!f11'] = 'TH set',
+            ['!f1'] = {'TP set', 'gs c toggle TP set'},
+            ['!f2'] = {'Idle set', 'gs c toggle Idle set'},
+            ['!f3'] = {'TH set', 'gs c th'},
         },
+        -- Book 1 set 1 Ctrl: Dancer sub.
         ['^'] = {
-            title = 'Combat',
-            {'Feint', 'input /ja "Feint" <t>', 75},
-            {'Sneak Attack', 'input /ja "Sneak Attack" <me>'},
-            {'Trick Attack', 'input /ja "Trick Attack" <me>'},
-            {'Bully', 'input /ja "Bully" <t>'},
-            {'Hide', 'input /ja "Hide" <me>'},
-            {'Collab p1', 'input /ja "Collaborator" <p1>'},
-            {'Accomplice p1', 'input /ja "Accomplice" <p1>'},
-            {'Larceny', 'input /ja "Larceny" <t>'},
-            {'Perfect Dodge', 'input /ja "Perfect Dodge" <me>'},
-            {'Conspirator', 'input /ja "Conspirator" <me>'},
+            title = 'Dancer',
+            {'Box Step', 'input /ja "Box Step" <t>', 23},
+            {'Quickstep', 'input /ja "Quickstep" <t>', 20},
+            {'Haste Samba', 'input /ja "Haste Samba" <me>', 45},
+            {'Stutter Step', 'input /ja "Stutter Step" <t>', 40},
+            {'Reverse', 'input /ja "Reverse Flourish" <me>', 40},
+            {'Violent', 'input /ja "Violent Flourish" <t>', 45},
+            {'C.Waltz III', 'input /ja "Curing Waltz III" <stpc>', 45},
+            {'Healing Waltz', 'input /ja "Healing Waltz" <stpc>', 35},
+            {'Divine Waltz', 'input /ja "Divine Waltz" <me>', 25},
+            {'Animated', 'input /ja "Animated Flourish" <t>', 20},
         },
+        -- Book 1 set 1 Alt: openers + THF tools. Despoil tags TH.
         ['!'] = {
-            title = 'Steal & WS',
-            {'Steal', 'input /ja "Steal" <t>'},
-            {'Despoil', 'input /ja "Despoil" <t>'},
-            {'Mug', 'input /ja "Mug" <t>'},
-            {'Flee', 'input /ja "Flee" <me>'},
+            title = 'Openers',
             {'Evisceration', 'input /ws "Evisceration" <t>'},
-            {'Aeolian Edge', 'input /ws "Aeolian Edge" <t>'},
-            {'Shark Bite', 'input /ws "Shark Bite" <t>'},
-            {'Dancing Edge', 'input /ws "Dancing Edge" <t>'},
-            {'Collab p2', 'input /ja "Collaborator" <p2>'},
-            {'Accomplice p2', 'input /ja "Accomplice" <p2>'},
+            {'SA opener', 'gs c saopen'},
+            {'TA opener', 'gs c taopen'},
+            {'SATA', 'gs c sata'},
+            {'Feint', 'input /ja "Feint" <t>', 75},
+            {'Hide', 'input /ja "Hide" <me>'},
+            {'Despoil', 'input /ja "Despoil" <t>'},
+            {'Conspirator', 'input /ja "Conspirator" <me>'},
+            {'Perfect Dodge', 'input /ja "Perfect Dodge" <me>'},
+            {'Flee', 'input /ja "Flee" <me>'},
         },
+        -- Book 1 set 2 Ctrl: utility (DNC overflow + THF JAs). Building/Jig II need DNC main.
         ['~^'] = {
             title = 'Utility',
-            {'Trizek Ring', 'gs c trizek'},
-            {'Capacity Ring', 'gs c capring'},
-            {'Warp Ring', 'gs c warp'},
-            {'Food', 'input /item "Grape Daifuku" <me>'},
-            {'Raise trusts', 'tru raise'},
-            {'EXP', 'tru exp'},
-            {'TH set', 'gs c th'},
-            {'SATA', 'gs c sata'},
-            {'TP set', 'gs c toggle TP set'},
-            {'Dismiss', 'input /refa all'},
+            {'Spectral Jig', 'input /ja "Spectral Jig" <me>', 25},
+            {'Drain Samba II', 'input /ja "Drain Samba II" <me>', 35},
+            {'Aspir Samba', 'input /ja "Aspir Samba" <me>', 25},
+            {'Assassin\'s Charge', 'input /ja "Assassin\'s Charge" <me>', 75},
+            {'Collaborator', 'input /ja "Collaborator" <stpt>', 65},
+            {'Accomplice', 'input /ja "Accomplice" <stpt>', 65},
+            {'Bully', 'input /ja "Bully" <t>', 93},
+            {'Steal', 'input /ja "Steal" <t>', 5},
+            {'Mug', 'input /ja "Mug" <t>', 15},
+            {'Wild', 'input /ja "Wild Flourish" <t>', 30},
         },
+        -- Book 1 set 2 Alt: spare WS.
         ['~!'] = {
-            title = 'Ranged',
-            {'Ranged', 'input /ra <t>'},
-            {'Wasp Sting', 'input /ws "Wasp Sting" <t>'},
-            {'Viper Bite', 'input /ws "Viper Bite" <t>'},
-            {'Idle set', 'gs c toggle Idle set'},
-            {'Assassin\'s Charge', 'input /ja "Assassin\'s Charge" <me>'},
-            {'Rudra\'s Storm', 'input /ws "Rudra\'s Storm" <t>'},
-            {'Exenterator', 'input /ws "Exenterator" <t>'},
-            {'Mandalic Stab', 'input /ws "Mandalic Stab" <t>'},
-            {'Shadowstitch', 'input /ws "Shadowstitch" <t>'},
-            {'Energy Drain', 'input /ws "Energy Drain" <t>'},
+            title = 'WS 2',
+            {'Aeolian Edge', 'input /ws "Aeolian Edge" <t>'},
         },
     })
 
     if player.status == 'Engaged' then
-        equip(sets.TP.TP)
+        equip(apply_cp(sets.TP.TP))
     else
-        equip(sets.Idle.Move)
+        equip(apply_cp(sets.Idle.Idle))
     end
 
-    -- Visible gear blinks when combat feet replace Sprinter's Shoes, and the client drops the camera lock.
     send_command('wait 0.5; du blinking self always on')
-    send_command('@input /echo [GearSwap] THF loaded - Alt+F8 SATA | F9 TP | F10 idle | F11 TH | //gs c binds lists number keys')
+    send_command('@input /echo [GearSwap] THF/DNC book 1 - CP gear on (Aptitude + Jubilee) | //gs c cp toggles off')
 end
 
 function file_unload()
     clear_binds()
-    send_command('unbind !f8')
-    send_command('unbind !f9')
-    send_command('unbind !f10')
-    send_command('unbind !f11')
 end
 
 local function equip_tp()
     if ForceTH then
-        equip(sets.TP.TH)
+        equip(apply_cp(sets.TP.TH))
     else
-        equip(sets.TP[TP_Set_Names[TP_Index]])
+        equip(apply_cp(sets.TP[TP_Set_Names[TP_Index]]))
     end
 end
 
 local function equip_idle()
-    equip(sets.Idle[Idle_Set_Names[Idle_Index]])
+    equip(apply_cp(sets.Idle[Idle_Set_Names[Idle_Index]]))
 end
 
 function precast(spell)
@@ -204,17 +270,17 @@ function precast(spell)
 
     if spell.type == 'WeaponSkill' then
         local base = sets.WS[spell.english] or sets.WS.Base
-        equip(base)
+        equip(apply_cp(base))
 
         local sa = buffactive['Sneak Attack'] or buffactive['sneak attack']
         local ta = buffactive['Trick Attack'] or buffactive['trick attack']
 
         if sa and ta then
-            equip(sets.WS.SATA[spell.english] or sets.WS.SATA.Base or sets.SneakAttack)
+            equip(apply_cp(sets.WS.SATA[spell.english] or sets.WS.SATA.Base or sets.SneakAttack))
         elseif sa then
-            equip(sets.WS.SA[spell.english] or sets.WS.SA.Base or sets.SneakAttack)
+            equip(apply_cp(sets.WS.SA[spell.english] or sets.WS.SA.Base or sets.SneakAttack))
         elseif ta then
-            equip(sets.WS.TA[spell.english] or sets.WS.TA.Base or sets.TrickAttack)
+            equip(apply_cp(sets.WS.TA[spell.english] or sets.WS.TA.Base or sets.TrickAttack))
         end
         return
     end
@@ -230,9 +296,9 @@ function precast(spell)
 end
 
 function aftercast(spell)
-    -- Keep Mummu on while the chain is between abilities. Idle would swap in Sprinter's Shoes.
+    -- Keep Mummu on while the chain is between abilities.
     if os.clock() < sata_ready_at then
-        equip(sets.TP.TP)
+        equip(apply_cp(sets.TP.TP))
         return
     end
     if player.status == 'Engaged' then
@@ -244,7 +310,7 @@ end
 
 function status_change(new, old)
     if os.clock() < sata_ready_at then
-        equip(sets.TP.TP)
+        equip(apply_cp(sets.TP.TP))
         return
     end
     if new == 'Engaged' then
@@ -258,13 +324,13 @@ function buff_change(buff, gain)
     buff = buff:lower()
     if buff == 'sneak attack' then
         if gain then
-            equip(sets.SneakAttack)
+            equip(apply_cp(sets.SneakAttack))
         elseif player.status == 'Engaged' then
             equip_tp()
         end
     elseif buff == 'trick attack' then
         if gain then
-            equip(sets.TrickAttack)
+            equip(apply_cp(sets.TrickAttack))
         elseif player.status == 'Engaged' then
             equip_tp()
         end
@@ -287,34 +353,34 @@ function self_command(command)
         ForceTH = not ForceTH
         send_command('@input /echo ----- Force TH: '..tostring(ForceTH)..' -----')
         if player.status == 'Engaged' then equip_tp() end
-    elseif command == 'sata' then
-        if os.clock() < sata_ready_at then return end
-        if (player.tp or 0) < 1000 then
-            send_command('@input /echo ----- SATA needs 1000 TP -----')
-            return
-        end
-        local recasts = windower.ffxi.get_ability_recasts()
-        if (recasts[64] or 0) > 0 or (recasts[66] or 0) > 0 then
-            send_command('@input /echo ----- SATA is on recast -----')
-            return
-        end
-        if not player.target or player.target.type ~= 'MONSTER' then
-            send_command('@input /echo ----- SATA needs a monster -----')
-            return
-        end
-        -- Stay engaged. /attackoff drops the target and releases the camera.
-        -- Hit this just after a swing so the weaponskill lands before the next one.
-        -- Charge triples that weaponskill. It goes on last so a swing during the
-        -- Sneak Attack and Trick Attack waits does not spend it.
-        local chain = 'input /ja "Sneak Attack" <me>; wait 1; input /ja "Trick Attack" <me>; wait 1; '
-        if (recasts[67] or 0) <= 0 then
-            chain = chain..'input /ja "Assassin\'s Charge" <me>; wait 1; '
-            sata_ready_at = os.clock() + 5
-            send_command('@input /echo ----- SATA: Charge into Evisceration -----')
+    elseif command == 'cp' then
+        CpMode = not CpMode
+        if CpMode then
+            opener_chat('CP gear on: Aptitude Mantle +1 and Jubilee Ring stay equipped')
         else
-            sata_ready_at = os.clock() + 4
-            send_command('@input /echo ----- SATA: Evisceration, Charge still cooling -----')
+            opener_chat('CP gear off: Toutatis and Enlivened, Aptitude on weaponskill')
         end
-        send_command(chain..'input /ws "Evisceration" <t>')
+        if player.status == 'Engaged' then equip_tp() else equip_idle() end
+    elseif command == 'regear' then
+        if player.status == 'Engaged' then equip_tp() else equip_idle() end
+    elseif command == 'saopen' then
+        -- Stay engaged. Openers skip any JA still cooling, then WS.
+        run_opener('SA opener', {
+            {RECAST_SA, 'input /ja "Sneak Attack" <me>'},
+            {RECAST_FEINT, 'input /ja "Feint" <t>'},
+        })
+    elseif command == 'taopen' then
+        run_opener('TA opener', {
+            {RECAST_TA, 'input /ja "Trick Attack" <me>'},
+            {RECAST_FEINT, 'input /ja "Feint" <t>'},
+        })
+    elseif command == 'sata' then
+        run_opener('SATA', {
+            {RECAST_SA, 'input /ja "Sneak Attack" <me>'},
+            {RECAST_TA, 'input /ja "Trick Attack" <me>'},
+            {RECAST_FEINT, 'input /ja "Feint" <t>'},
+        })
+    elseif command == 'openertest' then
+        opener_chat('opener commands reachable (try //gs c saopen with TP + target)')
     end
 end

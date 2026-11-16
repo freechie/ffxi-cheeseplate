@@ -23,7 +23,6 @@ lua load BattleStations;
 lua load ConsoleBG;
 lua load DressUp;
 lua load enternity;
-lua load equipviewer;
 lua load GearSwap;
 lua load InfoBar;
 lua load InfoReplacer;

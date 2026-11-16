@@ -3,6 +3,7 @@
     <global>
         <abilitytxt>
             <flags>
+                <draggable>false</draggable>
                 <right>true</right>
             </flags>
             <pos>
@@ -16,6 +17,7 @@
         </abilitytxt>
         <heighttxt>
             <flags>
+                <draggable>false</draggable>
                 <right>true</right>
             </flags>
             <pos>
@@ -29,6 +31,7 @@
         </heighttxt>
         <main>
             <flags>
+                <draggable>false</draggable>
                 <right>true</right>
             </flags>
             <pos>
@@ -42,6 +45,7 @@
         </main>
         <pettxt>
             <flags>
+                <draggable>false</draggable>
                 <right>true</right>
             </flags>
             <pos>

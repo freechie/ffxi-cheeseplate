@@ -1,14 +1,16 @@
 _addon.name = 'keylabels'
 _addon.author = 'Cheeseplate'
-_addon.version = '2.7'
+_addon.version = '2.8'
 _addon.commands = {'keylabels', 'kl'}
 
 -- Shows number-row and function-key bind labels while a modifier combo is held.
 -- GearSwap feeds: `kl clear`, `kl set <mod> <button> <label>`, `kl title <mod> <title>`.
 -- mod is ctrl|alt|cshift|ashift|calt|cast so Windower never sees !1/^1 in send_command.
+-- LT/RT on the pad also show Alt/Ctrl pages (overlay only; no macro injection).
 
 local config = require('config')
 local texts = require('texts')
+local socket = require('socket')
 
 -- Mid-left, below Timers (recast/buffs/custom at y≈70). Keep clear of that top row.
 local defaults = {
@@ -114,6 +116,7 @@ end
 
 rebuild_boxes()
 
+-- Number row first (mirrors in-game 1-0 bar); F-keys after 0.
 local KEYS = {
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
     'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12',
@@ -138,6 +141,10 @@ local titles = {}
 local down = {}
 local forced
 local pad_view
+local pad_state_path
+local pad_watcher_ok = false
+local pad_layer
+local TRIGGER = 80
 -- Gamepad names for keys 1-0, and the same buttons again for F1-F11 while RB is held.
 local PAD_BUTTON = {
     ['1'] = 'Up', ['3'] = 'Down',
@@ -168,13 +175,76 @@ local function current_prefix()
     if a then return s and '~!' or '!' end
 end
 
+-- Forward declare: apply_pad_layer calls update before its definition.
+local update
+
+local function read_pad()
+    if not pad_state_path then return nil end
+    local handle = io.open(pad_state_path, 'r')
+    if not handle then return nil end
+    local line = handle:read('*l')
+    handle:close()
+    if not line then return nil end
+    local buttons, lt, rt, stamp = line:match('^(%d+)%s+(%d+)%s+(%d+)%s+(%d+)')
+    if not buttons then return nil end
+    stamp = tonumber(stamp)
+    local age = socket.gettime() * 1000 - stamp
+    if age > 500 or age < -2000 then return nil end
+    return {lt = tonumber(lt), rt = tonumber(rt)}
+end
+
+-- LT = Ctrl (left), RT = Alt (right), both = Ctrl+Alt. Overlay only.
+-- Matches keyboard layout and common Steam/FFXI trigger→mod mapping.
+local function pad_layer_name(pad)
+    local lt = pad.lt >= TRIGGER
+    local rt = pad.rt >= TRIGGER
+    if lt and rt then return 'calt' end
+    if lt then return 'ctrl' end
+    if rt then return 'alt' end
+end
+
+local function apply_pad_layer(name)
+    if name == pad_layer then return end
+    pad_layer = name
+    if name then
+        forced = MOD_FROM_NAME[name]
+        pad_view = nil
+    else
+        forced = nil
+        pad_view = nil
+    end
+    shown = false
+    update()
+end
+
+local function start_pad_watcher()
+    pad_state_path = windower.addon_path .. 'data\\pad.state'
+    windower.create_dir(windower.addon_path .. 'data')
+    local pythonw = 'C:\\Users\\jrmol\\AppData\\Local\\Programs\\Python\\Python313\\pythonw.exe'
+    local script = windower.addon_path .. 'xinput_watch.py'
+    local cmd = 'start "" /MIN "' .. pythonw .. '" "' .. script .. '" "' .. pad_state_path .. '"'
+    pad_watcher_ok = os.execute(cmd) ~= nil
+end
+
+local function poll_pad()
+    if not pad_watcher_ok then return end
+    local pad = read_pad()
+    if not pad then
+        apply_pad_layer(nil)
+        return
+    end
+    apply_pad_layer(pad_layer_name(pad))
+end
+
 local function button_for(k)
     if pad_view == 'pad' and k:sub(1, 1) ~= 'f' then return PAD_BUTTON[k] or k end
     if pad_view == 'fpad' and k:sub(1, 1) == 'f' then return PAD_BUTTON[k] or k:upper() end
 end
 
-local function update()
-    local prefix = forced or current_prefix()
+update = function()
+    -- Keyboard wins so the overlay matches the in-game Ctrl/Alt macro bar.
+    -- Pad LT/RT only drive the overlay when no keyboard modifier is held.
+    local prefix = current_prefix() or forced
     local sig = (prefix or '')..':'..(pad_view or '')
     if shown ~= false and sig == shown then return end
     shown = sig
@@ -256,11 +326,21 @@ local function recover(gen, attempt)
 end
 
 windower.register_event('load', function()
+    -- Drop any leftover kl show/pad state (e.g. after padmacros unload).
+    forced = nil
+    pad_view = nil
+    pad_layer = nil
+    shown = false
+    start_pad_watcher()
     if player_ready() then
         gear_loaded = true
         windower.send_command('wait 1; gs c labels')
     end
-    windower.add_to_chat(207, '[keylabels] v2.7 loaded - //kl unlock to arrange')
+    if pad_watcher_ok then
+        windower.add_to_chat(207, '[keylabels] v2.9 - hold LT=Ctrl / RT=Alt for overlay (or keyboard mods)')
+    else
+        windower.add_to_chat(207, '[keylabels] v2.8 loaded - pad watcher failed; keyboard mods still work')
+    end
 end)
 
 windower.register_event('login', function()
@@ -327,8 +407,11 @@ windower.register_event('mouse', function(event_type)
 end)
 
 windower.register_event('unload', function()
+    apply_pad_layer(nil)
     save_settings()
 end)
+
+windower.register_event('prerender', poll_pad)
 
 windower.register_event('keyboard', function(dik, pressed)
     if not MOD_KEYS[dik] then return end

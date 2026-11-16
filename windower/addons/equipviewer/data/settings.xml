@@ -34,11 +34,18 @@
         </icon>
         <left_justify>false</left_justify>
         <pos>
-            <x>1674</x>
-            <y>949</y>
+            <x>1470</x>
+            <y>841</y>
         </pos>
         <show_ammo_count>true</show_ammo_count>
         <show_encumbrance>true</show_encumbrance>
         <size>28</size>
     </global>
+    <cheeseplate>
+        <pos>
+            <x>1470</x>
+            <y>841</y>
+        </pos>
+        <size>25.6</size>
+    </cheeseplate>
 </settings>

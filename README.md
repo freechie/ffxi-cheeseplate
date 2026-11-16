@@ -23,15 +23,14 @@ Right now: Thief 99, Dancer 94, Ninja 70. Job Points come first on Thief. The bo
 - `windower/plugins/ll/` — LightLuggage drop lists
 - `windower/addons/*/data/` — settings, filters, and GearSwap for addons you install from the launcher
 - `windower/keybinds.md` — Thief, Dancer, and Ninja number-row keys. GearSwap sets them. The key overlay reloads once the character is in.
-- `windower/steam/controller_xbox360.vdf` — Xbox pad layout used with `padmacros`
-- `game/USER/158678d/` — Cheeseplate's macros, equipment sets, and client options. Books are alphabetical: 1 Dancer, 2 Dancer/Ninja, 3 Dancer/Thief, 4 Dancer/Warrior, 5 Ninja, 6 Ninja/Dancer, 7 Ninja/Thief, 8 Ninja/Warrior, 9 Puppetmaster/Dancer, 10 Thief, 11 Thief/Dancer, 12 Thief/Warrior. Rebuild them with `python windower/scripts/sync_macro_names.py` while PlayOnline is closed.
+- `windower/steam/controller_xbox360.vdf` — optional Xbox pad layout (e.g. LB tap autorun)
+- `game/USER/158678d/` — Cheeseplate's macros, equipment sets, and client options. Maintained book: **1 THF/DNC** (set 1 only; set 2 empty; books 2–20 blank). DNC/NIN books return at 99. Rebuild with `python windower/scripts/sync_macro_names.py` while PlayOnline is closed.
 - `game/settings.xml` — retail client profile (UI scale, console key)
 - `dgvoodoo/dgVoodoo.conf` — DirectX 8 wrapper used by PlayOnline
 
 These addons are in the repo as source. The launcher does not ship them:
 
 - `keylabels` — key overlay
-- `padmacros` — Xbox pad to those keys (needs Python 3)
 - `scenepace` — 30 FPS during cutscenes, 60 FPS the rest of the time
 - `screenfit` — places the HUD for the current window size
 - `SellNPC` — vendor list. See `windower/addons/SellNPC/README.md`
@@ -96,11 +95,9 @@ Copy-Item "$Repo\game\USER\158678d\*" "$Game\FINAL FANTASY XI\USER\158678d\" -Re
 
 Another character: copy `mcr.dat`, `mcr*.dat`, `mcr.ttl`, `mcr_2.ttl`, and `mcr.sys` into that character's own `USER\<id>\` folder. Leave the rest of `158678d` (equipment sets and client options) in place unless you mean to replace that character's files.
 
-### 4. Point padmacros at Python
+### 4. Optional Steam pad layout
 
-`padmacros` starts `xinput_watch.py` with the Python path from this PC. In `windower/addons/padmacros/padmacros.lua`, set `pythonw` inside `start_watcher` to your `pythonw.exe`. Python 3 is enough. The script uses the standard library.
-
-The pad layout is `windower/steam/controller_xbox360.vdf` (tap L to autorun; holds pick the macro row). Steam keeps the live file under your own `Steam Controller Configs\<steamid>\config\230330\controller_xbox360.vdf`. Copy this file onto the one Steam already created for FFXI, or import it from Steam's controller settings.
+`windower/steam/controller_xbox360.vdf` is an optional Xbox layout (e.g. tap L for autorun). Macros come from the in-game Ctrl/Alt books and native gamepad, not a Windower pad injector. Steam keeps the live file under your own `Steam Controller Configs\<steamid>\config\230330\controller_xbox360.vdf` if you use it.
 
 ### 5. Character name
 
@@ -110,9 +107,9 @@ Rename both tags to the new character name in the settings files, and rename the
 
 ## After you log in
 
-Insert opens the Windower console. The launcher loads the plugins and addons from `settings.xml`. `scripts/init.txt` then loads XIPivot, enemybar2, keylabels, padmacros, screenfit, and scenepace. Leave XIPivot and SATACast out of a second load. Each one errors with "already loaded" when both the launcher list and `init.txt` start it.
+Insert opens the Windower console. The launcher loads the plugins and addons from `settings.xml`. `scripts/init.txt` then loads XIPivot, enemybar2, keylabels, screenfit, and scenepace. Leave XIPivot and SATACast out of a second load. Each one errors with "already loaded" when both the launcher list and `init.txt` start it.
 
-`screenfit` fits the HUD to the window and writes the UI scale back into `settings.xml` for the next launch (1 on 1920x1080, 1.45 on 2560x1440). Once the character is in, GearSwap loads the job file and the key overlay reloads.
+`screenfit` fits the HUD to the window and writes the UI scale back into `settings.xml` for the next launch (1.2 on 1920x1080, 1.5 on 2560x1440). Once the character is in, GearSwap loads the job file and the key overlay reloads.
 
 Save Records of Eminence once, then the daily set comes back with:
 

@@ -32,8 +32,8 @@ local DESCRIPTIONS = {
     ['Capacity Ring'] = 'CP',
     ['Warp Ring'] = 'Home',
     ['TP set'] = 'Mummu then TH',
-    ['Idle set'] = 'Shoes, pants, Mummu',
-    ['TH set'] = 'Lock Mummu',
+    ['Idle set'] = 'Pants then Mummu',
+    ['TH set'] = 'Force TH',
     ['Feint'] = '-eva',
     ['Weapons'] = 'Level weapons',
     ['Best Waltz'] = 'Best heal',
@@ -82,7 +82,10 @@ local DESCRIPTIONS = {
     ['TA'] = 'Move hate',
     ['SA Evisc'] = 'Sneak WS',
     ['TA Evisc'] = 'Trick WS',
-    ['SATA'] = 'SA TA Charge WS',
+    ['SA opener'] = 'SA Feint WS',
+    ['TA opener'] = 'TA Feint WS',
+    ['SATA'] = 'SA TA Feint WS',
+    ['Evisceration'] = 'WS',
     ['Bully'] = 'Intimidate',
     ['Perfect Dodge'] = 'Evade',
     ['Conspirator'] = 'Party acc',
@@ -93,6 +96,8 @@ local DESCRIPTIONS = {
     ['Hide'] = 'Drop hate',
     ['Collab p1'] = 'Share hate',
     ['Collab p2'] = 'Share hate',
+    ['Collaborator'] = 'Share TH',
+    ['Accomplice'] = 'Take hate',
     ['Accomplice p1'] = 'Take hate',
     ['Accomplice p2'] = 'Take hate',
     ['Larceny'] = 'Steal buffs',
@@ -228,19 +233,18 @@ local SUB_ROWS = {
         {'Hojo: Ni', 'input /ma "Hojo: Ni" <t>', 48},
         {'Kurayami: Ni', 'input /ma "Kurayami: Ni" <t>', 44},
     },
-    -- Subjob cap is 49. Flourish I and Reverse are the full set at that level.
-    -- Building (50) and the later flourishes need Dancer as main.
+    -- Subjob cap is 49. Matches THF/DNC book 1 Ctrl. Building (50+) needs Dancer main.
     DNC = {
         {'Box Step', 'input /ja "Box Step" <t>', 23},
         {'Quickstep', 'input /ja "Quickstep" <t>', 20},
         {'Haste Samba', 'input /ja "Haste Samba" <me>', 45},
-        {'Animated', 'input /ja "Animated Flourish" <t>', 20},
-        {'Desperate', 'input /ja "Desperate Flourish" <t>', 30},
+        {'Stutter Step', 'input /ja "Stutter Step" <t>', 40},
         {'Reverse', 'input /ja "Reverse Flourish" <me>', 40},
         {'Violent', 'input /ja "Violent Flourish" <t>', 45},
         {'C.Waltz III', 'input /ja "Curing Waltz III" <stpc>', 45},
-        {'Divine Waltz', 'input /ja "Divine Waltz" <me>', 25},
         {'Healing Waltz', 'input /ja "Healing Waltz" <stpc>', 35},
+        {'Divine Waltz', 'input /ja "Divine Waltz" <me>', 25},
+        {'Animated', 'input /ja "Animated Flourish" <t>', 20},
     },
     WAR = {
         {'Provoke', 'input /ja "Provoke" <t>', 5},
@@ -267,15 +271,14 @@ local CHAINS = {
 }
 -- GearSwap re-equips after every action, so the ring slot is locked until the use goes off.
 for cmd, ring in pairs(RINGS) do
-    CHAINS[cmd] = 'gs disable ring1; input /equip ring1 "'..ring..'"; wait 11; input /item "'..ring..'" <me>; wait 3; gs enable ring1'
+    CHAINS[cmd] = 'gs disable ring1; input /equip ring1 "'..ring..'"; wait 11; input /item "'..ring..'" <me>; wait 3; gs enable ring1; gs c regear'
 end
 -- Warp Ring has a longer activation time than the experience/capacity rings.
-CHAINS.warp = 'gs disable ring1; input /equip ring1 "Warp Ring"; wait 11; input /item "Warp Ring" <me>; wait 12; gs enable ring1'
+CHAINS.warp = 'gs disable ring1; input /equip ring1 "Warp Ring"; wait 11; input /item "Warp Ring" <me>; wait 12; gs enable ring1; gs c regear'
 
 for _, row in pairs(SUB_ROWS) do
     row.title = 'subjob'
 end
--- Ctrl while Dancer is subbed. Trance is the first open Alt+Shift key.
 SUB_ROWS.DNC.title = 'Dancer'
 
 local main_rows = {}
@@ -316,39 +319,22 @@ local function send_title(prefix)
 end
 
 -- Must match the books written by scripts/sync_macro_names.py.
-local MACRO_BOOKS = {DNC = 1, NIN = 5, THF = 10, PUP = 9}
+-- THF/DNC is the only maintained book for now (book 1). DNC/NIN books return at 99.
+local MACRO_BOOKS = {THF = 1}
 local MACRO_SETS = {['^'] = 1, ['!'] = 1, ['~^'] = 2, ['~!'] = 2, ['^!'] = 3}
--- Alphabetical combo books, set 1. One book per combo; subjob rows are not copied elsewhere.
-local COMBO_BOOK = {
-    DNC = {NIN = {2, 1}, THF = {3, 1}, WAR = {4, 1}},
-    NIN = {DNC = {6, 1}, THF = {7, 1}, WAR = {8, 1}},
-    PUP = {DNC = {9, 1}},
-    THF = {DNC = {11, 1}, WAR = {12, 1}},
-}
 
 local function macro_location(prefix)
     local book = MACRO_BOOKS[player.main_job]
     if not book then return '' end
-    local combos = COMBO_BOOK[player.main_job]
-    local dnc_book = player.sub_job == 'DNC' and combos and combos.DNC
-    -- Dancer abilities take Ctrl, so that palette is the combo book.
-    if dnc_book and (prefix == '^' or prefix == '!') then
-        return ' book '..dnc_book[1]..' set '..dnc_book[2]
-    end
-    -- The main Ctrl row moves to Ctrl+Alt and still lives on the main book.
-    if dnc_book and prefix == '^!' then
-        return ' book '..book..' set 1'
-    end
     local set = MACRO_SETS[prefix]
-    if prefix == '^!' then
-        local where = combos and combos[player.sub_job]
-        if where then
-            book, set = where[1], where[2]
-        end
-    end
     if not set then return '' end
     return ' book '..book..' set '..set
 end
+
+-- When true, bind_rows only fills active/commands; keylabels is pushed once
+-- after the command queue settles. gs reload used to flood bind+kl set and
+-- drop half the overlay.
+local defer_kl = false
 
 local function bind_rows(rows, lvl, job)
     -- Login reloads the job file before the level packet arrives. A nil
@@ -361,14 +347,14 @@ local function bind_rows(rows, lvl, job)
             local who = row.title
             if job and job ~= '' then who = job..' '..who end
             titles[mod[1]] = who..macro_location(mod[1])
-            send_title(mod[1])
+            if not defer_kl then send_title(mod[1]) end
         end
         for i, entry in ipairs(row or {}) do
             if lvl >= (entry[3] or 1) then
                 local key = mod[1]..KEYS[i]
                 send_command('bind '..key..' '..entry[2])
                 local label = overlay_text(entry[1])
-                send_kl_set(key, label)
+                if not defer_kl then send_kl_set(key, label) end
                 active[key] = label
                 commands[key] = entry[2]
             end
@@ -377,10 +363,33 @@ local function bind_rows(rows, lvl, job)
 end
 
 local function send_overlay_labels(rows)
-    for key, label in pairs(rows.fkeys or {}) do
+    for key, spec in pairs(rows.fkeys or {}) do
+        local label, cmd = spec, nil
+        if type(spec) == 'table' then
+            label, cmd = spec[1], spec[2]
+        end
         local display = overlay_text(label)
-        send_kl_set(key, display)
+        if cmd then
+            send_command('bind '..key..' '..cmd)
+            active[key] = display
+            commands[key] = cmd
+        end
+        if not defer_kl then send_kl_set(key, display) end
         overlay_labels[key] = display
+    end
+end
+
+local function push_keylabels()
+    for prefix in pairs(titles) do
+        send_title(prefix)
+    end
+    for key, label in pairs(active) do
+        send_kl_set(key, label)
+    end
+    for key, label in pairs(overlay_labels) do
+        if not active[key] then
+            send_kl_set(key, label)
+        end
     end
 end
 
@@ -400,12 +409,8 @@ local FKEY_IDS = {'f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12'
 -- Abilities and spells that do not fit the 10-key sub row.
 -- Ichi stays beside Ni. Each of those spells has its own recast.
 local SUB_EXTRA = {
-    DNC = {
-        {'Stutter Step', 'input /ja "Stutter Step" <t>', 40},
-        {'Drain Samba II', 'input /ja "Drain Samba II" <me>', 35},
-        {'Aspir Samba', 'input /ja "Aspir Samba" <me>', 25},
-        {'Spectral Jig', 'input /ja "Spectral Jig" <me>', 25},
-    },
+    -- Spectral / Drain II / Aspir live on book 1 set 2 (Ctrl+Shift), not F-keys.
+    DNC = {},
     NIN = {
         {'Hyoton: Ni', 'input /ma "Hyoton: Ni" <t>', 40},
         {'Doton: Ni', 'input /ma "Doton: Ni" <t>', 40},
@@ -441,7 +446,7 @@ end
 local function bind_entry(key, entry)
     send_command('bind '..key..' '..entry[2])
     local label = overlay_text(entry[1])
-    send_kl_set(key, label)
+    if not defer_kl then send_kl_set(key, label) end
     active[key] = label
     commands[key] = entry[2]
 end
@@ -457,31 +462,11 @@ local function bind_overflow(list, lvl)
     end
 end
 
-local function bind_trance(sub_lvl)
-    if (tonumber(sub_lvl) or 0) < 1 then return end
-    local row = main_rows['~!'] or {}
-    local key
-    if #row < #KEYS then
-        key = '~!'..KEYS[#row + 1]
-    else
-        key = first_free_fkey()
-    end
-    if not key then return end
-    bind_entry(key, {'Trance', 'input /ja "Trance" <me>'})
-end
-
 local function select_macro_book()
     if not player or not player.main_job then return end
     local book = MACRO_BOOKS[player.main_job]
-    local set_no = 1
     if not book then return end
-    if player.sub_job == 'DNC' then
-        local where = COMBO_BOOK[player.main_job] and COMBO_BOOK[player.main_job].DNC
-        if where then
-            book, set_no = where[1], where[2]
-        end
-    end
-    send_command('input /macro book '..book..'; wait 0.1; input /macro set '..set_no)
+    send_command('input /macro book '..book..'; wait 0.1; input /macro set 1')
 end
 
 function refresh_binds()
@@ -490,7 +475,26 @@ function refresh_binds()
     local sub_lvl = player.sub_job_level or 0
     local job = player.main_job
     local sub = player.sub_job
-    -- Dancer subjob takes Ctrl. The main Ctrl row moves to Ctrl+Alt.
+
+    defer_kl = true
+    -- THF/DNC book 1: set 1 Ctrl/Alt, set 2 Ctrl+Shift utility + Alt+Shift WS.
+    if job == 'THF' then
+        bind_rows(main_rows, main_lvl, job)
+        if sub ~= 'DNC' and SUB_ROWS[sub] then
+            bind_rows({['^!'] = SUB_ROWS[sub]}, sub_lvl, '/'..tostring(sub))
+        end
+        if SUB_EXTRA[sub] and #(SUB_EXTRA[sub]) > 0 then
+            bind_overflow(SUB_EXTRA[sub], sub_lvl)
+        end
+        send_overlay_labels(main_rows)
+        select_macro_book()
+        defer_kl = false
+        -- After unbind/bind drain, push overlay once so //gs reload does not drop labels.
+        send_command('wait 0.5; gs c labels')
+        return
+    end
+
+    -- Other jobs: Dancer subjob takes Ctrl; main Ctrl row moves to Ctrl+Alt.
     if sub == 'DNC' and main_rows['^'] then
         local rest = {}
         for key, row in pairs(main_rows) do
@@ -505,14 +509,13 @@ function refresh_binds()
         bind_rows(main_rows, main_lvl, job)
         bind_rows({['^!'] = SUB_ROWS[sub]}, sub_lvl, '/'..tostring(sub))
     end
-    if sub == 'DNC' then
-        bind_trance(sub_lvl)
-    end
     if SUB_EXTRA[sub] then
         bind_overflow(SUB_EXTRA[sub], sub_lvl)
     end
     send_overlay_labels(main_rows)
     select_macro_book()
+    defer_kl = false
+    send_command('wait 0.5; gs c labels')
 end
 
 function set_binds(rows)
@@ -537,16 +540,9 @@ function binds_command(command)
         return true
     end
     if command == 'labels' then
+        -- clear_binds already wiped keylabels on refresh; clear again for //kl refresh.
         send_command('kl clear')
-        for prefix in pairs(titles) do
-            send_title(prefix)
-        end
-        for key, label in pairs(active) do
-            send_kl_set(key, label)
-        end
-        for key, label in pairs(overlay_labels) do
-            send_kl_set(key, label)
-        end
+        push_keylabels()
         return true
     end
     if command == 'binds' then

@@ -13,12 +13,12 @@
             <bottom>false</bottom>
             <draggable>false</draggable>
             <italic>false</italic>
-            <right>false</right>
+            <right>true</right>
         </flags>
         <padding>0</padding>
         <pos>
-            <x>1348</x>
-            <y>12</y>
+            <x>-297</x>
+            <y>750</y>
         </pos>
         <text>
             <alpha>255</alpha>
@@ -40,15 +40,14 @@
         </text>
     </global>
     <cheeseplate>
-        <!-- Offsets from the bottom-right of a 1920x1080 window. -->
         <flags>
-            <bottom>true</bottom>
+            <bottom>false</bottom>
             <draggable>false</draggable>
             <right>true</right>
         </flags>
         <pos>
             <x>-297</x>
-            <y>-210</y>
+            <y>750</y>
         </pos>
     </cheeseplate>
 </settings>

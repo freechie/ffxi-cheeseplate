@@ -1,6 +1,30 @@
+# Editor / agent (local only; never push)
 .cursor/
 .vscode/
 
+# Python / Office junk
 windower/scripts/__pycache__/
-windower/~$keybinds.xlsx
+**/__pycache__/
+*.py[cod]
+~$*
+Thumbs.db
+Desktop.ini
+*.tmp
 
+# XIPivot texture packs live only under C:\Windower4 (AshP/ashB/MoonIcon/etc are multi-GB).
+# Repo keeps overlay list in windower/addons/XIPivot/data/settings.xml only.
+windower/addons/XIPivot/data/DATs/
+
+# Third-party addons installed on the live Windower tree, not mirrored as full source here.
+# (Install from upstream; copy settings overlays into this repo when you want them tracked.)
+windower/addons/chronicle/
+
+# screenfit helper build outputs (compiled on the live install)
+windower/addons/screenfit/monitor.exe
+windower/addons/screenfit/monitor.txt
+
+# Windower runtime / launcher caches if a full install is ever copied into this tree
+windower/updates/
+windower/logs/
+windower/screenshots/
+windower/*.log
