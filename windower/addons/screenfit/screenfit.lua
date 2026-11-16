@@ -26,10 +26,9 @@ local ENEMYBAR = {
     {'subtarget', 1282, 161, true, false},
     {'focustarget', 1271, 111, true, false},
 }
--- Top-left of the 4x4 grid on a 1920x1080 UI. The grid is 112px, so this
--- sits just left of the target health bar and lines up with its bottom edge.
--- Right and bottom pins keep that same corner gap when the UI size changes.
-local EQUIP = {x = 1674, y = 949, right = true, bottom = true}
+-- Top-left of the 4x4 grid on a 1920x1080 UI. Tuned so UI scale 1.5
+-- (1707x960) lands at 1470,841. Right and bottom pins keep that gap.
+local EQUIP = {x = 1683, y = 961, right = true, bottom = true}
 local GEAR_COLS = 4
 
 -- FFXIDB uses window pixels, not UI pixels. This is the 2560x1440 spot.
@@ -39,7 +38,7 @@ local MAP = {x = 2018, y = 892, w = 2560, h = 1440}
 -- These read the window size when they load. Unload saves memory over the file,
 -- so the cheeseplate block is written again after unload, then they load.
 local ANCHORED = {'Debuffed', 'targetinfo', 'SpeedChecker', 'findAll'}
-local SNAPSHOT = {'DistancePlus', 'invtracker'}
+local SNAPSHOT = {'DistancePlus'}
 
 local BLOCKS = {
     -- Right anchor only. texts.lua mis-computes the grab point when right
@@ -69,15 +68,17 @@ local BLOCKS = {
             </pos>
         </display>
     </cheeseplate>]],
+    -- Right only (never bottom+right — texts.lua drag corrupts y and it walks away).
+    -- y is 1080p top: old bottom gap -210 → 1080-210=870.
     ['addons\\SpeedChecker\\data\\settings.xml'] = [[<cheeseplate>
         <flags>
-            <bottom>true</bottom>
+            <bottom>false</bottom>
             <draggable>false</draggable>
             <right>true</right>
         </flags>
         <pos>
             <x>-297</x>
-            <y>-210</y>
+            <y>870</y>
         </pos>
     </cheeseplate>]],
     ['addons\\findAll\\data\\settings.xml'] = [[<cheeseplate>
@@ -92,6 +93,8 @@ local BLOCKS = {
 
 local applied_w, applied_h
 local ticking = 0
+-- When true, skip forcing Speed / Distance / enemybar positions so you can drag them.
+local arranging = false
 
 local function ui_size()
     local s = windower.get_windower_settings()
@@ -122,6 +125,14 @@ local function root_path()
     return windower.addon_path:match('^(.*)addons[\\/]screenfit[\\/]')
 end
 
+local function read_file(path)
+    local fh = io.open(path, 'r')
+    if not fh then return end
+    local text = fh:read('*a')
+    fh:close()
+    return text
+end
+
 local function replace_cheeseplate(path, block)
     local fh = io.open(path, 'r')
     if not fh then return end
@@ -129,9 +140,113 @@ local function replace_cheeseplate(path, block)
     fh:close()
     local start_at = text:find('<cheeseplate>', 1, true)
     local end_at = text:find('</cheeseplate>', 1, true)
-    if not start_at or not end_at then return end
-    text = text:sub(1, start_at - 1) .. block .. text:sub(end_at + #'</cheeseplate>')
+    if start_at and end_at then
+        text = text:sub(1, start_at - 1) .. block .. text:sub(end_at + #'</cheeseplate>')
+    else
+        local close = text:find('</settings>', 1, true)
+        if not close then return end
+        text = text:sub(1, close - 1) .. block .. '\n' .. text:sub(close)
+    end
     fh = io.open(path, 'w')
+    if not fh then return end
+    fh:write(text)
+    fh:close()
+end
+
+-- Cheeseplate is also the Cheeseplate character block (config merges by name).
+-- Keep <global> in sync so unload/reload cannot leave a drifted global-only file.
+local function patch_speed_global(path, x, y, draggable)
+    local text = read_file(path)
+    if not text then return end
+    local g0, g1 = text:find('<global>', 1, true), text:find('</global>', 1, true)
+    if not g0 or not g1 then return end
+    local global = text:sub(g0, g1 - 1)
+    local drag = draggable and 'true' or 'false'
+    global = global:gsub('<bottom>[^<]*</bottom>', '<bottom>false</bottom>', 1)
+    global = global:gsub('<right>[^<]*</right>', '<right>true</right>', 1)
+    global = global:gsub('<draggable>[^<]*</draggable>', '<draggable>' .. drag .. '</draggable>', 1)
+    global = global:gsub(
+        '(<pos>%s*<x>)[^<]*(</x>%s*<y>)[^<]*(</y>)',
+        '%1' .. tostring(x) .. '%2' .. tostring(y) .. '%3',
+        1)
+    text = text:sub(1, g0 - 1) .. global .. text:sub(g1)
+    local fh = io.open(path, 'w')
+    if not fh then return end
+    fh:write(text)
+    fh:close()
+end
+
+local function speed_block(x, y, draggable)
+    local drag = draggable and 'true' or 'false'
+    return string.format([[<cheeseplate>
+        <flags>
+            <bottom>false</bottom>
+            <draggable>%s</draggable>
+            <right>true</right>
+        </flags>
+        <pos>
+            <x>%s</x>
+            <y>%s</y>
+        </pos>
+    </cheeseplate>]], drag, tostring(x), tostring(y))
+end
+
+-- Recover a usable top-left y from bottom-anchored or corrupted SpeedChecker saves.
+local function normalize_speed_pos(text, h)
+    h = h or BASE_H
+    local sx, sy = -297, BASE_H - 210
+    local src = text:match('<cheeseplate>(.-)</cheeseplate>') or text
+    local bottom = tostring(src:match('<bottom>%s*([^<]*)</bottom>') or ''):lower() == 'true'
+    local px = tonumber(src:match('<pos>%s*<x>([^<]*)</x>'))
+    local py = tonumber(src:match('<pos>%s*<y>([^<]*)</y>'))
+    if not px or not py then return sx, sy end
+    if bottom then
+        if py < 0 then
+            py = h + py
+        end
+        -- Corrupted saves often keep bottom=true with an absolute y (~700–900).
+    end
+    if py < 0 or py > h + 50 then
+        return sx, sy
+    end
+    return px, math.floor(py + 0.5)
+end
+
+local function write_speed(x, y, draggable)
+    local root = root_path()
+    if not root then return end
+    local path = root .. 'addons\\SpeedChecker\\data\\settings.xml'
+    local block = speed_block(x, y, draggable)
+    BLOCKS['addons\\SpeedChecker\\data\\settings.xml'] = block
+    replace_cheeseplate(path, block)
+    patch_speed_global(path, x, y, draggable)
+end
+
+local function set_distance_draggable(draggable)
+    local root = root_path()
+    if not root then return end
+    local path = root .. 'addons\\DistancePlus\\data\\settings.xml'
+    local text = read_file(path)
+    if not text then return end
+    local drag = draggable and 'true' or 'false'
+    -- Ensure each text section has flags.draggable; rewrite common blocks.
+    local function ensure_drag(section)
+        local block = text:match('<' .. section .. '>(.-)</' .. section .. '>')
+        if not block then return end
+        if block:find('<draggable>', 1, true) then
+            block = block:gsub('<draggable>[^<]*</draggable>', '<draggable>' .. drag .. '</draggable>')
+        elseif block:find('<flags>', 1, true) then
+            block = block:gsub('<flags>', '<flags>\n                <draggable>' .. drag .. '</draggable>', 1)
+        else
+            block = '<flags>\n                <draggable>' .. drag .. '</draggable>\n                <right>true</right>\n            </flags>\n            ' .. block
+        end
+        text = text:gsub('<' .. section .. '>.-</' .. section .. '>',
+            '<' .. section .. '>' .. block .. '</' .. section .. '>', 1)
+    end
+    for _, section in ipairs({'main', 'heighttxt', 'pettxt', 'abilitytxt'}) do
+        ensure_drag(section)
+    end
+    local fh = io.open(path, 'w')
     if not fh then return end
     fh:write(text)
     fh:close()
@@ -157,6 +272,23 @@ local function write_anchors()
     if not root then return end
     for rel, block in pairs(BLOCKS) do
         replace_cheeseplate(root .. rel, block)
+    end
+    local sp_block = BLOCKS['addons\\SpeedChecker\\data\\settings.xml']
+    if sp_block then
+        local x = tonumber(sp_block:match('<x>([^<]*)</x>'))
+        local y1080 = tonumber(sp_block:match('<y>([^<]*)</y>'))
+        local drag = tostring(sp_block:match('<draggable>([^<]*)</draggable>') or ''):lower() == 'true'
+        local _, h = ui_size()
+        if x and y1080 then
+            -- BLOCK y is 1080p absolute; shift so the bottom gap survives UI scale changes.
+            local y = y1080 + ((h or BASE_H) - BASE_H)
+            local live = speed_block(x, y, drag)
+            replace_cheeseplate(root .. 'addons\\SpeedChecker\\data\\settings.xml', live)
+            patch_speed_global(root .. 'addons\\SpeedChecker\\data\\settings.xml', x, y, drag)
+        end
+    end
+    if not arranging then
+        set_distance_draggable(false)
     end
     clear_track(root .. 'addons\\findAll\\data\\settings.xml')
 end
@@ -235,8 +367,8 @@ local function run_monitor()
 end
 
 local function scale_for(mw, mh)
-    if (mw or 0) >= 2200 or (mh or 0) >= 1300 then return '1.45' end
-    return '1'
+    if (mw or 0) >= 2200 or (mh or 0) >= 1300 then return '1.5' end
+    return '1.2'
 end
 
 local function write_uiscale(scale, label, report)
@@ -366,8 +498,8 @@ local function place_window(mode)
 end
 
 local PRESETS = {
-    ['1080'] = {scale = '1', label = '1920x1080'},
-    ['1440'] = {scale = '1.45', label = '2560x1440'},
+    ['1080'] = {scale = '1.2', label = '1920x1080'},
+    ['1440'] = {scale = '1.5', label = '2560x1440'},
 }
 
 -- Save the menu scale for the monitor you are about to switch to.
@@ -503,15 +635,126 @@ end
 
 local function shift_commands(w, h)
     place_gear(w, h, true)
-    for _, bar in ipairs(ENEMYBAR) do
-        local x, y = place(bar[2], bar[3], w, h, bar[4], bar[5])
-        windower.send_command('eb set pos ' .. bar[1] .. ' ' .. x .. ' ' .. y)
+    if not arranging then
+        for _, bar in ipairs(ENEMYBAR) do
+            local x, y = place(bar[2], bar[3], w, h, bar[4], bar[5])
+            windower.send_command('eb set pos ' .. bar[1] .. ' ' .. x .. ' ' .. y)
+        end
     end
     local sw, sh = window_size()
     if not sw then return end
     local mx, my = map_pos(sw, sh)
     write_map(sw, sh)
     windower.send_command('ffxidb pos ' .. mx .. ' ' .. my)
+    -- Reload last so the minimap draws above EquipViewer images.
+    windower.send_command('wait 0.5; unload FFXIDB; wait 0.2; load FFXIDB; wait 0.2; ffxidb pos ' .. mx .. ' ' .. my)
+end
+
+local function read_xml_pos(text, tag)
+    if tag then
+        local block = text:match('<' .. tag .. '>(.-)</' .. tag .. '>')
+        if not block then return end
+        text = block
+    end
+    local x = tonumber(text:match('<pos>%s*<x>([^<]*)</x>'))
+    local y = tonumber(text:match('<pos>%s*<y>([^<]*)</y>'))
+    return x, y
+end
+
+-- Convert a live UI pixel into the 1920x1080 base used by ENEMYBAR pins.
+local function to_base(px, py, w, h, pin_right, pin_bottom)
+    local x, y = px, py
+    if pin_right then x = px - (w - BASE_W) end
+    if pin_bottom then y = py - (h - BASE_H) end
+    return math.floor(x + 0.5), math.floor(y + 0.5)
+end
+
+local function patch_enemybar_defaults(t_x, t_y, st_x, st_y, ft_x, ft_y)
+    local path = windower.addon_path .. 'screenfit.lua'
+    local text = read_file(path)
+    if not text then return false end
+    local repl = string.format(
+        "local ENEMYBAR = {\n    {'target', %d, %d, true, false},\n    {'subtarget', %d, %d, true, false},\n    {'focustarget', %d, %d, true, false},\n}",
+        t_x, t_y, st_x, st_y, ft_x, ft_y)
+    local updated, n = text:gsub('local ENEMYBAR = %b{}', repl, 1)
+    if n == 0 then return false end
+    local fh = io.open(path, 'w')
+    if not fh then return false end
+    fh:write(updated)
+    fh:close()
+    ENEMYBAR = {
+        {'target', t_x, t_y, true, false},
+        {'subtarget', st_x, st_y, true, false},
+        {'focustarget', ft_x, ft_y, true, false},
+    }
+    return true
+end
+
+local function capture_hud_layout()
+    local root = root_path()
+    local w, h = ui_size()
+    if not root or not w then return false, 'no UI size' end
+
+    local eb = read_file(root .. 'addons\\enemybar2\\data\\settings.xml') or ''
+    -- Prefer character block values when present (last matching pos per bar name).
+    local function bar_xy(name)
+        local x, y
+        for block in eb:gmatch('<' .. name .. '_bar>(.-)</' .. name .. '_bar>') do
+            local px, py = read_xml_pos(block)
+            if px and py then x, y = px, py end
+        end
+        return x, y
+    end
+    local tx, ty = bar_xy('target')
+    local stx, sty = bar_xy('subtarget')
+    local ftx, fty = bar_xy('focustarget')
+    if not (tx and stx and ftx) then return false, 'enemybar positions missing' end
+    local bt_x, bt_y = to_base(tx, ty, w, h, true, false)
+    local bs_x, bs_y = to_base(stx, sty, w, h, true, false)
+    local bf_x, bf_y = to_base(ftx, fty, w, h, true, false)
+    if not patch_enemybar_defaults(bt_x, bt_y, bs_x, bs_y, bf_x, bf_y) then
+        return false, 'could not write ENEMYBAR defaults'
+    end
+
+    local sp = read_file(root .. 'addons\\SpeedChecker\\data\\settings.xml') or ''
+    local sx, sy = normalize_speed_pos(sp, h)
+    -- Persist 1080p base in BLOCKS; write live pixels to the settings file.
+    local base_y = sy - (h - BASE_H)
+    BLOCKS['addons\\SpeedChecker\\data\\settings.xml'] = speed_block(sx, base_y, false)
+    write_speed(sx, sy, false)
+    set_distance_draggable(false)
+    return true
+end
+
+local function begin_arrange()
+    arranging = true
+    local root = root_path()
+    local w, h = ui_size()
+    if root then
+        local sp = read_file(root .. 'addons\\SpeedChecker\\data\\settings.xml') or ''
+        local sx, sy = normalize_speed_pos(sp, h)
+        write_speed(sx, sy, true)
+        set_distance_draggable(true)
+        windower.send_command('lua r SpeedChecker')
+        windower.send_command('lua r DistancePlus')
+    end
+    windower.send_command('eb setup') -- toggle setup/drag mode on
+    windower.add_to_chat(207, '[screenfit] Arrange mode: drag Speed, Distance, and HP bars.')
+    windower.add_to_chat(207, '[screenfit] Distance: drag the number. HP: drag each bar.')
+    windower.add_to_chat(207, '[screenfit] When happy: //fit lock')
+end
+
+local function end_arrange()
+    local ok, why = capture_hud_layout()
+    arranging = false
+    windower.send_command('eb setup') -- toggle setup/drag mode off
+    windower.send_command('lua r SpeedChecker')
+    windower.send_command('lua r DistancePlus')
+    if ok then
+        windower.add_to_chat(207, '[screenfit] Locked. Speed / Distance / HP positions saved.')
+    else
+        windower.add_to_chat(167, '[screenfit] Locked arrange mode, but capture failed: ' .. tostring(why))
+    end
 end
 
 local pending_w, pending_h
@@ -524,7 +767,7 @@ local function load_hud()
         windower.send_command('lua load ' .. name)
     end
     windower.send_command('load timers')
-    -- DistancePlus and invtracker are not unloaded on a resize. Reload those.
+    -- DistancePlus is not unloaded on a resize. Reload it.
     local how = booted and 'lua r ' or 'lua load '
     for _, name in ipairs(SNAPSHOT) do
         windower.send_command(how .. name)
@@ -548,10 +791,8 @@ local function apply()
     applied_w, applied_h = w, h
     pending_w, pending_h = w, h
     shift_commands(w, h)
-    -- Timers saves its current spot over the file on unload. Unload first on
-    -- a fresh load too, so a reload cannot write the old spot back.
-    windower.send_command('unload timers')
     if resize then
+        windower.send_command('unload timers')
         for _, name in ipairs(ANCHORED) do
             windower.send_command('lua unload ' .. name)
         end
@@ -591,12 +832,18 @@ windower.register_event('addon command', function(cmd, extra)
             prepare_monitor(extra)
         elseif extra == '1' or extra == '1.0' then
             write_uiscale('1', '', true)
+        elseif extra == '1.2' then
+            write_uiscale('1.2', '', true)
         elseif extra == '1.4' then
             write_uiscale('1.4', '', true)
         elseif extra == '1.45' then
             write_uiscale('1.45', '', true)
         elseif extra == '1.5' then
             write_uiscale('1.5', '', true)
+        elseif extra == '1.6' then
+            write_uiscale('1.6', '', true)
+        elseif extra == '1.55' then
+            write_uiscale('1.55', '', true)
         else
             local info = run_monitor()
             if not info then
@@ -609,6 +856,12 @@ windower.register_event('addon command', function(cmd, extra)
     elseif cmd == 'window' or cmd == 'fill' or cmd == 'other' then
         place_window(cmd)
         return
+    elseif cmd == 'unlock' or cmd == 'arrange' then
+        begin_arrange()
+        return
+    elseif cmd == 'lock' or cmd == 'savehud' then
+        end_arrange()
+        return
     end
-    windower.add_to_chat(207, 'screenfit: //fit window | //fit fill | //fit other')
+    windower.add_to_chat(207, 'screenfit: //fit unlock | //fit lock | //fit window | //fit fill | //fit other')
 end)

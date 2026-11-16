@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <settings>
   <launcher>
     <branch>stable</branch>
@@ -30,18 +30,31 @@
     <addon>battlemod</addon>
     <addon>enternity</addon>
     <addon>SellNPC</addon>
+    <addon>thtracker</addon>
+    <addon>ChatLink</addon>
+    <addon>checkparam</addon>
+    <addon>Debuffed</addon>
+    <addon>diagnostics</addon>
+    <addon>Dimmer</addon>
+    <addon>dynamishelper</addon>
+    <addon>highlight</addon>
+    <addon>ohShi</addon>
+    <addon>Omen</addon>
+    <addon>organizer</addon>
+    <addon>plasmon</addon>
+    <addon>reive</addon>
+    <addon>translate</addon>
     <plugin>DelayMeNot</plugin>
     <plugin>Config</plugin>
     <plugin>Tickle</plugin>
     <plugin>WinControl</plugin>
     <plugin>FFXIDB</plugin>
     <plugin>MipmapFix</plugin>
+    <plugin>LightLuggage</plugin>
   </autoload>
   <profile name="">
     <consolekey>Insert</consolekey>
-    <!-- 1.45 when the game is on the 2560x1440 monitor. screenfit writes 1 on the 1920x1080 monitor. Takes effect on the next launch. -->
-    <uiscale>1</uiscale>
-    <supersampling>1</supersampling>
+    <uiscale>1.2</uiscale>
     <allowwinkey>true</allowwinkey>
     <enablefastlogin>true</enablefastlogin>
     <preventbackgroundthrottling>true</preventbackgroundthrottling>
