@@ -2,6 +2,9 @@
 <settings>
     <global>
         <abilitytxt>
+            <bg>
+                <alpha>128</alpha>
+            </bg>
             <flags>
                 <draggable>false</draggable>
                 <right>true</right>
@@ -16,6 +19,9 @@
             </text>
         </abilitytxt>
         <heighttxt>
+            <bg>
+                <alpha>128</alpha>
+            </bg>
             <flags>
                 <draggable>false</draggable>
                 <right>true</right>
@@ -30,6 +36,9 @@
             </text>
         </heighttxt>
         <main>
+            <bg>
+                <alpha>128</alpha>
+            </bg>
             <flags>
                 <draggable>false</draggable>
                 <right>true</right>
@@ -44,6 +53,9 @@
             </text>
         </main>
         <pettxt>
+            <bg>
+                <alpha>128</alpha>
+            </bg>
             <flags>
                 <draggable>false</draggable>
                 <right>true</right>

@@ -7,7 +7,7 @@
         <TargetPC>${name}</TargetPC>
         <display>
             <bg>
-                <alpha>102</alpha>
+                <alpha>128</alpha>
                 <blue>0</blue>
                 <green>0</green>
                 <red>0</red>
@@ -34,7 +34,7 @@
                 </fonts>
                 <green>255</green>
                 <red>255</red>
-                <size>12</size>
+                <size>14</size>
                 <stroke>
                     <alpha>255</alpha>
                     <blue>0</blue>

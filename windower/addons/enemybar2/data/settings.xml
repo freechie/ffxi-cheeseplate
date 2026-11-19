@@ -3,7 +3,7 @@
     <global>
         <aggro_bar>
             <color>
-                <alpha>255</alpha>
+                <alpha>128</alpha>
                 <blue>50</blue>
                 <green>150</green>
                 <red>0</red>
@@ -27,7 +27,7 @@
         </aggro_bar>
         <focustarget_bar>
             <color>
-                <alpha>255</alpha>
+                <alpha>128</alpha>
                 <blue>255</blue>
                 <green>0</green>
                 <red>93</red>
@@ -48,7 +48,7 @@
         </focustarget_bar>
         <subtarget_bar>
             <color>
-                <alpha>255</alpha>
+                <alpha>128</alpha>
                 <blue>101</blue>
                 <green>50</green>
                 <red>12</red>
@@ -69,7 +69,7 @@
         </subtarget_bar>
         <target_bar>
             <color>
-                <alpha>255</alpha>
+                <alpha>128</alpha>
                 <blue>0</blue>
                 <green>0</green>
                 <red>255</red>

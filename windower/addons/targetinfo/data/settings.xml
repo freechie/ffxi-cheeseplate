@@ -3,7 +3,7 @@
     <global>
         <ShowFullID>false</ShowFullID>
         <ShowHexID>false</ShowHexID>
-        <ShowSpeed>true</ShowSpeed>
+        <ShowSpeed>false</ShowSpeed>
         <ShowTargetName>false</ShowTargetName>
         <display>
             <bg>
