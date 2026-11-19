@@ -115,6 +115,7 @@ function get_sets()
     sets.WS.SATA = {}
 
     -- Mummu combat set with Meg legs. Kaja Knife stays main for Evisceration.
+    -- Shijo path D is the offhand (TA+2, DW+5, DEX+15). Mezzotint at Nolan.
     -- Toutatis's Cape is Sneak Attack +10 even before augments.
     -- Aptitude Mantle +1 is Capacity Points +30%. CpMode wears it the whole fight.
     -- With CpMode off, Toutatis stays on combat and Aptitude swaps in for the weaponskill.
@@ -124,7 +125,7 @@ function get_sets()
     -- Eabani is DW; Belatz Pearl is the spare melee ear.
     local combat = {
         main="Kaja Knife",
-        sub="Homestead Dagger",
+        sub="Shijo",
         head="Mummu Bonnet +1",
         body="Mummu Jacket +2",
         hands="Mummu Wrists +1",
