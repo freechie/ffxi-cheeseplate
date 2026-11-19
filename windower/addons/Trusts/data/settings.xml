@@ -6,74 +6,53 @@
         <sets>
             <default>
                 <1>August</1>
-                <2>Sakura</2>
+                <2>Apururu (UC)</2>
                 <3>Koru-Moru</3>
                 <4>Qultada</4>
                 <5>Shantotto II</5>
             </default>
-            <camps>
-                <1>Selh'teus</1>
-                <2>Koru-Moru</2>
-                <3>Qultada</3>
-                <4>Sakura</4>
-                <5>Shantotto II</5>
-            </camps>
             <exp>
-                <1>Selh'teus</1>
+                <1>Selh&apos;teus</1>
                 <2>Koru-Moru</2>
                 <3>Qultada</3>
                 <4>Kupofried</4>
                 <5>Shantotto II</5>
             </exp>
-            <raise>
-                <1>August</1>
-                <2>Sakura</2>
-                <3>Koru-Moru</3>
-                <4>Qultada</4>
-                <5>Ferreous Coffin</5>
-            </raise>
-            <boss>
-                <1>Amchuchu</1>
-                <2>Sakura</2>
-                <3>King of Hearts</3>
-                <4>Koru-Moru</4>
-                <5>Shantotto II</5>
-            </boss>
             <ambu>
                 <1>Amchuchu</1>
-                <2>Sakura</2>
+                <2>Apururu (UC)</2>
                 <3>Qultada</3>
                 <4>August</4>
                 <5>Shantotto II</5>
             </ambu>
-            <apu>
-                <1>August</1>
-                <2>Apururu (UC)</2>
-                <3>Koru-Moru</3>
-                <4>Qultada</4>
-                <5>Shantotto II</5>
-            </apu>
-            <raiseapu>
+            <di>
+                <1>Apururu (UC)</1>
+                <2>Selh'teus</2>
+                <3>Joachim</3>
+                <4>Koru-Moru</4>
+                <5>Qultada</5>
+            </di>
+            <raise>
                 <1>August</1>
                 <2>Apururu (UC)</2>
                 <3>Koru-Moru</3>
                 <4>Qultada</4>
                 <5>Ferreous Coffin</5>
-            </raiseapu>
-            <bossapu>
+            </raise>
+            <dyna>
+                <1>Mayakov</1>
+                <2>Uka Totlihn</2>
+                <3>Trion</3>
+                <4>Koru-Moru</4>
+                <5>Apururu (UC)</5>
+            </dyna>
+            <boss>
                 <1>Amchuchu</1>
                 <2>Apururu (UC)</2>
                 <3>King of Hearts</3>
                 <4>Koru-Moru</4>
                 <5>Shantotto II</5>
-            </bossapu>
-            <ambuapu>
-                <1>Amchuchu</1>
-                <2>Apururu (UC)</2>
-                <3>Qultada</3>
-                <4>August</4>
-                <5>Shantotto II</5>
-            </ambuapu>
+            </boss>
         </sets>
         <wait>
             <aftercast>3</aftercast>
