@@ -21,7 +21,6 @@ lua load autoenterkey;
 lua load battlemod;
 lua load BattleStations;
 lua load ConsoleBG;
-lua load DressUp;
 lua load enternity;
 lua load GearSwap;
 lua load InfoBar;

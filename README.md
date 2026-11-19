@@ -53,7 +53,7 @@ Config, DelayMeNot, FFXIDB, LightLuggage, LuaCore, MipmapFix, Tickle, Timers, We
 
 Addons:
 
-autoenterkey, BattleMod, BattleStations, ConsoleBG, Debuffed, DistancePlus, DressUp, enternity, Equipviewer, findAll, GearSwap, InfoBar, InfoReplacer, instaLS, invtracker, Itemizer, Lookup, MacroChanger, MountMuzzle, MountRoulette, ROE, SATACast, Scoreboard, SetTarget, Shortcuts, SpeedChecker, TargetInfo, timestamp, TParty, Trusts, Update
+autoenterkey, BattleMod, BattleStations, ConsoleBG, Debuffed, DistancePlus, enternity, Equipviewer, findAll, GearSwap, InfoBar, InfoReplacer, instaLS, invtracker, Itemizer, Lookup, MacroChanger, MountMuzzle, MountRoulette, ROE, SATACast, Scoreboard, SetTarget, Shortcuts, SpeedChecker, TargetInfo, timestamp, TParty, Trusts, Update
 
 The launcher also installs `libs` for the addons that need it.
 

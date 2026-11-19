@@ -5,7 +5,6 @@
   </launcher>
   <autoload>
     <addon>autoenterkey</addon>
-    <addon>DressUp</addon>
     <addon>InfoBar</addon>
     <addon>Lookup</addon>
     <addon>macrochanger</addon>
@@ -34,16 +33,9 @@
     <addon>ChatLink</addon>
     <addon>checkparam</addon>
     <addon>Debuffed</addon>
-    <addon>diagnostics</addon>
     <addon>Dimmer</addon>
-    <addon>dynamishelper</addon>
-    <addon>highlight</addon>
-    <addon>ohShi</addon>
-    <addon>Omen</addon>
-    <addon>organizer</addon>
-    <addon>plasmon</addon>
-    <addon>reive</addon>
     <addon>translate</addon>
+    <addon>chronicle</addon>
     <plugin>DelayMeNot</plugin>
     <plugin>Config</plugin>
     <plugin>Tickle</plugin>
@@ -54,7 +46,7 @@
   </autoload>
   <profile name="">
     <consolekey>Insert</consolekey>
-    <uiscale>1.2</uiscale>
+    <uiscale>1.5</uiscale>
     <allowwinkey>true</allowwinkey>
     <enablefastlogin>true</enablefastlogin>
     <preventbackgroundthrottling>true</preventbackgroundthrottling>
