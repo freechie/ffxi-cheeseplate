@@ -1,6 +1,6 @@
 _addon.name = 'screenfit'
 _addon.author = 'Cheeseplate'
-_addon.version = '2.3'
+_addon.version = '2.5'
 _addon.commands = {'screenfit', 'fit'}
 
 -- Cheeseplate's HUD was laid out in a 1920x1080 window. Edge pieces are stored
@@ -222,34 +222,97 @@ local function write_speed(x, y, draggable)
     patch_speed_global(path, x, y, draggable)
 end
 
-local function set_distance_draggable(draggable)
-    local root = root_path()
-    if not root then return end
-    local path = root .. 'addons\\DistancePlus\\data\\settings.xml'
+local DISTANCE_SECTIONS = {'main', 'heighttxt', 'pettxt', 'abilitytxt'}
+
+-- Last matching section wins (character block overrides global).
+local function read_distance_pos(xml, section)
+    local x, y
+    for block in xml:gmatch('<' .. section .. '>(.-)</' .. section .. '>') do
+        local px = tonumber(block:match('<pos>%s*<x>([^<]*)</x>'))
+        local py = tonumber(block:match('<pos>%s*<y>([^<]*)</y>'))
+        if px and py then x, y = px, py end
+    end
+    return x, y
+end
+
+local function read_distance_layout(xml)
+    local pos = {}
+    for _, section in ipairs(DISTANCE_SECTIONS) do
+        local x, y = read_distance_pos(xml, section)
+        if not (x and y) then return nil end
+        pos[section] = {x = x, y = y}
+    end
+    return pos
+end
+
+local function distance_block(pos, draggable)
+    local drag = draggable and 'true' or 'false'
+    local parts = {'<cheeseplate>'}
+    for _, section in ipairs(DISTANCE_SECTIONS) do
+        local p = pos[section]
+        parts[#parts + 1] = string.format([[
+        <%s>
+            <flags>
+                <draggable>%s</draggable>
+                <right>true</right>
+            </flags>
+            <pos>
+                <x>%s</x>
+                <y>%s</y>
+            </pos>
+        </%s>]], section, drag, tostring(p.x), tostring(p.y), section)
+    end
+    parts[#parts + 1] = '    </cheeseplate>'
+    return table.concat(parts, '\n')
+end
+
+local function patch_distance_global(path, pos, draggable)
     local text = read_file(path)
     if not text then return end
     local drag = draggable and 'true' or 'false'
-    -- Ensure each text section has flags.draggable; rewrite common blocks.
-    local function ensure_drag(section)
+    for _, section in ipairs(DISTANCE_SECTIONS) do
+        local p = pos[section]
         local block = text:match('<' .. section .. '>(.-)</' .. section .. '>')
-        if not block then return end
-        if block:find('<draggable>', 1, true) then
-            block = block:gsub('<draggable>[^<]*</draggable>', '<draggable>' .. drag .. '</draggable>')
-        elseif block:find('<flags>', 1, true) then
-            block = block:gsub('<flags>', '<flags>\n                <draggable>' .. drag .. '</draggable>', 1)
-        else
-            block = '<flags>\n                <draggable>' .. drag .. '</draggable>\n                <right>true</right>\n            </flags>\n            ' .. block
+        if block and p then
+            if block:find('<draggable>', 1, true) then
+                block = block:gsub('<draggable>[^<]*</draggable>', '<draggable>' .. drag .. '</draggable>')
+            elseif block:find('<flags>', 1, true) then
+                block = block:gsub('<flags>', '<flags>\n                <draggable>' .. drag .. '</draggable>', 1)
+            else
+                block = '<flags>\n                <draggable>' .. drag .. '</draggable>\n                <right>true</right>\n            </flags>\n            ' .. block
+            end
+            block = block:gsub(
+                '(<pos>%s*<x>)[^<]*(</x>%s*<y>)[^<]*(</y>)',
+                '%1' .. tostring(p.x) .. '%2' .. tostring(p.y) .. '%3',
+                1)
+            text = text:gsub('<' .. section .. '>.-</' .. section .. '>',
+                '<' .. section .. '>' .. block .. '</' .. section .. '>', 1)
         end
-        text = text:gsub('<' .. section .. '>.-</' .. section .. '>',
-            '<' .. section .. '>' .. block .. '</' .. section .. '>', 1)
-    end
-    for _, section in ipairs({'main', 'heighttxt', 'pettxt', 'abilitytxt'}) do
-        ensure_drag(section)
     end
     local fh = io.open(path, 'w')
     if not fh then return end
     fh:write(text)
     fh:close()
+end
+
+local function write_distance(pos, draggable)
+    local root = root_path()
+    if not root or not pos then return end
+    local path = root .. 'addons\\DistancePlus\\data\\settings.xml'
+    local block = distance_block(pos, draggable)
+    BLOCKS['addons\\DistancePlus\\data\\settings.xml'] = block
+    replace_cheeseplate(path, block)
+    patch_distance_global(path, pos, draggable)
+end
+
+local function set_distance_draggable(draggable)
+    local root = root_path()
+    if not root then return end
+    local path = root .. 'addons\\DistancePlus\\data\\settings.xml'
+    local text = read_file(path) or ''
+    local pos = read_distance_layout(text)
+    if not pos then return end
+    write_distance(pos, draggable)
 end
 
 local function clear_track(path)
@@ -287,7 +350,13 @@ local function write_anchors()
             patch_speed_global(root .. 'addons\\SpeedChecker\\data\\settings.xml', x, y, drag)
         end
     end
-    if not arranging then
+    local dp_block = BLOCKS['addons\\DistancePlus\\data\\settings.xml']
+    if dp_block and not arranging then
+        local pos = read_distance_layout(dp_block)
+        if pos then
+            write_distance(pos, false)
+        end
+    elseif not arranging then
         set_distance_draggable(false)
     end
     clear_track(root .. 'addons\\findAll\\data\\settings.xml')
@@ -722,35 +791,68 @@ local function capture_hud_layout()
     local base_y = sy - (h - BASE_H)
     BLOCKS['addons\\SpeedChecker\\data\\settings.xml'] = speed_block(sx, base_y, false)
     write_speed(sx, sy, false)
-    set_distance_draggable(false)
+
+    local dp = read_file(root .. 'addons\\DistancePlus\\data\\settings.xml') or ''
+    local dpos = read_distance_layout(dp)
+    if not dpos then return false, 'distance positions missing' end
+    write_distance(dpos, false)
     return true
 end
 
+-- SpeedChecker / DistancePlus: unload can overwrite a just-written settings file.
+-- Always unload first, then write, then load — never write then lua r.
+-- DistancePlus also saves on drag-release and on unload (patched to pass root settings).
 local function begin_arrange()
-    arranging = true
-    local root = root_path()
-    local w, h = ui_size()
-    if root then
-        local sp = read_file(root .. 'addons\\SpeedChecker\\data\\settings.xml') or ''
-        local sx, sy = normalize_speed_pos(sp, h)
-        write_speed(sx, sy, true)
-        set_distance_draggable(true)
-        windower.send_command('lua r SpeedChecker')
-        windower.send_command('lua r DistancePlus')
+    if arranging then
+        windower.add_to_chat(207, '[screenfit] Already arranging. Drag, then //fit lock.')
+        return
     end
-    windower.send_command('eb setup') -- toggle setup/drag mode on
+    arranging = true
+    windower.send_command('eb setup on')
+    windower.send_command('lua unload SpeedChecker; lua unload DistancePlus')
+    windower.send_command('wait 0.3; fit arrangedrag')
     windower.add_to_chat(207, '[screenfit] Arrange mode: drag Speed, Distance, and HP bars.')
     windower.add_to_chat(207, '[screenfit] Distance: drag the number. HP: drag each bar.')
     windower.add_to_chat(207, '[screenfit] When happy: //fit lock')
 end
 
+local function arrange_enable_drag()
+    local root = root_path()
+    local _, h = ui_size()
+    if not root then return end
+    local sp = read_file(root .. 'addons\\SpeedChecker\\data\\settings.xml') or ''
+    local sx, sy = normalize_speed_pos(sp, h)
+    write_speed(sx, sy, true)
+    set_distance_draggable(true)
+    windower.send_command('lua load SpeedChecker')
+    windower.send_command('lua load DistancePlus')
+end
+
 local function end_arrange()
+    if not arranging then
+        windower.add_to_chat(207, '[screenfit] Not arranging. //fit unlock first.')
+        return
+    end
+    windower.send_command('eb setup off')
+    -- Unload flushes Speed (texts save) and DistancePlus (unload handler) to disk
+    -- before capture reads and owns those positions.
+    windower.send_command('lua unload SpeedChecker; lua unload DistancePlus')
+    windower.send_command('wait 0.3; fit arrangelock')
+end
+
+local function arrange_finish_lock()
     local ok, why = capture_hud_layout()
     arranging = false
-    windower.send_command('eb setup') -- toggle setup/drag mode off
-    windower.send_command('lua r SpeedChecker')
-    windower.send_command('lua r DistancePlus')
-    if ok then
+    windower.send_command('lua load SpeedChecker')
+    windower.send_command('lua load DistancePlus')
+    local w, h = ui_size()
+    if ok and w then
+        for _, bar in ipairs(ENEMYBAR) do
+            local x, y = place(bar[2], bar[3], w, h, bar[4], bar[5])
+            windower.send_command('eb set pos ' .. bar[1] .. ' ' .. x .. ' ' .. y)
+        end
+        windower.add_to_chat(207, '[screenfit] Locked. Speed / Distance / HP positions saved.')
+    elseif ok then
         windower.add_to_chat(207, '[screenfit] Locked. Speed / Distance / HP positions saved.')
     else
         windower.add_to_chat(167, '[screenfit] Locked arrange mode, but capture failed: ' .. tostring(why))
@@ -859,8 +961,14 @@ windower.register_event('addon command', function(cmd, extra)
     elseif cmd == 'unlock' or cmd == 'arrange' then
         begin_arrange()
         return
+    elseif cmd == 'arrangedrag' then
+        arrange_enable_drag()
+        return
     elseif cmd == 'lock' or cmd == 'savehud' then
         end_arrange()
+        return
+    elseif cmd == 'arrangelock' then
+        arrange_finish_lock()
         return
     end
     windower.add_to_chat(207, 'screenfit: //fit unlock | //fit lock | //fit window | //fit fill | //fit other')
