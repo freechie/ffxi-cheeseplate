@@ -131,7 +131,7 @@ function get_sets()
         hands="Mummu Wrists +1",
         legs="Meg. Chausses +2",
         feet="Mummu Gamash. +1",
-        neck="Arctier's Torque",
+        neck="Dampener's Torque",
         waist="Patentia Sash",
         left_ear="Eabani Earring",
         right_ear="Belatz Pearl",
