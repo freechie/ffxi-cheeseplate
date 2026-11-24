@@ -31,9 +31,10 @@ local ENEMYBAR = {
 local EQUIP = {x = 1683, y = 961, right = true, bottom = true}
 local GEAR_COLS = 4
 
--- FFXIDB uses window pixels, not UI pixels. This is the 2560x1440 spot.
--- The same fraction of the window is used on 1920x1080 (1514, 669).
-local MAP = {x = 2018, y = 892, w = 2560, h = 1440}
+-- FFXIDB uses window pixels, not UI pixels. Stored as a spot on a reference
+-- window size so //fit apply keeps the same corner fraction after resize.
+-- Update with //fit map after dragging the minimap where you want it.
+local MAP = {x = 2068, y = 67, w = 2560, h = 1440}
 
 -- These read the window size when they load. Unload saves memory over the file,
 -- so the cheeseplate block is written again after unload, then they load.
@@ -648,6 +649,55 @@ local function write_map(sw, sh)
     return x, y
 end
 
+local function read_ffxidb_pos(text)
+    local x, y
+    for block in text:gmatch('<Cheeseplate>(.-)</Cheeseplate>') do
+        local px = tonumber(block:match('<X>([^<]*)</X>'))
+        local py = tonumber(block:match('<Y>([^<]*)</Y>'))
+        if px and py then x, y = px, py end
+    end
+    if x and y then return x, y end
+    x = tonumber(text:match('<global>.-<X>([^<]*)</X>'))
+    y = tonumber(text:match('<global>.-<Y>([^<]*)</Y>'))
+    return x, y
+end
+
+local function patch_map_defaults(x, y, w, h)
+    local path = windower.addon_path .. 'screenfit.lua'
+    local text = read_file(path)
+    if not text then return false end
+    local repl = string.format(
+        'local MAP = {x = %d, y = %d, w = %d, h = %d}',
+        x, y, w, h)
+    local updated, n = text:gsub(
+        'local MAP = {x = %d+, y = %d+, w = %d+, h = %d+}',
+        repl, 1)
+    if n == 0 then return false end
+    local fh = io.open(path, 'w')
+    if not fh then return false end
+    fh:write(updated)
+    fh:close()
+    MAP = {x = x, y = y, w = w, h = h}
+    return true
+end
+
+-- Bake the live FFXIDB spot into MAP so //fit apply stops moving it.
+local function capture_map_layout()
+    local root = root_path()
+    local sw, sh = window_size()
+    if not root or not sw then return false, 'no window size' end
+    local text = read_file(root .. 'plugins\\settings\\ffxidb.xml')
+    if not text then return false, 'ffxidb.xml missing' end
+    local x, y = read_ffxidb_pos(text)
+    if not (x and y) then return false, 'ffxidb position missing' end
+    if not patch_map_defaults(x, y, sw, sh) then
+        return false, 'could not write MAP defaults'
+    end
+    write_map(sw, sh)
+    windower.send_command('ffxidb pos ' .. x .. ' ' .. y)
+    return true, x, y, sw, sh
+end
+
 local function gear_pos(w, h)
     return place(EQUIP.x, EQUIP.y, w, h, EQUIP.right, EQUIP.bottom)
 end
@@ -796,6 +846,9 @@ local function capture_hud_layout()
     local dpos = read_distance_layout(dp)
     if not dpos then return false, 'distance positions missing' end
     write_distance(dpos, false)
+
+    -- Map is optional so a missing ffxidb.xml does not block HUD lock.
+    capture_map_layout()
     return true
 end
 
@@ -851,9 +904,9 @@ local function arrange_finish_lock()
             local x, y = place(bar[2], bar[3], w, h, bar[4], bar[5])
             windower.send_command('eb set pos ' .. bar[1] .. ' ' .. x .. ' ' .. y)
         end
-        windower.add_to_chat(207, '[screenfit] Locked. Speed / Distance / HP positions saved.')
+        windower.add_to_chat(207, '[screenfit] Locked. Speed / Distance / HP / map positions saved.')
     elseif ok then
-        windower.add_to_chat(207, '[screenfit] Locked. Speed / Distance / HP positions saved.')
+        windower.add_to_chat(207, '[screenfit] Locked. Speed / Distance / HP / map positions saved.')
     else
         windower.add_to_chat(167, '[screenfit] Locked arrange mode, but capture failed: ' .. tostring(why))
     end
@@ -970,6 +1023,16 @@ windower.register_event('addon command', function(cmd, extra)
     elseif cmd == 'arrangelock' then
         arrange_finish_lock()
         return
+    elseif cmd == 'map' or cmd == 'savemap' then
+        local ok, a, b, c, d = capture_map_layout()
+        if ok then
+            windower.add_to_chat(207, string.format(
+                '[screenfit] Map saved at %d,%d for %dx%d. //fit apply will keep this spot.',
+                a, b, c, d))
+        else
+            windower.add_to_chat(167, '[screenfit] Map save failed: ' .. tostring(a))
+        end
+        return
     end
-    windower.add_to_chat(207, 'screenfit: //fit unlock | //fit lock | //fit window | //fit fill | //fit other')
+    windower.add_to_chat(207, 'screenfit: //fit unlock | //fit lock | //fit map | //fit window | //fit fill | //fit other')
 end)

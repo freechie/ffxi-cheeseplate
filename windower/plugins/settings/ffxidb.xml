@@ -1,7 +1,5 @@
 <settings>
     <global>
-        <X>-9</X>
-        <Y>61</Y>
         <Zoom>10</Zoom>
         <Opacity>60</Opacity>
         <ShowPC>true</ShowPC>
@@ -10,15 +8,16 @@
         <ShowMarker>true</ShowMarker>
         <ShowTargetLine>true</ShowTargetLine>
         <Ranges />
-        <Scale>0.85</Scale>
+        <Scale>0.8</Scale>
         <ColorPC>#FF006FB8</ColorPC>
         <ColorNPC>#FF269D49</ColorNPC>
         <ColorMob>#FFED1A20</ColorMob>
         <ColorMarker>#FFB646AD</ColorMarker>
         <ZoomDefault>-7</ZoomDefault>
+        <X>1534</X>
+        <Y>42</Y>
     </global>
     <Cheeseplate>
-        <X>1514</X>
-        <Y>669</Y>
+        <X>1502</X>
     </Cheeseplate>
 </settings>

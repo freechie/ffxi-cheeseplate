@@ -10,7 +10,7 @@
             </color>
             <count>6</count>
             <font>Arial</font>
-            <font_size>9</font_size>
+            <font_size>8</font_size>
             <pos>
                 <x>350</x>
                 <y>550</y>
@@ -22,8 +22,8 @@
             <show_target>false</show_target>
             <show_target_icon>false</show_target_icon>
             <stack_dir>down</stack_dir>
-            <stack_padding>27</stack_padding>
-            <width>180</width>
+            <stack_padding>22</stack_padding>
+            <width>140</width>
         </aggro_bar>
         <focustarget_bar>
             <color>
@@ -33,7 +33,7 @@
                 <red>93</red>
             </color>
             <font>Arial</font>
-            <font_size>12</font_size>
+            <font_size>9</font_size>
             <pos>
                 <x>680</x>
                 <y>670</y>
@@ -44,7 +44,7 @@
             <show_dist>false</show_dist>
             <show_target>false</show_target>
             <show_target_icon>false</show_target_icon>
-            <width>250</width>
+            <width>190</width>
         </focustarget_bar>
         <subtarget_bar>
             <color>
@@ -54,7 +54,7 @@
                 <red>12</red>
             </color>
             <font>Arial</font>
-            <font_size>12</font_size>
+            <font_size>9</font_size>
             <pos>
                 <x>680</x>
                 <y>700</y>
@@ -65,7 +65,7 @@
             <show_dist>false</show_dist>
             <show_target>false</show_target>
             <show_target_icon>false</show_target_icon>
-            <width>300</width>
+            <width>230</width>
         </subtarget_bar>
         <target_bar>
             <color>
@@ -75,7 +75,7 @@
                 <red>255</red>
             </color>
             <font>Arial</font>
-            <font_size>13</font_size>
+            <font_size>10</font_size>
             <pos>
                 <x>650</x>
                 <y>750</y>
@@ -86,26 +86,26 @@
             <show_dist>false</show_dist>
             <show_target>false</show_target>
             <show_target_icon>false</show_target_icon>
-            <width>400</width>
+            <width>310</width>
         </target_bar>
     </global>
     <cheeseplate>
         <focustarget_bar>
             <pos>
-                <x>1270.5687255859</x>
-                <y>111.11804962158</y>
+                <x>579.18682861323</x>
+                <y>689.00012207031</y>
             </pos>
         </focustarget_bar>
         <subtarget_bar>
             <pos>
-                <x>1281.7733764648</x>
-                <y>160.88474273682</y>
+                <x>603.51470947261</x>
+                <y>719.66674804688</y>
             </pos>
         </subtarget_bar>
         <target_bar>
             <pos>
-                <x>1277.7880545616</x>
-                <y>76.395861477321</y>
+                <x>620.83984375</x>
+                <y>745.33335113526</y>
             </pos>
         </target_bar>
     </cheeseplate>

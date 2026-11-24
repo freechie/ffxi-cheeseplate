@@ -5,9 +5,6 @@
         <cache_max_age>600</cache_max_age>
         <cache_size>2147483648</cache_size>
         <debug_log>false</debug_log>
-        <overlays>moonIcon,jasmints,ashP,remapster</overlays>
+        <overlays>moonIcon,jasmints,ashB,remapster</overlays>
     </global>
-    <cheeseplate>
-        <overlays>moonIcon,jasmints,ashP,remapster</overlays>
-    </cheeseplate>
 </settings>

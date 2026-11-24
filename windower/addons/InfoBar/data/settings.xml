@@ -1,8 +1,8 @@
 <?xml version="1.1" ?>
 <settings>
     <global>
-        <NoTarget>${name} (${main_job}${main_job_level}/${sub_job}${sub_job_level}) (${x},${y},${z})</NoTarget>
-        <TargetMOB>${name}</TargetMOB>
+        <NoTarget>${zone_name} ${main_job}${main_job_level}/${sub_job}${sub_job_level} ${position} ${facing_dir}</NoTarget>
+        <TargetMOB>${name} ${hpp} ${distance}y Lv${levelrange} ${isagressive}/${islinking} ${detect}</TargetMOB>
         <TargetNPC>${name}</TargetNPC>
         <TargetPC>${name}</TargetPC>
         <display>
@@ -34,7 +34,7 @@
                 </fonts>
                 <green>255</green>
                 <red>255</red>
-                <size>14</size>
+                <size>11</size>
                 <stroke>
                     <alpha>255</alpha>
                     <blue>0</blue>
@@ -48,11 +48,15 @@
     <cheeseplate>
         <display>
             <pos>
-                <x>749.77203369141</x>
-                <y>89.658081054688</y>
+                <x>945.86535644531</x>
+                <y>742.4931640625</y>
             </pos>
             <text>
                 <blue>128</blue>
+                <fonts>
+
+                </fonts>
+                <red>128</red>
             </text>
         </display>
     </cheeseplate>

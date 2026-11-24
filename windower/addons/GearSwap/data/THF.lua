@@ -114,8 +114,8 @@ function get_sets()
     sets.WS.TA = {}
     sets.WS.SATA = {}
 
-    -- Mummu combat set with Meg legs. Kaja Knife stays main for Evisceration.
-    -- Shijo path D is the offhand (TA+2, DW+5, DEX+15). Mezzotint at Nolan.
+    -- Mummu combat set with Meg legs. Tauret is main (Kaja upgraded).
+    -- Shijo path D offhand is capped (TA+2, DW+5, DEX+15).
     -- Toutatis's Cape is Sneak Attack +10 even before augments.
     -- Aptitude Mantle +1 is Capacity Points +30%. CpMode wears it the whole fight.
     -- With CpMode off, Toutatis stays on combat and Aptitude swaps in for the weaponskill.
@@ -124,7 +124,7 @@ function get_sets()
     -- Vehemence stays the spare. Mummu stays on the right.
     -- Eabani is DW; Belatz Pearl is the spare melee ear.
     local combat = {
-        main="Kaja Knife",
+        main="Tauret",
         sub="Shijo",
         head="Mummu Bonnet +1",
         body="Mummu Jacket +2",

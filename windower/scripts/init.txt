@@ -24,6 +24,8 @@ lua load enemybar2
 lua load keylabels
 lua load screenfit
 lua load scenepace
+lua load wardrobedump
+lua load bagsort
 
 // Minimap after EquipViewer so FFXIDB draws on top.
 wait 2; unload FFXIDB; wait 0.2; load FFXIDB

@@ -34,9 +34,8 @@ function get_sets()
     sets.Weapons.Lv70 = {main="Rune Kris", sub="Venom Kukri", ammo="War Hoop"}
     sets.Weapons.Lv72 = {main="Gully", sub="Rune Kris", ammo="War Hoop"}
     sets.Weapons.Lv87 = {main="Verus Knife", sub="Gully", ammo="War Hoop"}
-    sets.Weapons.Lv99 = {main="Kaja Knife", sub="Homestead Dagger", ammo="War Hoop"}
-    -- Fallback 99 sub if Homestead is elsewhere:
-    -- sets.Weapons.Lv99 = {main="Kaja Knife", sub="Eminent Dagger", ammo="War Hoop"}
+    sets.Weapons.Lv99 = {main="Tauret", sub="Shijo", ammo="War Hoop"}
+    -- Homestead/Eminent were pre-Tauret offhands.
 
     -- ============================================================
     -- JA / Dance

@@ -22,7 +22,8 @@ local profiles = {}
 --   furniture, gear (except Voay -1 trash), yggrete, abjurations,
 --   Velkk mask and necklace (those sell on the AH),
 --   testimonies, gardening seeds/cuttings, cooking staples (honey/vanilla/etc.),
---   smithing ores kept in profiles['ore'], prize powder (profiles['powder']).
+--   smithing ores kept in profiles['ore'], prize powder (profiles['powder']),
+--   Acheron Shield (profiles['shield']).
 profiles['junk'] = S{
     -- Ivaar upstream
     'chestnut',
@@ -149,6 +150,10 @@ profiles['junk'] = S{
 -- Stock example profiles
 profiles['powder'] = S{
     'prize powder',
+}
+
+profiles['shield'] = S{
+    'acheron shield',
 }
 
 profiles['ore'] = S{

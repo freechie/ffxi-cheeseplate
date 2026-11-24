@@ -7,6 +7,9 @@ Queue items, then open any NPC shop — queued inventory stacks sell automatical
 ```
 //lua load SellNPC          -- if not autoloaded
 //sellnpc junk              -- queue the junk profile
+//sellnpc powder            -- prize powder
+//sellnpc shield            -- Acheron Shield
+//sellnpc ore               -- copper / iron / tin ore
 //sellnpc bird feather      -- queue one item by name
 ```
 
@@ -33,4 +36,4 @@ An item is kept on the list only if:
 - It is not in the explicit exclude set (crystals, seals, seeds, cooking staples, etc.)
 - SellNPC can NPC-sell it (`No NPC Sale` items never queue)
 
-Keep `//sellnpc powder` and `//sellnpc ore` separate when you want those stacks.
+Keep `//sellnpc powder`, `//sellnpc shield`, and `//sellnpc ore` separate when you want those stacks.
